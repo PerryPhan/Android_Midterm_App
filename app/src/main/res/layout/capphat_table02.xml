@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NhanvienLayout"
+    >
+
+    <!--    Header of the table -->
+    <!-- 80 / 230 / 100-->
+    <TableLayout
+        style="@style/tableLayoutStyle"
+        android:stretchColumns="2"
+        >
+        <TableRow>
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/ma_nv"
+                android:layout_width="80dp"
+                />
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/ten_nv"
+                android:layout_width="230dp"
+                />
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/so_luong"
+                android:maxWidth="100dp"
+                />
+        </TableRow>
+    </TableLayout>
+    <!--    Content of the table -->
+    <!-- 80 / 230 / 90-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            style="@style/tableLayoutStyle"
+            android:layout_width="match_parent"
+            android:stretchColumns="2"
+            >
+            <!--         Generate Row based on Data here   -->
+            <TableRow>
+                <TextView
+                    style="@style/PBRow_firstCellWidth"
+                    android:text="NV1"
+                    android:layout_width="80dp"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Nguyễn Thành Nam"
+                    android:layout_width="230dp"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="60"
+                    android:maxWidth="90dp"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    style="@style/PBRow_firstCellWidth"
+                    android:text="NV2"
+                    android:layout_width="80dp"
+                    android:background="@drawable/table_lightdark_border"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Vũ Thị Thắm"
+                    android:background="@drawable/table_lightdark_border"
+                    android:layout_width="230dp"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="60"
+                    android:background="@drawable/table_lightdark_border"
+                    android:maxWidth="90dp"
+                    />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

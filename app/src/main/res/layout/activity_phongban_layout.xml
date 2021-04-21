@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PhongbanLayout"
+    >
+    <TextView
+        android:id="@+id/heading"
+        android:layout_below="@+id/toolbar"
+        style="@style/Heading"
+        android:text="@string/phong_ban"
+        />
+<!--    Header of the table -->
+    <TableLayout
+        style="@style/tableLayoutStyle"
+        android:stretchColumns="1"
+        android:shrinkColumns="0"
+        >
+        <TableRow>
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/ma_pb"
+                />
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/ten_pb"
+                />
+        </TableRow>
+
+
+<!--    Content of the table -->
+    </TableLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            style="@style/tableLayoutStyle"
+            android:stretchColumns="1"
+            android:shrinkColumns="0">
+<!--         Generate Row based on Data here   -->
+            <TableRow>
+                <TextView
+                    style="@style/PBRow_firstCellWidth"
+                    android:text="PB01"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Phòng Giám đốc"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    style="@style/PBRow_firstCellWidth"
+                    android:text="PB02"
+                    android:background="@drawable/table_lightdark_border"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Phòng Kinh doanh"
+                    android:background="@drawable/table_lightdark_border"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    style="@style/PBRow_firstCellWidth"
+                    android:text="PB03"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Phòng Kỹ thuật"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    style="@style/PBRow_firstCellWidth"
+                    android:text="PB04"
+                    android:background="@drawable/table_lightdark_border"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Phòng Kế toán"
+                    android:background="@drawable/table_lightdark_border"
+                    />
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CapphatVPPLayout"
+    android:orientation="vertical"
+    android:layout_margin="10dp">
+    <LinearLayout
+        android:id="@+id/CPV_Top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            app:icon="@drawable/baseline_arrow_back_ios_black_18"
+            app:iconGravity="textStart"
+            app:iconPadding="5dp"
+            app:iconTint="#000"
+            />
+
+    </LinearLayout>
+    <TextView
+        style="@style/Heading"
+        android:text="@string/thong_ke"
+        />
+
+    <Button
+        style="@style/Btn"
+        android:layout_width="match_parent"
+        android:paddingVertical="15dp"
+        android:id="@+id/Capphatnav"
+        android:text="1. Tìm 02 nhân viên được cấp nhiều giấy A4 nhất"
+        android:backgroundTint="@color/thongke_activeBtn"
+
+        />
+    <Button
+        style="@style/Btn"
+        android:layout_width="match_parent"
+        android:paddingVertical="15dp"
+        android:text="2. Liệt kê các VPP được cấp phát cùng ngày"
+        android:backgroundTint="@color/disable_color"
+        android:textColor="@color/black"
+        />
+    <Button
+        style="@style/Btn"
+        android:layout_width="match_parent"
+        android:paddingVertical="15dp"
+        android:text="3. Các nhân viên chưa được cấp VPP năm 2018"
+        android:backgroundTint="@color/disable_color"
+        android:textColor="@color/black"
+        />
+    <Button
+        style="@style/Btn"
+        android:layout_width="match_parent"
+        android:paddingVertical="15dp"
+        android:text="4. Thống kê số lượng các VPP cấp cho phòng ban"
+        android:backgroundTint="@color/disable_color"
+        android:textColor="@color/black"
+        />
+    <TextView
+        style="@style/textRed"
+        android:text="Kết quả thống kê"
+        android:textSize="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginVertical="20dp"
+        />
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        layout="@layout/thongke_table04"/>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        layout="@layout/_created_by_3xdteam"/>
+</LinearLayout>

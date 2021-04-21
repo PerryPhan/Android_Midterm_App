@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.giuaki">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Giuaki">
+        <activity android:name=".ThongbaoLayout"></activity>
+        <activity android:name=".XinchoLayout" />
+        <activity android:name=".BaocaoTable02" />
+        <activity android:name=".BaocaoTable01" />
+        <activity android:name=".BaocaoVPP2Layout" />
+        <activity android:name=".BaocaoVPPLayout" />
+        <activity android:name=".ThongkeTable04" />
+        <activity android:name=".ThongkeTable03" />
+        <activity android:name=".ThongkeTable02" />
+        <activity android:name=".ThongkeTable01" />
+        <activity android:name=".ThongkeLayout" />
+        <activity android:name=".CapphatTable04" />
+        <activity android:name=".CapphatTable03" />
+        <activity android:name=".CapphatVPP2Layout" />
+        <activity android:name=".CapphatTable02" />
+        <activity android:name=".CapphatTable01" />
+        <activity android:name=".CapphatVPPLayout" />
+        <activity android:name=".VanphongphamLayout" />
+        <activity android:name=".NhanvienLayout" />
+        <activity android:name=".PhongbanLayout" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

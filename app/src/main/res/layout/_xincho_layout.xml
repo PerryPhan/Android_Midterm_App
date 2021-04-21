@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".XinchoLayout"
+    android:orientation="vertical">
+    <TextView
+        style="@style/Heading"
+        android:text="Báo cáo thống kê cấp phát văn phòng phẩm"
+        android:paddingHorizontal="50dp"
+        android:paddingVertical="10dp"
+        android:textColor="@color/thoatbtn_bgcolor"
+        android:layout_marginTop="100dp"
+        />
+    <ImageView
+        android:layout_marginVertical="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:src="@drawable/_xdlogo"
+        />
+    <TextView
+        style="@style/textBlack"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:text="Đang in báo cáo"
+        android:textSize="40dp"/>
+    <TextView
+        style="@style/tempCombobox"
+        android:text="Processing bar "
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="140dp">
+        <Button
+            style="@style/Btn"
+            android:layout_width="300dp"
+            android:gravity="center"
+            android:text="Hủy"
+            android:backgroundTint="@color/thoatbtn_bgcolor"
+            />
+    </LinearLayout>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        layout="@layout/_created_by_3xdteam"/>
+</LinearLayout>

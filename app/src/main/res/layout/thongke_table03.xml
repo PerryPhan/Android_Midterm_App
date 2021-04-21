@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NhanvienLayout"
+    >
+
+    <!--    Header of the table -->
+    <!-- 70 p0 / 150 / 90 p0 / <= 80 p0 -->
+    <TableLayout
+        style="@style/tableLayoutStyle"
+        android:stretchColumns="3"
+        android:shrinkColumns="0"
+        >
+        <TableRow>
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/ma_nv"
+                android:padding="0dp"
+                android:layout_width="70dp"
+                />
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/ten_nv"
+                android:layout_width="150dp"
+                />
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/ngay_sinh"
+                android:layout_width="90dp"
+                android:padding="0dp"
+                />
+            <TextView
+                style="@style/tableHeader"
+                android:text="@string/ten_pb"
+                android:maxWidth="80dp"
+                android:padding="0dp"
+                />
+        </TableRow>
+    </TableLayout>
+    <!--    Content of the table -->
+    <!-- 70 p0 / 150 / 90 p0 / <= 80 p0 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            style="@style/tableLayoutStyle"
+            android:stretchColumns="3">
+            <!--         Generate Row based on Data here   -->
+            <TableRow>
+                <TextView
+                    style="@style/PBRow_firstCellWidth"
+                    android:text="NV2"
+                    android:padding="0dp"
+                    android:layout_width="70dp"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Nguyễn Thành Nam"
+                    android:layout_width="150dp"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="18/01/1982"
+                    android:padding="0dp"
+                    android:layout_width="90dp"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Phòng Giám đốc"
+                    android:maxWidth="80dp"
+                    android:padding="0dp"
+                    />
+            </TableRow>
+            <TableRow>
+                <TextView
+                    style="@style/PBRow_firstCellWidth"
+                    android:text="NV5"
+                    android:padding="0dp"
+                    android:layout_width="70dp"
+                    android:background="@drawable/table_lightdark_border"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Vũ Văn Nam"
+                    android:layout_width="150dp"
+                    android:background="@drawable/table_lightdark_border"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="02/12/1992"
+                    android:padding="0dp"
+                    android:layout_width="90dp"
+                    android:background="@drawable/table_lightdark_border"
+                    />
+                <TextView
+                    style="@style/tableRow"
+                    android:text="Phòng Kinh doanh"
+                    android:background="@drawable/table_lightdark_border"
+                    android:maxWidth="80dp"
+                    android:padding="0dp"
+                    />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>
