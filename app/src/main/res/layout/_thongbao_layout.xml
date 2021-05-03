@@ -5,8 +5,8 @@
     android:layout_width="200dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    tools:context=".ThongbaoLayout"
-    android:background="@drawable/table_lightbright_border"
+    tools:context=".Main.ThongbaoLayout"
+    android:background="@drawable/only_border"
     android:orientation="vertical">
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:text="Bạn có thật sự muốn thoát?"
-        android:background="@drawable/table_lightbright_border"
+        android:background="@drawable/only_border"
         android:backgroundTint="@color/lightdark"
         android:textSize="16dp"
         android:gravity="center"
@@ -42,7 +42,7 @@
             />
         <Button
             style="@style/Btn"
-            android:backgroundTint="#40870D"
+            android:backgroundTint="@color/yes_color"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="Có"

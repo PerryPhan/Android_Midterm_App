@@ -42,7 +42,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">17dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/table_lightbright_border</item>
+        <item name="android:background">@drawable/only_border</item>
         <item name="android:padding">10dp</item>
     </style>
 
@@ -54,7 +54,9 @@
         <item name="android:gravity">center</item>
         <item name="android:layout_marginBottom">10dp</item>
     </style>
-
+        <style name="only_70dp" >
+            <item name="android:layout_width">70dp</item>
+        </style>
     <!--PB : Phòng ban-->
         <style name="PBHeader_firstCellWidth" parent="tableHeader">
             <item name="android:layout_width">70dp</item>

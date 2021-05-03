@@ -9,32 +9,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Giuaki">
-        <activity android:name=".ThongbaoLayout"></activity>
+        <activity android:name=".Main.ThongbaoLayout"></activity>
         <activity android:name=".XinchoLayout" />
-        <activity android:name=".BaocaoTable02" />
-        <activity android:name=".BaocaoTable01" />
-        <activity android:name=".BaocaoVPP2Layout" />
-        <activity android:name=".BaocaoVPPLayout" />
-        <activity android:name=".ThongkeTable04" />
-        <activity android:name=".ThongkeTable03" />
-        <activity android:name=".ThongkeTable02" />
-        <activity android:name=".ThongkeTable01" />
-        <activity android:name=".ThongkeLayout" />
-        <activity android:name=".CapphatTable04" />
-        <activity android:name=".CapphatTable03" />
-        <activity android:name=".CapphatVPP2Layout" />
-        <activity android:name=".CapphatTable02" />
-        <activity android:name=".CapphatTable01" />
-        <activity android:name=".CapphatVPPLayout" />
-        <activity android:name=".VanphongphamLayout" />
-        <activity android:name=".NhanvienLayout" />
-        <activity android:name=".PhongbanLayout" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Tables.BaocaoTable02" />
+        <activity android:name=".Tables.BaocaoTable01" />
+        <activity android:name=".Statistics.BaocaoVPP2Layout" />
+        <activity android:name=".Statistics.BaocaoVPPLayout" />
+        <activity android:name=".Tables.ThongkeTable04" />
+        <activity android:name=".Tables.ThongkeTable03" />
+        <activity android:name=".Tables.ThongkeTable02" />
+        <activity android:name=".Tables.ThongkeTable01" />
+        <activity android:name=".Main.ThongkeLayout" />
+        <activity android:name=".Tables.CapphatTable04" />
+        <activity android:name=".Tables.CapphatTable03" />
+        <activity android:name=".Statistics.CapphatVPP2Layout" />
+        <activity android:name=".Tables.CapphatTable02" />
+        <activity android:name=".Tables.CapphatTable01" />
+        <activity android:name=".Statistics.CapphatVPPLayout" />
+        <activity android:name=".Main.VanphongphamLayout" />
+        <activity android:name=".Main.NhanvienLayout" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Main.PhongbanLayout" >
+
+        </activity>
+        <activity android:name=".MainActivity">
+
         </activity>
     </application>
 

@@ -5,21 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PhongbanLayout"
-    android:layout_margin="10dp">
+    tools:context=".Main.PhongbanLayout"
+    >
     <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
         android:id="@+id/Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
-
         <Button
-            android:id="@+id/btnOne"
+            android:id="@+id/exitBtn"
             style="@style/Btn"
             android:text="@string/thoat"
             android:textColor="#ffffff"
-            app:backgroundTint="@color/thoatbtn_bgcolor"
+            android:backgroundTint="@color/thoatbtn_bgcolor"
+
             />
 
         <EditText
@@ -39,6 +41,7 @@
         </EditText>
 
         <Button
+            android:id="@+id/insert_btn"
             style="@style/Btn"
             android:layout_width="50dp"
             app:icon="@drawable/outline_add_black_24"
@@ -60,18 +63,12 @@
         android:orientation="vertical"
         android:layout_weight="1"
         >
-<!--        &lt;!&ndash; + Table Include + &ndash;&gt;-->
-<!--        <ViewStub android:id="@+id/stub"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"/>-->
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            layout="@layout/activity_vanphongpham_layout"/>
+
     </LinearLayout>
     <!--///////////////////////////////////////////////////////-->
     <!-- + @+id/subToolbar + -->
     <LinearLayout
+        android:layout_marginHorizontal="10dp"
         android:layout_below="@+id/table_container"
         android:id="@+id/subToolbar"
         android:layout_width="match_parent"
@@ -119,6 +116,7 @@
     </LinearLayout>
 
     <LinearLayout
+
         android:id="@+id/navbar"
         android:layout_below="@+id/subtoolbar"
         android:layout_width="match_parent"

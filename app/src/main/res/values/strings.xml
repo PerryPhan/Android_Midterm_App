@@ -28,4 +28,13 @@
     <string name="pb">PB</string>
     <string name="sl">SL</string>
     <string name="ngay_cap">Ngày cấp</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="error_of_this_line">Error of this line</string>
+    <array name="phongban">
+        <item>PB01</item>
+        <item>PB02</item>
+        <item>PB03</item>
+        <item>PB04</item>
+    </array>
 </resources>

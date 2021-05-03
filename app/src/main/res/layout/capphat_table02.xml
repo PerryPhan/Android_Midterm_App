@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".NhanvienLayout"
+    tools:context=".Main.NhanvienLayout"
     >
 
     <!--    Header of the table -->
@@ -60,26 +60,26 @@
                     android:maxWidth="90dp"
                     />
             </TableRow>
-            <TableRow>
-                <TextView
-                    style="@style/PBRow_firstCellWidth"
-                    android:text="NV2"
-                    android:layout_width="80dp"
-                    android:background="@drawable/table_lightdark_border"
-                    />
-                <TextView
-                    style="@style/tableRow"
-                    android:text="Vũ Thị Thắm"
-                    android:background="@drawable/table_lightdark_border"
-                    android:layout_width="230dp"
-                    />
-                <TextView
-                    style="@style/tableRow"
-                    android:text="60"
-                    android:background="@drawable/table_lightdark_border"
-                    android:maxWidth="90dp"
-                    />
-            </TableRow>
+<!--            <TableRow>-->
+<!--                <TextView-->
+<!--                    style="@style/PBRow_firstCellWidth"-->
+<!--                    android:text="NV2"-->
+<!--                    android:layout_width="80dp"-->
+<!--                    android:background="@drawable/table_lightdark_border"-->
+<!--                    />-->
+<!--                <TextView-->
+<!--                    style="@style/tableRow"-->
+<!--                    android:text="Vũ Thị Thắm"-->
+<!--                    android:background="@drawable/table_lightdark_border"-->
+<!--                    android:layout_width="230dp"-->
+<!--                    />-->
+<!--                <TextView-->
+<!--                    style="@style/tableRow"-->
+<!--                    android:text="60"-->
+<!--                    android:background="@drawable/table_lightdark_border"-->
+<!--                    android:maxWidth="90dp"-->
+<!--                    />-->
+<!--            </TableRow>-->
         </TableLayout>
     </ScrollView>
 </LinearLayout>

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CapphatVPPLayout"
-    android:orientation="vertical"
-    android:layout_margin="10dp">
+    tools:context=".Statistics.CapphatVPPLayout"
+    android:orientation="vertical">
     <LinearLayout
+        android:layout_margin="10dp"
         android:id="@+id/CPV_Top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

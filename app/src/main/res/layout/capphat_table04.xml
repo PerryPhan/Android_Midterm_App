@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".NhanvienLayout"
+    tools:context=".Main.NhanvienLayout"
     >
     <!--    Header of the table -->
     <!--    -->
@@ -46,20 +46,20 @@
                     android:maxWidth="300dp"
                     />
             </TableRow>
-            <TableRow>
-                <TextView
-                    style="@style/PBRow_firstCellWidth"
-                    android:text="NV2"
-                    android:background="@drawable/table_lightdark_border"
-                    android:layout_width="80dp"
-                    />
-                <TextView
-                    style="@style/tableRow"
-                    android:text="Vũ Thị Thắm"
-                    android:background="@drawable/table_lightdark_border"
-                    android:maxWidth="300dp"
-                    />
-            </TableRow>
+<!--            <TableRow>-->
+<!--                <TextView-->
+<!--                    style="@style/PBRow_firstCellWidth"-->
+<!--                    android:text="NV2"-->
+<!--                    android:background="@drawable/table_lightdark_border"-->
+<!--                    android:layout_width="80dp"-->
+<!--                    />-->
+<!--                <TextView-->
+<!--                    style="@style/tableRow"-->
+<!--                    android:text="Vũ Thị Thắm"-->
+<!--                    android:background="@drawable/table_lightdark_border"-->
+<!--                    android:maxWidth="300dp"-->
+<!--                    />-->
+<!--            </TableRow>-->
         </TableLayout>
     </ScrollView>
 </LinearLayout>
