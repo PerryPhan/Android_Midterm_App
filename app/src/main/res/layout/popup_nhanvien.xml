@@ -134,15 +134,7 @@
                         android:layout_marginTop="16dp"
                         android:calendarViewShown="false"
                         android:datePickerMode="spinner" />
-                    <TextView
-                        style="@style/textRed"
-                        android:id="@+id/NV_showNSNVError"
-                        android:layout_width="match_parent"
-                        android:text="@string/error_of_this_line"
-                        android:gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:visibility="invisible"
-                        />
+
                 </LinearLayout>
             </LinearLayout>
     </ScrollView>

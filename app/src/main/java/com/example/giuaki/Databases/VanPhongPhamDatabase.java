@@ -25,7 +25,6 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "VANPHONGPHAM";
 
     public static final String text = "text";
-    public static final String COLUMN_ID ="ID";
     public static final String COLUMN_MAVPP ="MAVPP";
     public static final String COLUMN_TENVPP = "TENVPP";
     public static final String COLUMN_DVT = "DVT";
@@ -40,12 +39,11 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Script to create table.
         String script = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                + COLUMN_MAVPP + " TEXT NOT NULL UNIQUE,"
+                + COLUMN_MAVPP + " TEXT PRIMARY KEY,"
                 + COLUMN_TENVPP + " TEXT NOT NULL,"
-                + COLUMN_DVT + "TEXT NOT NULL,"
-                + COLUMN_GIANHAP + "TEXT NOT NULL,"
-                + COLUMN_HINH + "BLOB)";
+                + COLUMN_DVT + " TEXT NOT NULL,"
+                + COLUMN_GIANHAP + " TEXT NOT NULL,"
+                + COLUMN_HINH + " BLOB)";
         // Execute script.
         db.execSQL(script);
     }
@@ -74,7 +72,6 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                COLUMN_ID,
                 COLUMN_MAVPP,
                 COLUMN_TENVPP,
                 COLUMN_DVT,
@@ -83,7 +80,7 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
         };
 
         // How you want the results sorted in the resulting Cursor
-        String sortOrder = PhongBanDatabase.COLUMN_ID + " DESC";
+        String sortOrder = VanPhongPhamDatabase.COLUMN_MAVPP + " ASC";
 
         Cursor cursor = db.query(
                 TABLE_NAME,   // The table to query
@@ -99,19 +96,18 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
 
         while(cursor.moveToNext()){
             list_vanphongpham.add(new VanPhongPham(
-                    cursor.getLong(0),
+                    cursor.getString(0),
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),
-                    cursor.getString(4),
-                    cursor.getBlob(5)
+                    cursor.getBlob(4)
             ));
         }
 
         return list_vanphongpham;
     }
 
-    public void insert(VanPhongPham vanPhongPham){
+    public long insert(VanPhongPham vanPhongPham){
         // Gets the data repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -124,7 +120,7 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
         values.put(COLUMN_HINH, vanPhongPham.getHinh());
 
         // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(TABLE_NAME, null, values);
+        return db.insert(TABLE_NAME, null, values);
     }
 
     public long update(VanPhongPham vanPhongPham){

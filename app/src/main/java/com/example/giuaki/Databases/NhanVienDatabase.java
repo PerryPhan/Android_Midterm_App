@@ -59,14 +59,14 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
     }
     public List<NhanVien> reset(){
         deleteAll();
-        insert(new NhanVien("NV1","Nguyễn Thành Nam", "01/08/1982", "PB01"));
-        insert(new NhanVien("NV2","Vũ Thị Thắm"     , "12/08/1992", "PB01"));
-        insert(new NhanVien("NV3","Hồ Thanh Tâm"    , "05/06/1990", "PB02"));
-        insert(new NhanVien("NV4","Ngô Đức Trung"   , "04/08/1990", "PB02"));
-        insert(new NhanVien("NV5","Vũ Văn Nam"      , "02/12/1992", "PB02"));
-        insert(new NhanVien("NV6","Trần Văn Thắng"  , "23/08/1991", "PB03"));
-        insert(new NhanVien("NV7","Hà Quang Dự"     , "07/08/1985", "PB03"));
-        insert(new NhanVien("NV8","Ngô Phương Lan"  , "01/02/1990", "PB04"));
+        insert(new NhanVien("NV1","Nguyễn Thành Nam", "1982-08-01", "PB01"));
+        insert(new NhanVien("NV2","Vũ Thị Thắm"     , "1992-08-12", "PB01"));
+        insert(new NhanVien("NV3","Hồ Thanh Tâm"    , "1990-06-05", "PB02"));
+        insert(new NhanVien("NV4","Ngô Đức Trung"   , "1990-08-04", "PB02"));
+        insert(new NhanVien("NV5","Vũ Văn Nam"      , "1992-12-02", "PB02"));
+        insert(new NhanVien("NV6","Trần Văn Thắng"  , "1991-08-23", "PB03"));
+        insert(new NhanVien("NV7","Hà Quang Dự"     , "1985-08-07", "PB03"));
+        insert(new NhanVien("NV8","Ngô Phương Lan"  , "1990-02-01", "PB04"));
         return select();
     }
 

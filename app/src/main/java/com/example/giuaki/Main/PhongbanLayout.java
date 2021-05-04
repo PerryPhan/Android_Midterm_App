@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -30,6 +31,11 @@ public class PhongbanLayout extends AppCompatActivity {
     Button insertBtn;
     Button editBtn;
     Button delBtn;
+    Button exitBtn;
+
+    Button navPB;
+    Button navNV;
+    Button navVPP;
 
     // Dialog Layout
     Dialog phongbandialog;
@@ -67,6 +73,7 @@ public class PhongbanLayout extends AppCompatActivity {
         setControl();
         loadDatabase();
         setEvent();
+        setNavigation();
     }
 
     // --------------- MAIN HELPER -----------------------------------------------------------------
@@ -75,12 +82,46 @@ public class PhongbanLayout extends AppCompatActivity {
         insertBtn = findViewById(R.id.PB_insertBtn);
         editBtn = findViewById(R.id.PB_editBtn);
         delBtn = findViewById(R.id.PB_delBtn);
+        exitBtn = findViewById(R.id.PB_exitBtn);
+
+        navPB = findViewById(R.id.PB_navbar_phongban);
+        navNV = findViewById(R.id.PB_navbar_nhanvien);
+        navVPP= findViewById(R.id.PB_navbar_VPP);
     }
 
     public void setEvent() {
         editBtn.setVisibility(View.INVISIBLE); // turn on when click items
         delBtn.setVisibility(View.INVISIBLE);  // this too
         setEventTable(phongban_table_list);
+    }
+
+    public void setNavigation(){
+        // navPB onclick none
+        // navNV
+        navNV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(PhongbanLayout.this, NhanvienLayout.class);
+                startActivity( intent );
+            }
+        });
+        // navVPP
+        navVPP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(PhongbanLayout.this, VanphongphamLayout.class);
+                startActivity( intent );
+            }
+        });
+
+        exitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public void setEventTable(TableLayout list) {

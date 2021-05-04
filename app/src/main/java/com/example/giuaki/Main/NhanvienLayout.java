@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,10 +38,16 @@ public class NhanvienLayout extends AppCompatActivity {
     TableLayout nhanvien_table_list;
 
     Spinner PB_spinner;
+    String PB_spinner_maPB;
 
     Button insertBtn;
     Button editBtn;
     Button delBtn;
+    Button exitBtn;
+
+    Button navPB;
+    Button navNV;
+    Button navVPP;
 
     // Dialog Layout
     Dialog nhanviendialog;
@@ -49,17 +57,17 @@ public class NhanvienLayout extends AppCompatActivity {
     Button noBtn;
 
     Spinner PB_spinner_mini;
-    String PB_spinner_mini_maPB;
 
     EditText inputMaNV;
     EditText inputTenNV;
 
     DatePicker datepickerNSNV;
+
+    String PB_spinner_mini_maPB;
     String strDate;
 
     TextView showMNVError;
     TextView showTNVError;
-    TextView showNSNVError;
     TextView showResult;
     TextView showConfirm;
     TextView showLabel;
@@ -83,12 +91,14 @@ public class NhanvienLayout extends AppCompatActivity {
     float scale;
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nhanvien_layout);
         setControl();
         loadDatabase();
         setEvent();
+        setNavigation();
     }
 
     // --------------- MAIN HELPER -----------------------------------------------------------------
@@ -98,6 +108,11 @@ public class NhanvienLayout extends AppCompatActivity {
         insertBtn = findViewById(R.id.NV_insertBtn);
         editBtn = findViewById(R.id.NV_editBtn);
         delBtn = findViewById(R.id.NV_delBtn);
+        exitBtn = findViewById(R.id.NV_exitBtn);
+
+        navPB = findViewById(R.id.NV_navbar_phongban);
+        navNV = findViewById(R.id.NV_navbar_nhanvien);
+        navVPP= findViewById(R.id.NV_navbar_VPP);
     }
 
     public void loadDatabase() {
@@ -109,21 +124,22 @@ public class NhanvienLayout extends AppCompatActivity {
         nhanvienlist = nhanvienDB.select();
         // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn
         for (int i = 0; i < nhanvienlist.size(); i++) {
+            Log.d("data",nhanvienlist.get(i).toString());
             tr = createRow(this, nhanvienlist.get(i));
             tr.setId((int) i + 1);
-            tr.setTag(nhanvienlist.get(i).getMaPb());
             nhanvien_table_list.addView(tr);
         }
 
         phongbanlist = phongbanDB.select();
         ArrayList<String> PB_name = new ArrayList<>();
-        PB_name.add("All");
+        PB_name.add("Tất cả phòng ban");
         for (PhongBan pb : phongbanlist) {
             PB_name.add(pb.getTenpb());
         }
         PB_spinner.setAdapter(loadSpinnerAdapter(PB_name));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void setEvent() {
         editBtn.setVisibility(View.INVISIBLE); // turn on when click items
         delBtn.setVisibility(View.INVISIBLE);  // this too
@@ -131,12 +147,43 @@ public class NhanvienLayout extends AppCompatActivity {
         setEventSpinner();
     }
 
+    public void setNavigation(){
+        // navNV onclick none
+        // navPB
+        navPB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(NhanvienLayout.this, PhongbanLayout.class);
+                startActivity( intent );
+            }
+        });
+        // navVPP
+        navVPP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                Intent intent = new Intent(NhanvienLayout.this, VanphongphamLayout.class);
+                startActivity( intent );
+            }
+        });
+
+        exitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
     public void setEventSpinner() {
+        PB_spinner_maPB = "All";
         PB_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
                     if (nhanvien_table_list.getChildCount() < nhanvienlist.size() + 1) {
+                        PB_spinner_maPB = "All";
                         // Nếu có sort trước đó làm cho số nhân viên nhỏ hơn số nhân viên tổng thì mới sort lại theo all
                         TableRow tr = (TableRow) nhanvien_table_list.getChildAt(0);
                         nhanvien_table_list.removeAllViews();
@@ -153,6 +200,7 @@ public class NhanvienLayout extends AppCompatActivity {
                 } else {
                     int dem = 1;
                     String mapb = phongbanlist.get(position - 1).getMapb();
+                    PB_spinner_maPB = mapb;
                     // Select lại toàn bộ table
                     TableRow tr = (TableRow) nhanvien_table_list.getChildAt(0);
                     nhanvien_table_list.removeAllViews();
@@ -167,15 +215,18 @@ public class NhanvienLayout extends AppCompatActivity {
                         }
                     }
                 }
+                editBtn.setVisibility(View.INVISIBLE); // turn on when click items
+                delBtn.setVisibility(View.INVISIBLE);  // this too
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                PB_spinner_maPB = "All";
             }
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void setEventTable(TableLayout list) {
         // Log.d("count", list.getChildCount()+""); // số table rows + 1
         // Không cần thay đổi vì đây chỉ mới set Event
@@ -193,7 +244,11 @@ public class NhanvienLayout extends AppCompatActivity {
                 // Control
                 setControlDialog();
                 // Event
+                strDate = formatDate(InttoStringDate(30,8,1999), true);
+                Toast.makeText( NhanvienLayout.this, strDate+"", Toast.LENGTH_LONG).show();
                 setEventDialog(v);
+//                Log.d("date",strDate+"");
+
                 // Right to Select spinner
             }
         });
@@ -329,11 +384,14 @@ public class NhanvienLayout extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setEventDatePicker(){
-        datepickerNSNV.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+        strDate = formatDate(InttoStringDate(30,8,1999), true);
+        datepickerNSNV.init(1999,07,30,new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                 Toast.makeText( NhanvienLayout.this, InttoStringDate(dayOfMonth,monthOfYear+1,year)+"", Toast.LENGTH_LONG).show();
+                 strDate = formatDate(InttoStringDate(dayOfMonth,monthOfYear+1,year), true);
+                 Toast.makeText( NhanvienLayout.this, strDate+"", Toast.LENGTH_LONG).show();
             }
+
         });
     }
 
@@ -355,12 +413,11 @@ public class NhanvienLayout extends AppCompatActivity {
         inputTenNV = nhanviendialog.findViewById(R.id.NV_inputTenNV);
 
         datepickerNSNV = nhanviendialog.findViewById(R.id.NV_inputNS);
-        setEventDatePicker();
 
+        setEventDatePicker();
 
         showMNVError = nhanviendialog.findViewById(R.id.NV_showMNVError);
         showTNVError = nhanviendialog.findViewById(R.id.NV_showTNVError);
-        showNSNVError = nhanviendialog.findViewById(R.id.NV_showNSNVError);
 
         showResult = nhanviendialog.findViewById(R.id.NV_showResult);
         showConfirm = nhanviendialog.findViewById(R.id.NV_showConfirm);
@@ -389,139 +446,213 @@ public class NhanvienLayout extends AppCompatActivity {
                 //  showResult.setVisibility(View.VISIBLE);
                 boolean success = false;
                 switch (view.getId()) {
-                    case R.id.PB_insertBtn: {
-//                        if (!isSafeDialog( false )) break;
-////                        PhongBan pb = new PhongBan(inputMaPB.getText() + "", inputTenPB.getText() + "");
-//                        NhanVien nv = new NhanVien();
-//                        if (nhanvienDB.insert(nv) == -1) break;
-//                        TableRow tr = createRow(NhanvienLayout.this, nv);
-//                        int n = nhanvien_table_list.getChildCount();
-//                        tr.setId(n);
-//                        nhanvien_table_list.addView(tr);
-//                        setEventTableRows((TableRow) nhanvien_table_list.getChildAt(n), nhanvien_table_list);
-//                        success = true;
-//                        editBtn.setVisibility(View.INVISIBLE);
-//                        delBtn.setVisibility(View.INVISIBLE);
-//                        focusRow = null;
-//                        focusMaNV = null;
-//                        focusTenNV = null;
-//                        focusNSNV = null;
+                    case R.id.NV_insertBtn: {
+                        if ( !isSafeDialog( false )) break;
+//                        Log.d("process","1True");
+                        NhanVien nv = new NhanVien(
+                                inputMaNV.getText().toString().trim() +""
+                                , inputTenNV.getText().toString().trim()+""
+                                , strDate
+                                , PB_spinner_mini_maPB.trim());
+//                        Log.d("process",PB_spinner_mini_maPB.trim()+"");
+//                        Log.d("process",PB_spinner_maPB.trim()+"");
+//                        Log.d("process",strDate.trim()+"");
+//                        Log.d("process",nv.toString());
+                        if (nhanvienDB.insert(nv) == -1) break;
+//                        Log.d("process","2True");
+                        TableRow tr = createRow(NhanvienLayout.this, nv);
+                        int n = nhanvien_table_list.getChildCount();
+                        tr.setId(n);
+                        if ( !PB_spinner_mini_maPB.trim().equals(PB_spinner_maPB.trim()) ){
+                            // Nếu thằng bên trong là phòng ban nhưng bên ngoài là tất cả phòng ban thì
+                            if( PB_spinner_maPB.trim().equals("All") ){
+                                // cứ insert như bth
+                                nhanvien_table_list.addView(tr);
+                                setEventTableRows((TableRow) nhanvien_table_list.getChildAt(n), nhanvien_table_list);
+                            }
+                            // Nếu thằng bên trong là phòng ban nhưng bên ngoài là phòng ban khác thì khỏi thêm table
+                        // Nếu trùng
+                        }else{
+                            nhanvien_table_list.addView(tr);
+                            setEventTableRows((TableRow) nhanvien_table_list.getChildAt(n), nhanvien_table_list);
+                        }
+                        nhanvienlist.add(nv);
+                        editBtn.setVisibility(View.INVISIBLE);
+                        delBtn.setVisibility(View.INVISIBLE);
+                        focusRow = null;
+                        focusMaNV = null;
+                        focusTenNV = null;
+                        focusNSNV = null;
+                        focusPBNV = "";
+                        success = true;
                     }
                     break;
-                    case R.id.PB_editBtn: {
-//                        if (!isSafeDialog( true )) break;
-//                        TableRow tr = (TableRow) nhanvien_table_list.getChildAt(indexofRow);
-//                        TextView id = (TextView) tr.getChildAt(0);
-//                        TextView name = (TextView) tr.getChildAt(1);
-////                        if(nhanvienDB.update(new PhongBan(id.getText().toString().trim(), inputTenPB.getText().toString().trim())) == -1) break;
-////                        name.setText(inputTenPB.getText() + "");
-//                        success = true;
+                    case R.id.NV_editBtn: {
+                        if (!isSafeDialog( true )) break;
+//                        Log.d("process","1True");
+                        TableRow tr = (TableRow) nhanvien_table_list.getChildAt(indexofRow);
+                        TextView id = (TextView) tr.getChildAt(0);
+                        TextView name = (TextView) tr.getChildAt(1);
+                        TextView date = (TextView) tr.getChildAt(2);
+                        NhanVien nv = new NhanVien(
+                                id.getText().toString().trim()
+                                ,inputTenNV.getText().toString().trim()
+                                ,strDate
+                                ,PB_spinner_mini_maPB);
+//                        Log.d("process",PB_spinner_mini_maPB.trim()+"");
+//                        Log.d("process",PB_spinner_maPB.trim()+"");
+//                        Log.d("process",strDate.trim()+"");
+//                        Log.d("process",nv.toString());
+                        if(nhanvienDB.update( nv ) == -1) break;
+//                        Log.d("process","2True");
+                        //   Cập nhật nhân viên list bằng cách lấy cái index ra và add vào cái index đó
+                        int index = 0;
+                        for( int i = 0; i< nhanvienlist.size(); i++){
+                            if( nhanvienlist.get(i).getMaNv().equals( id.getText().toString().trim() ) )
+                            { index = i; break;}
+                        }
+                        Log.d("process",index+"");
+                        nhanvienlist.set( index, nv );
+                        boolean edit = false, changePB = false;
+                        if ( !PB_spinner_mini_maPB.trim().equals( PB_spinner_maPB.trim() )){
+                            // Khi không cần biết thay đổi PB như thế nào nhưng bên ngoài là All thì cứ edit thôi
+                            if( PB_spinner_maPB.trim().equals("All") )
+                                edit = true;
+                            // Vậy trường hợp đang là Phòng giám đốc muốn thay Phòng kỹ thuật thì
+                            else{
+                                changePB = true;
+                            }
+                        }else{
+                            // Khi giữ nguyên phòng ban
+                            edit = true;
+                        }
 
+                        if(edit) {
+                            name.setText(nv.getHoTen() + "");
+                            date.setText(formatDate(strDate,false));
+                            tr.setTag(nv.getMaPb());
+                        }
+                        if(changePB){
+                            if (indexofRow == nhanvien_table_list.getChildCount() - 1) {
+                                nhanvien_table_list.removeViewAt(indexofRow);
+                            } else {
+                                nhanvien_table_list.removeViewAt(indexofRow);
+                                for (int i = 0; i < nhanvien_table_list.getChildCount(); i++) {
+                                    nhanvien_table_list.getChildAt(i).setId((int) i);
+                                }
+                            }
+                        }
+                        success = true;
                     }
                     break;
-                    case R.id.PB_delBtn: {
-////                        if( nhanvienDB.delete( new PhongBan(focusMaPB.getText().toString().trim(), focusTenPB.getText().toString().trim()) ) == -1 ) break;
-//                        if (indexofRow == nhanvien_table_list.getChildCount() - 1) {
-//                            nhanvien_table_list.removeViewAt(indexofRow);
-//                        } else {
-//                            nhanvien_table_list.removeViewAt(indexofRow);
-//                            for (int i = 0; i < nhanvien_table_list.getChildCount(); i++) {
-//                                nhanvien_table_list.getChildAt(i).setId((int) i);
-//                            }
-//                        }
-//                        editBtn.setVisibility(View.INVISIBLE);
-//                        delBtn.setVisibility(View.INVISIBLE);
-//                        focusRow = null;
-//                        focusMaNV = null;
-//                        focusTenNV = null;
-//                        focusNSNV = null;
-//                        success = true;
+                    case R.id.NV_delBtn: {
+                        NhanVien nv =  new NhanVien(
+                                focusMaNV.getText().toString().trim(),
+                                focusTenNV.getText().toString().trim(),
+                                formatDate(focusNSNV.getText().toString().trim(), true),
+                                focusPBNV.trim());
+                        boolean del = false;
+                        if( nhanvienDB.delete(nv) == -1 ) break;
+//                        Log.d("process","1True");
+//                        Log.d("process",nv.toString());
+                            if (indexofRow == nhanvien_table_list.getChildCount() - 1) {
+                                nhanvien_table_list.removeViewAt(indexofRow);
+                            } else {
+                                nhanvien_table_list.removeViewAt(indexofRow);
+                                for (int i = 0; i < nhanvien_table_list.getChildCount(); i++) {
+                                    nhanvien_table_list.getChildAt(i).setId((int) i);
+                                }
+                            }
+                            int index = 0;
+                        for( int i = 0; i< nhanvienlist.size(); i++){
+                            if( nhanvienlist.get(i).getMaNv().equals(focusMaNV.getText().toString().trim()) ){
+                                index = i ; break;
+                            }
+                        }
+                            nhanvienlist.remove( index );
+//                        Log.d("process",index+"");
+//                        Log.d("process",nhanvienlist.size()+"");
+                        editBtn.setVisibility(View.INVISIBLE);
+                        delBtn.setVisibility(View.INVISIBLE);
+                        focusRow = null;
+                        focusMaNV = null;
+                        focusTenNV = null;
+                        focusNSNV = null;
+                        focusPBNV = "";
+                        success = true;
                     }
                     break;
                     default:
                         break;
                 }
-//                if (success) {
-//                    showResult.setText(showLabel.getText() + " thành công !");
-//                    showResult.setTextColor(getResources().getColor(R.color.yes_color));
-//                    showResult.setVisibility(View.VISIBLE);
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-////                            inputMaPB.setText("");
-////                            inputTenPB.setText("");
-//                            showResult.setVisibility(View.INVISIBLE);
-//                            nhanviendialog.dismiss();
-//                        }
-//                    }, 1000);
-//                } else {
-//                    showResult.setTextColor(getResources().getColor(R.color.thoatbtn_bgcolor));
-//                    showResult.setText(showLabel.getText() + " thất bại !");
-//                    showResult.setVisibility(View.VISIBLE);
-//                }
+                if (success) {
+                    showResult.setText(showLabel.getText() + " thành công !");
+                    showResult.setTextColor(getResources().getColor(R.color.yes_color));
+                    showResult.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            inputMaNV.setText("");
+                            inputTenNV.setText("");
+                            showResult.setVisibility(View.INVISIBLE);
+                            nhanviendialog.dismiss();
+                        }
+                    }, 1000);
+                } else {
+                    showResult.setTextColor(getResources().getColor(R.color.thoatbtn_bgcolor));
+                    showResult.setText(showLabel.getText() + " thất bại !");
+                    showResult.setVisibility(View.VISIBLE);
+                }
             }
         });
 
 
     }
 
-    //
-//    public boolean isSafeDialog( boolean allowSameID ) {
-//        String id, mapb, tenpb;
-//        // Mã PB không được trùng với Mã PB khác và ko để trống
-////        mapb = inputMaPB.getText().toString().trim();
-//        boolean noError = true;
-//        if (mapb.equals("")) {
-//            showMNVError.setText("Mã PB không được trống ");
-//            showMNVError.setVisibility(View.VISIBLE);
-//            noError = false;
-//        }else{
-//            showMNVError.setVisibility(View.INVISIBLE);
-//            noError = true;
-//        }
-//
-//        // Tên PB không được để trống và không trùng
-//        tenpb = inputTenPB.getText().toString().trim();
-//        if (tenpb.equals("")) {
-//            showTNVError.setText("Tên PB không được trống ");
-//            showTNVError.setVisibility(View.VISIBLE);
-//            noError = false;
-//        }else{
-//            showTNVError.setVisibility(View.INVISIBLE);
-//            noError = true;
-//        }
-//
-////        Log.d("mapb_text",mapb+ "");
-////        Log.d("tenpb_text",tenpb+ "");
-//
-//        if( noError ) {
-//            for (int i = 1; i < nhanvien_table_list.getChildCount(); i++) {
-//                TableRow tr = (TableRow) nhanvien_table_list.getChildAt(i);
-//                TextView mapb_data = (TextView) tr.getChildAt(0);
-//                TextView tenpb_data = (TextView) tr.getChildAt(1);
-//
-////            Log.d("mapb",mapb_data.getText()+ "");
-////            Log.d("tenpb",tenpb_data.getText()+ "");
-////            Log.d("mapb_comp",(mapb.equals(mapb_data.getText().toString()))+ "");
-////            Log.d("tenpb_comp",(tenpb.equals(tenpb_data.getText().toString()))+ "");
-//
-//                if (!allowSameID)
-//                    if (mapb.equals(mapb_data.getText().toString())) {
-//                        showMNVError.setText("Mã PB không được trùng ");
-//                        showMNVError.setVisibility(View.VISIBLE);
-//                        return noError = false;
-//                    }
-//                if (tenpb.equals(tenpb_data.getText().toString())) {
-//                    showTNVError.setText("Tên PB không được trùng");
-//                    showTNVError.setVisibility(View.VISIBLE);
-//                    return noError = false;
-//                }
-//            }
-//            showMNVError.setVisibility(View.INVISIBLE);
-//            showTNVError.setVisibility(View.INVISIBLE);
-//        }
-//        return noError;
-//    }
+    public boolean isSafeDialog( boolean allowSameID ) {
+        String  manv, tennv ;
+        // Mã PB không được trùng với Mã PB khác và ko để trống
+        manv = inputMaNV.getText().toString().trim();
+        boolean noError = true;
+        if ( manv.equals("")) {
+            showMNVError.setText("Mã NV không được trống ");
+            showMNVError.setVisibility(View.VISIBLE);
+            noError = false;
+        }else{
+            showMNVError.setVisibility(View.INVISIBLE);
+            noError = true;
+        }
+
+        // Tên PB không được để trống và không trùng
+        tennv = inputTenNV.getText().toString().trim();
+        if (tennv.equals("")) {
+            showTNVError.setText("Tên NV không được trống ");
+            showTNVError.setVisibility(View.VISIBLE);
+            noError = false;
+        }else{
+            showTNVError.setVisibility(View.INVISIBLE);
+            noError = true;
+        }
+
+        if( noError ) {
+            for (int i = 1; i < nhanvien_table_list.getChildCount(); i++) {
+                TableRow tr = (TableRow) nhanvien_table_list.getChildAt(i);
+                TextView mapb_data = (TextView) tr.getChildAt(0);
+                TextView tenpb_data = (TextView) tr.getChildAt(1);
+
+                if (!allowSameID)
+                    if (manv.equals(mapb_data.getText().toString())) {
+                        showMNVError.setText("Mã NV không được trùng ");
+                        showMNVError.setVisibility(View.VISIBLE);
+                        return noError = false;
+                    }
+            }
+            showMNVError.setVisibility(View.INVISIBLE);
+            showTNVError.setVisibility(View.INVISIBLE);
+        }
+        return noError;
+    }
+
     // --------------- CUSTOM HELPER -----------------------------------------------------------------
     public ArrayAdapter<String> loadSpinnerAdapter(ArrayList<String> phongban) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, phongban);
@@ -556,6 +687,20 @@ public class NhanvienLayout extends AppCompatActivity {
         return day + "/" + month + "/" + year; // [30,08,1999] -> 30/08/1999
     }
 
+    public String formatDate(String str, boolean toSQL ){
+        String[] date ;
+        String result = "";
+        if( toSQL ){
+            date = str.split("/");
+            result = date[2] +"-"+ date[1] +"-"+ date[0];
+        }else{
+            date = str.split("-");
+            result = date[2] +"/"+ date[1] +"/"+ date[0];
+        }
+
+        return result;
+    }
+
     // This Custom Columns' Max Width : 65 p0 / 220 / <= 100 p0
     public TableRow createRow(Context context, NhanVien nv) {
         TableRow tr = new TableRow(context);
@@ -581,9 +726,11 @@ public class NhanvienLayout extends AppCompatActivity {
         ngaysinhNV.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
         ngaysinhNV.setPadding(0, 0, 0, 0);
         ngaysinhNV.setMaxWidth(DPtoPix(100));
-        ngaysinhNV.setText(nv.getNgaySinh());
+        ngaysinhNV.setText(formatDate(nv.getNgaySinh(),false));
 
         tr.setBackgroundColor(getResources().getColor(R.color.white));
+        //  Mã PB
+        tr.setTag(nv.getMaPb()+"");
 
         tr.addView(maNV);
         tr.addView(tenNV);

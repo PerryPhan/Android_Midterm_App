@@ -22,8 +22,15 @@ public class NhanVien {
         this.maPb = maPb;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "NhanVien{" +
+                "maNv='" + maNv + '\'' +
+                ", hoTen='" + hoTen + '\'' +
+                ", ngaySinh='" + ngaySinh + '\'' +
+                ", maPb='" + maPb + '\'' +
+                '}';
+    }
 //    public long getId() {
 //        return id;
 //    }

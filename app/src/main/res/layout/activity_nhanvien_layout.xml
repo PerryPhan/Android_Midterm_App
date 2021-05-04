@@ -202,20 +202,21 @@
         android:gravity="center">
         <Button
             style="@style/Btn"
-            android:id="@+id/navbar_phongban"
-            android:backgroundTint="@color/active_color"
+            android:id="@+id/NV_navbar_phongban"
+            android:backgroundTint="@color/disable_color"
+            android:textColor="@color/black"
             android:text="@string/phong_ban"/>
 
         <Button
             style="@style/Btn"
-            android:id="@+id/navbar_nhanvien"
-            android:backgroundTint="@color/disable_color"
+            android:id="@+id/NV_navbar_nhanvien"
+            android:backgroundTint="@color/active_color"
             android:textColor="@color/black"
             android:text="@string/nhan_vien"/>
 
         <Button
             style="@style/Btn"
-            android:id="@+id/navbar_VPP"
+            android:id="@+id/NV_navbar_VPP"
             android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"
             android:text="@string/vpp"/>
