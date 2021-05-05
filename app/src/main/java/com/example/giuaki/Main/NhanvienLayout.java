@@ -116,6 +116,7 @@ public class NhanvienLayout extends AppCompatActivity {
     }
 
     public void loadDatabase() {
+        Log.d("data","Load Database --------");
         nhanvienDB = new NhanVienDatabase(NhanvienLayout.this);
         phongbanDB = new PhongBanDatabase(NhanvienLayout.this);
 
@@ -155,7 +156,9 @@ public class NhanvienLayout extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 Intent intent = new Intent(NhanvienLayout.this, PhongbanLayout.class);
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
                 startActivity( intent );
+
             }
         });
         // navVPP
@@ -164,8 +167,11 @@ public class NhanvienLayout extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 Intent intent = new Intent(NhanvienLayout.this, VanphongphamLayout.class);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 startActivity( intent );
+
             }
+
         });
 
         exitBtn.setOnClickListener(new View.OnClickListener() {
@@ -641,7 +647,7 @@ public class NhanvienLayout extends AppCompatActivity {
                 TextView tenpb_data = (TextView) tr.getChildAt(1);
 
                 if (!allowSameID)
-                    if (manv.equals(mapb_data.getText().toString())) {
+                    if (manv.equalsIgnoreCase(mapb_data.getText().toString())) {
                         showMNVError.setText("Mã NV không được trùng ");
                         showMNVError.setVisibility(View.VISIBLE);
                         return noError = false;

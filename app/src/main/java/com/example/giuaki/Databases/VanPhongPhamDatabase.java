@@ -80,7 +80,7 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
         };
 
         // How you want the results sorted in the resulting Cursor
-        String sortOrder = VanPhongPhamDatabase.COLUMN_MAVPP + " ASC";
+        String sortOrder = null;
 
         Cursor cursor = db.query(
                 TABLE_NAME,   // The table to query

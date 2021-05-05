@@ -321,6 +321,15 @@
             android:orientation="horizontal"
             android:gravity="right">
             <Button
+                android:id="@+id/VPP_previewBtn"
+                android:drawableLeft="@drawable/baseline_visibility_black_24"
+                style="@style/Btn"
+                android:paddingLeft="12dp"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#50E363"
+                android:layout_marginRight="5dp"/>
+            <Button
                 style="@style/Btn"
                 android:id="@+id/Capphatnav"
                 android:text="@string/cap_phat_VPP"

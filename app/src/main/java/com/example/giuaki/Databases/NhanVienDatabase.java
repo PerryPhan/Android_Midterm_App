@@ -84,7 +84,7 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
         };
 
         // How you want the results sorted in the resulting Cursor
-        String sortOrder = NhanVienDatabase.COLUMN_MANV + " ASC";
+        String sortOrder = null;
 
         Cursor cursor = db.query(
                 NhanVienDatabase.TABLE_NAME,   // The table to query

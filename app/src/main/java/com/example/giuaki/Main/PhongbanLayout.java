@@ -103,7 +103,9 @@ public class PhongbanLayout extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 Intent intent = new Intent(PhongbanLayout.this, NhanvienLayout.class);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 startActivity( intent );
+
             }
         });
         // navVPP
@@ -112,7 +114,9 @@ public class PhongbanLayout extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 Intent intent = new Intent(PhongbanLayout.this, VanphongphamLayout.class);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 startActivity( intent );
+
             }
         });
 
@@ -161,7 +165,6 @@ public class PhongbanLayout extends AppCompatActivity {
                     inputMaPB.setText(focusMaPB.getText());
                     inputMaPB.setEnabled(false);
                     inputTenPB.setText(focusTenPB.getText());
-
                 }
             }
         });
@@ -398,12 +401,12 @@ public class PhongbanLayout extends AppCompatActivity {
 //            Log.d("tenpb_comp",(tenpb.equals(tenpb_data.getText().toString()))+ "");
 
                 if (!allowSameID)
-                    if (mapb.equals(mapb_data.getText().toString())) {
+                    if (mapb.equalsIgnoreCase(mapb_data.getText().toString())) {
                         showMPBError.setText("Mã PB không được trùng ");
                         showMPBError.setVisibility(View.VISIBLE);
                         return noError = false;
                     }
-                if (tenpb.equals(tenpb_data.getText().toString())) {
+                if (tenpb.equalsIgnoreCase(tenpb_data.getText().toString())) {
                     showTPBError.setText("Tên PB không được trùng");
                     showTPBError.setVisibility(View.VISIBLE);
                     return noError = false;
