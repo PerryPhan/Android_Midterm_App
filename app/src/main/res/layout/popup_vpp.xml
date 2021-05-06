@@ -49,24 +49,6 @@
                     android:orientation="vertical">
                     <TextView
                         style="@style/textBlack"
-                        android:text="@string/hinh"
-                        android:padding="10dp"
-                        />
-                    <TextView
-                        style="@style/tempCombobox"
-                        android:text="Button add image here"/>
-                    <TextView
-                        style="@style/tempCombobox"
-                        android:text="Image View here 100x100"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_marginTop="10dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        style="@style/textBlack"
                         android:text="@string/ma_vpp"
                         android:padding="10dp"
                         />
@@ -113,33 +95,35 @@
                         android:visibility="invisible"
                         />
                 </LinearLayout>
+
                 <LinearLayout
-                    android:layout_marginTop="10dp"
-                    android:layout_marginHorizontal="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
+
                     <TextView
                         style="@style/textBlack"
-                        android:text="@string/don_vi_tinh"
                         android:padding="10dp"
-                        />
+                        android:text="@string/don_vi_tinh" />
+
                     <EditText
                         android:id="@+id/VPP_inputDVT"
-                        android:paddingLeft="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        />
+                        android:paddingLeft="10dp" />
+
                     <TextView
-                        style="@style/textRed"
                         android:id="@+id/VPP_showDVTError"
-                        android:visibility="invisible"
+                        style="@style/textRed"
                         android:layout_width="match_parent"
-                        android:text="@string/error_of_this_line"
-                        android:gravity="center"
                         android:layout_marginTop="10dp"
-                        />
+                        android:gravity="center"
+                        android:text="@string/error_of_this_line"
+                        android:visibility="invisible" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_marginTop="10dp"
                     android:layout_marginHorizontal="10dp"
@@ -167,6 +151,33 @@
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="10dp">
+                    <TextView
+                        style="@style/textBlack"
+                        android:text="@string/hinh"
+                        android:padding="10dp"
+                        />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                            <ImageView
+                                android:id="@+id/VPP_inputHinh"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:scaleType="fitCenter"
+                                android:adjustViewBounds="true"
+                                android:layout_marginLeft="60dp"
+                                android:src="@drawable/_xdlogo"
+                                />
+                        </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
     </ScrollView>

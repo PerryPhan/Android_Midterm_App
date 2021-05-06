@@ -104,6 +104,7 @@
             <!--    Content of the table -->
         </TableLayout>
         <!--    70 p0 / 200 / 55 p0 / <= 55 p0-->
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
