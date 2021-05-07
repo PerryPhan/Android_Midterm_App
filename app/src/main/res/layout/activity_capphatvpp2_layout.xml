@@ -7,13 +7,14 @@
     tools:context=".Statistics.CapphatVPPLayout"
     android:orientation="vertical">
     <LinearLayout
-        android:layout_margin="10dp"
+        android:layout_marginHorizontal="10dp"
         android:id="@+id/CPV_Top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
         <Button
+            android:id="@+id/CP_backBtn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -24,6 +25,7 @@
             app:iconTint="#000"
             />
         <Switch
+            android:id="@+id/CP_allSwitch"
             android:layout_width="match_parent"
             android:gravity="right"
             android:layout_height="wrap_content"
@@ -44,9 +46,13 @@
             android:text="@string/ten_pb"
             android:paddingHorizontal="30dp"
             />
-        <TextView
-            style="@style/tempCombobox"
-            />
+        <Spinner
+            android:layout_gravity="center"
+            android:id="@+id/CP_PBSpinner"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,6 +65,7 @@
             android:text="Khi chọn tất cả phòng ban cấu trúc bảng sẽ khác"
             />
         <Button
+            android:id="@+id/CP_searchBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tìm"
@@ -70,9 +77,7 @@
             app:strokeWidth="2dp"
             />
     </LinearLayout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="220dp"
         android:layout_marginVertical="10dp"
@@ -89,7 +94,7 @@
             <TableRow>
                 <TextView
                     style="@style/tableHeader"
-                    android:text="ID"
+                    android:text="SP"
                     android:layout_width="70dp"
                     />
                 <TextView
@@ -121,6 +126,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TableLayout
+                android:id="@+id/CP_tableCP"
                 style="@style/tableLayoutStyle"
                 android:stretchColumns="4"
                 >
@@ -198,6 +204,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TableLayout
+                android:id="@+id/CP_tableNV"
                 style="@style/tableLayoutStyle"
                 android:stretchColumns="1">
                 <!--         Generate Row based on Data here   -->
@@ -229,7 +236,7 @@
         android:paddingTop="10dp"
         android:gravity="center">
         <Button
-            android:id="@+id/thongkeBtn"
+            android:id="@+id/CP_navbar_thongke"
             style="@style/Btn"
             android:textSize="20dp"
             android:textColor="@color/black"
@@ -239,7 +246,7 @@
             android:layout_marginRight="30dp"
             />
         <Button
-            android:id="@+id/inBaocaoBtn"
+            android:id="@+id/CP_navbar_baocao"
             style="@style/Btn"
             android:textSize="20dp"
             android:textColor="@color/black"

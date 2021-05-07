@@ -22,13 +22,13 @@
         <activity android:name=".Tables.ThongkeTable02" />
         <activity android:name=".Tables.ThongkeTable01" />
         <activity android:name=".Main.ThongkeLayout" />
-        <activity android:name=".Tables.CapphatTable04" />
-        <activity android:name=".Tables.CapphatTable03" />
         <activity android:name=".Statistics.CapphatVPP2Layout" />
-        <activity android:name=".Tables.CapphatTable02" />
-        <activity android:name=".Tables.CapphatTable01" />
         <activity android:name=".Statistics.CapphatVPPLayout" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".Main.VanphongphamLayout" >
         </activity>
@@ -38,11 +38,7 @@
         <activity android:name=".Main.PhongbanLayout" >
         </activity>
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
