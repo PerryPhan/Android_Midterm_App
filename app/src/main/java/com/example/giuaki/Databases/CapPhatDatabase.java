@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.giuaki.Entities.CapPhat;
+import com.example.giuaki.Entities.VanPhongPham;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,11 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "GiuaKi";
+    private static final String DATABASE_NAME = "GiuaKi.db";
 
     // Table name: Note.
     private static final String TABLE_NAME = "CAPPHAT";
 
-    public static final String COLUMN_ID ="ID";
     public static final String COLUMN_SOPHIEU ="SOPHIEU";
     public static final String COLUMN_NGAYCAP = "NGAYCAP";
     public static final String COLUMN_MAVPP = "MAVPP";
@@ -32,6 +32,7 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
 
     public CapPhatDatabase(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
 
     @Override
@@ -41,9 +42,12 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
 //                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                 + COLUMN_SOPHIEU + " TEXT PRIMARY KEY,"
                 + COLUMN_NGAYCAP + " TEXT NOT NULL,"
-                + COLUMN_MAVPP + "TEXT NOT NULL,"
-                + COLUMN_MANV + "TEXT NOT NULL,"
-                + COLUMN_SOLUONG + "INTEGER NOT NULL)";
+                + COLUMN_MAVPP + " TEXT NOT NULL,"
+                + COLUMN_MANV + " TEXT NOT NULL,"
+                + COLUMN_SOLUONG + " INTEGER NOT NULL,"
+                + "FOREIGN KEY("+COLUMN_MAVPP+") REFERENCES VANPHONGPHAM("+COLUMN_MAVPP+"), "
+                + "FOREIGN KEY("+COLUMN_MANV+") REFERENCES NHANVIEN("+COLUMN_MANV+") )";
+
         // Execute script.
         db.execSQL(script);
     }
@@ -59,20 +63,18 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insert(CapPhat capPhat){
-        // Gets the data repository in write mode
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // Create a new map of values, where column names are the keys
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_SOPHIEU, capPhat.getSoPhieu());
-        values.put(COLUMN_NGAYCAP, capPhat.getNgayCap());
-        values.put(COLUMN_MAVPP, capPhat.getMaVpp());
-        values.put(COLUMN_MANV, capPhat.getMaNv());
-        values.put(COLUMN_SOLUONG, capPhat.getSl());
-
-        // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(TABLE_NAME, null, values);
+    public List<CapPhat> reset(){
+        deleteAll();
+        insert(new CapPhat("PHIEU1","2018-05-07","VPP1","NV1",10));
+        insert(new CapPhat("PHIEU2","2018-08-25","VPP2","NV2",15));
+        insert(new CapPhat("PHIEU3","2017-01-04","VPP1","NV1",24));
+        insert(new CapPhat("PHIEU4","2019-02-24","VPP3","NV3",4));
+        insert(new CapPhat("PHIEU5","2018-10-30","VPP5","NV5",7));
+        insert(new CapPhat("PHIEU6","2019-05-07","VPP1","NV3",16));
+        insert(new CapPhat("PHIEU7","2020-07-01","VPP2","NV1",15));
+        insert(new CapPhat("PHIEU8","2019-02-02","VPP6","NV4",16));
+        insert(new CapPhat("PHIEU9","2018-02-09","VPP1","NV5",14));
+        return select();
     }
 
     public List<CapPhat> select(){
@@ -116,4 +118,55 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
 
         return list_capphat;
     }
+
+    public long insert(CapPhat capphatVPP){
+        // Gets the data repository in write mode
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SOPHIEU, capphatVPP.getSoPhieu());
+        values.put(COLUMN_NGAYCAP, capphatVPP.getNgayCap());
+        values.put(COLUMN_MAVPP, capphatVPP.getMaVpp());
+        values.put(COLUMN_MANV, capphatVPP.getMaNv());
+        values.put(COLUMN_SOLUONG, capphatVPP.getSl());
+
+        // Insert the new row, returning the primary key value of the new row
+        return db.insert(TABLE_NAME, null, values);
+    }
+
+    public long update(CapPhat capphatVPP){
+        // Gets the data repository in write mode
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SOPHIEU, capphatVPP.getSoPhieu());
+        values.put(COLUMN_NGAYCAP, capphatVPP.getNgayCap());
+        values.put(COLUMN_MAVPP, capphatVPP.getMaVpp());
+        values.put(COLUMN_MANV, capphatVPP.getMaNv());
+        values.put(COLUMN_SOLUONG, capphatVPP.getSl());
+
+        // db.update ( Tên bảng, tập giá trị mới, điều kiện lọc, tập giá trị cho điều kiện lọc );
+        return db.update(
+                CapPhatDatabase.TABLE_NAME
+                , values
+                , CapPhatDatabase.COLUMN_SOPHIEU +"=?"
+                ,  new String[] { String.valueOf(capphatVPP.getMaVpp()) }
+        );
+    }
+    public long delete(VanPhongPham vanPhongPham){
+        // Gets the data repository in write mode
+        SQLiteDatabase db = this.getWritableDatabase();
+        // db.delete ( Tên bàng, string các điều kiện lọc - dùng ? để xác định, string[] từng phần tử trong string[] sẽ nạp vào ? );
+        return db.delete(
+                CapPhatDatabase.TABLE_NAME
+                ,CapPhatDatabase.COLUMN_SOPHIEU +"=?"
+                ,  new String[] { String.valueOf(vanPhongPham.getMaVpp()) }
+        );
+    }
+    public long deleteAll(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(CapPhatDatabase.TABLE_NAME,null,null);
+    }
+
 }

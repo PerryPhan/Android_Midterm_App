@@ -1,5 +1,7 @@
 package com.example.giuaki.Entities;
 
+import androidx.annotation.NonNull;
+
 public class CapPhat {
 
     private String soPhieu;
@@ -16,6 +18,16 @@ public class CapPhat {
         this.sl = sl;
     }
 
+    @Override
+    public String toString() {
+        return "CapPhat{" +
+                "soPhieu='" + soPhieu + '\'' +
+                ", ngayCap='" + ngayCap + '\'' +
+                ", maVpp='" + maVpp + '\'' +
+                ", maNv='" + maNv + '\'' +
+                ", sl=" + sl +
+                '}';
+    }
 
     public String getSoPhieu() {
         return soPhieu;

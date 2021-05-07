@@ -19,7 +19,7 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "GiuaKi";
+    private static final String DATABASE_NAME = "GiuaKi.db";
 
     // Table name: Note.
     private static final String TABLE_NAME = "VANPHONGPHAM";
@@ -33,6 +33,7 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
 
     public VanPhongPhamDatabase(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {

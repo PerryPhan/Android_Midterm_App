@@ -32,8 +32,7 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
 
     public NhanVienDatabase(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        SQLiteDatabase db = this.getWritableDatabase();
-        onCreate(db);
+
     }
 
     @Override

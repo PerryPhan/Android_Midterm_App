@@ -14,6 +14,7 @@
         android:orientation="horizontal"
         >
         <Button
+            android:id="@+id/CP_backBtn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -24,6 +25,7 @@
             app:iconTint="#000"
             />
         <Switch
+            android:id="@+id/CP_allSwitch"
             android:layout_width="match_parent"
             android:gravity="right"
             android:layout_height="wrap_content"
@@ -43,9 +45,13 @@
                 android:text="@string/ten_pb"
                 android:paddingHorizontal="30dp"
             />
-            <TextView
-                style="@style/tempCombobox"
-            />
+            <Spinner
+                android:layout_gravity="center"
+                android:id="@+id/CP_PBSpinner"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,6 +64,7 @@
             android:text="Khi chọn tất cả phòng ban cấu trúc bảng sẽ khác"
             />
         <Button
+            android:id="@+id/CP_searchBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tìm"
@@ -69,11 +76,88 @@
             app:strokeWidth="2dp"
             />
     </LinearLayout>
-    <include android:id="@+id/CP_table01"
-        android:layout_width="wrap_content"
-        android:layout_height="130dp"
-        android:layout_marginVertical="10dp"
-        layout="@layout/capphat_table01" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".Main.NhanvienLayout"
+        >
+        <!--    Header of the table -->
+        <!-- 85 / 180 p0 / 50 p0 / 80  -->
+        <TableLayout
+            style="@style/tableLayoutStyle"
+            android:layout_width="match_parent"
+            android:stretchColumns="3">
+            <TableRow>
+
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/ma_vpp"
+                    android:layout_width="85dp"/>
+
+                <TextView
+                    style="@style/VPPHeader_secCellWidth"
+                    android:text="@string/ten_vpp"
+                    android:layout_width="180dp"/>
+
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/dvt"
+                    android:layout_width="50dp"
+                    android:padding="0dp"/>
+                <TextView
+                    style="@style/tableHeader"
+                    android:maxWidth="80dp"
+                    android:text="@string/gia" />
+            </TableRow>
+
+        </TableLayout>
+        <!--    Content of the table -->
+        <!-- 85 / 180 p0 / 50 p0 / 80  -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            >
+            <TableLayout
+                android:id="@+id/CP_tableVPP"
+                style="@style/tableLayoutStyle"
+                android:stretchColumns="3"
+                >
+                <TableRow
+                    >
+                    <TextView
+                        android:visibility="invisible"
+                        style="@style/VPPRow_firstCellWidth"
+                        android:text="VPP1"
+                        android:layout_height="0dp"
+                        android:layout_width="85dp"
+                        />
+                    <TextView
+                        android:visibility="invisible"
+                        style="@style/VPPRow_secCellWidth"
+                        android:layout_width="180dp"
+                        android:layout_height="0dp"
+                        android:text="Giấy A4" />
+                    <TextView
+                        android:visibility="invisible"
+                        style="@style/tableRow"
+                        android:text="Gram"
+                        android:layout_width="50dp"
+                        android:layout_height="0dp"
+                        android:padding="0dp"/>
+                    <TextView
+                        android:visibility="invisible"
+                        style="@style/tableRow"
+                        android:text="70.000"
+                        android:layout_height="0dp"
+                        android:maxWidth="80dp"
+                        />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </LinearLayout>
     <TextView
         style="@style/textRed"
         android:text="VPP4 được cấp cho các nhân viên dưới đây"
@@ -81,12 +165,73 @@
         android:gravity="center"
         android:layout_marginHorizontal="20dp"
         />
-
-    <include android:id="@+id/CP_table02"
-        android:layout_width="wrap_content"
-        android:layout_height="130dp"
-        android:layout_marginVertical="10dp"
-        layout="@layout/capphat_table02" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        >
+        <!--    Header of the table -->
+        <!-- 80 / 230 / 100-->
+        <TableLayout
+            android:id="@+id/CP_tableNV"
+            style="@style/tableLayoutStyle"
+            android:stretchColumns="2"
+            >
+            <TableRow>
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/ma_nv"
+                    android:layout_width="80dp"
+                    />
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/ten_nv"
+                    android:layout_width="230dp"
+                    />
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/so_luong"
+                    android:maxWidth="100dp"
+                    />
+            </TableRow>
+        </TableLayout>
+        <!--    Content of the table -->
+        <!-- 80 / 230 / 90-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableLayout
+                style="@style/tableLayoutStyle"
+                android:layout_width="match_parent"
+                android:stretchColumns="2"
+                >
+                <!--         Generate Row based on Data here   -->
+                <TableRow>
+                    <TextView
+                        android:visibility="invisible"
+                        style="@style/PBRow_firstCellWidth"
+                        android:text="NV1"
+                        android:layout_height="0dp"
+                        android:layout_width="80dp"
+                        />
+                    <TextView
+                        android:visibility="invisible"
+                        style="@style/tableRow"
+                        android:text="Nguyễn Thành Nam"
+                        android:layout_width="230dp"
+                        android:layout_height="0dp"
+                        />
+                    <TextView
+                        android:visibility="invisible"
+                        style="@style/tableRow"
+                        android:text="60"
+                        android:maxWidth="90dp"
+                        android:layout_height="0dp"
+                        />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </LinearLayout>
     <TextView
         style="@style/textRed"
         android:text="Tổng Chi phí trong Phòng Kỹ thuật được cấp :"
@@ -125,7 +270,7 @@
             android:layout_width="200dp"
             android:paddingHorizontal="30dp"/>
         <TextView
-            android:id="@+id/CP_totalMoney"
+            android:id="@+id/CP_totalPrice"
             style="@style/textBlack"
             android:layout_width="match_parent"
             android:layout_gravity="right"
@@ -142,7 +287,7 @@
         android:paddingTop="10dp"
         android:gravity="center">
         <Button
-            android:id="@+id/thongkeBtn"
+            android:id="@+id/CP_navbar_thongke"
             style="@style/Btn"
             android:textSize="20dp"
             android:textColor="@color/black"
@@ -152,7 +297,7 @@
             android:layout_marginRight="30dp"
             />
         <Button
-            android:id="@+id/inBaocaoBtn"
+            android:id="@+id/CP_navbar_baocao"
             style="@style/Btn"
             android:textSize="20dp"
             android:textColor="@color/black"

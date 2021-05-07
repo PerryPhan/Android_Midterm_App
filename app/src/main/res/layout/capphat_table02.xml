@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="150dp"
     android:orientation="vertical"
     tools:context=".Main.NhanvienLayout"
     >
@@ -45,41 +45,27 @@
             <!--         Generate Row based on Data here   -->
             <TableRow>
                 <TextView
+                    android:visibility="invisible"
                     style="@style/PBRow_firstCellWidth"
                     android:text="NV1"
+                    android:layout_height="0dp"
                     android:layout_width="80dp"
                     />
                 <TextView
+                    android:visibility="invisible"
                     style="@style/tableRow"
                     android:text="Nguyễn Thành Nam"
                     android:layout_width="230dp"
+                    android:layout_height="0dp"
                     />
                 <TextView
+                    android:visibility="invisible"
                     style="@style/tableRow"
                     android:text="60"
                     android:maxWidth="90dp"
+                    android:layout_height="0dp"
                     />
             </TableRow>
-<!--            <TableRow>-->
-<!--                <TextView-->
-<!--                    style="@style/PBRow_firstCellWidth"-->
-<!--                    android:text="NV2"-->
-<!--                    android:layout_width="80dp"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    />-->
-<!--                <TextView-->
-<!--                    style="@style/tableRow"-->
-<!--                    android:text="Vũ Thị Thắm"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    android:layout_width="230dp"-->
-<!--                    />-->
-<!--                <TextView-->
-<!--                    style="@style/tableRow"-->
-<!--                    android:text="60"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    android:maxWidth="90dp"-->
-<!--                    />-->
-<!--            </TableRow>-->
         </TableLayout>
     </ScrollView>
 </LinearLayout>

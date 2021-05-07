@@ -304,7 +304,7 @@ public class PhongbanLayout extends AppCompatActivity {
                 switch (view.getId()) {
                     case R.id.PB_insertBtn: {
                         if (!isSafeDialog( false )) break;
-                        PhongBan pb = new PhongBan(inputMaPB.getText() + "", inputTenPB.getText() + "");
+                        PhongBan pb = new PhongBan(inputMaPB.getText().toString().trim() + "", inputTenPB.getText().toString().trim() + "");
                         if (phongbanDB.insert(pb) == -1) break;
                         TableRow tr = createRow(PhongbanLayout.this, pb);
                         int n = phongban_table_list.getChildCount();
