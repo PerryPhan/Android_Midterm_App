@@ -325,7 +325,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                 focusTenVPP = (TextView) focusRow.getChildAt(1);
                 focusDVT = (TextView) focusRow.getChildAt(2);
                 focusGia = (TextView) focusRow.getChildAt(3);
-                focusDataHinh = image_list.get( focusRow.getId() -1 );
+                focusDataHinh = image_list.get( focusRow.getId() - 1);
                 setNormalBGTableRows(list);
                 // Testing to get id of focusable row
                 //  Toast.makeText( PhongbanLayout.this, focusRowID+"", Toast.LENGTH_LONG).show();
@@ -631,23 +631,23 @@ public class VanphongphamLayout extends AppCompatActivity {
         if( noError ) {
             for (int i = 1; i < vpp_table_list.getChildCount(); i++) {
                 TableRow tr = (TableRow) vpp_table_list.getChildAt(i);
-                TextView mapb_data = (TextView) tr.getChildAt(0);
-                TextView tenpb_data = (TextView) tr.getChildAt(1);
+                TextView mavpp_data = (TextView) tr.getChildAt(0);
+                TextView tenvpp_data = (TextView) tr.getChildAt(1);
 
-//            Log.d("mavpp",mapb_data.getText()+ "");
-//            Log.d("tenvpp",tenpb_data.getText()+ "");
-//            Log.d("mapb_comp",(mavpp.equals(mapb_data.getText().toString()))+ "");
-//            Log.d("tenpb_comp",(tenvpp.equals(tenpb_data.getText().toString()))+ "");
+//            Log.d("mavpp",mavpp_data.getText()+ "");
+//            Log.d("tenvpp",tenvpp_data.getText()+ "");
+//            Log.d("mapb_comp",(mavpp.equals(mavpp_data.getText().toString()))+ "");
+//            Log.d("tenpb_comp",(tenvpp.equals(tenvpp_data.getText().toString()))+ "");
 
                 if (!allowSameID)
-                    if (mavpp.equalsIgnoreCase(mapb_data.getText().toString())) {
+                    if (mavpp.equalsIgnoreCase(mavpp_data.getText().toString())) {
                         showMVPPError.setText("Mã PB không được trùng ");
                         showMVPPError.setVisibility(View.VISIBLE);
                         return noError = false;
                     }
                 // Trường hợp chỉ đổi ảnh, những thông tin khác ngoại trừ tên thì phải đổi tên luôn à
-                if (tenvpp.equalsIgnoreCase(tenpb_data.getText().toString())
-                        && !tenpb_data.getText().toString().equalsIgnoreCase(
+                if (tenvpp.equalsIgnoreCase(tenvpp_data.getText().toString())
+                        && !tenvpp_data.getText().toString().equalsIgnoreCase(
                                 focusTenVPP.getText().toString().trim()
                         )
                     ) {

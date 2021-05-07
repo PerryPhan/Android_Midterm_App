@@ -2,15 +2,13 @@ package com.example.giuaki.Entities;
 
 public class CapPhat {
 
-    private long id;
     private String soPhieu;
     private String ngayCap;
     private String maVpp;
     private String maNv;
     private long sl;
 
-    public CapPhat(long id, String soPhieu, String ngayCap, String maVpp, String maNv, long sl) {
-        this.id = id;
+    public CapPhat( String soPhieu, String ngayCap, String maVpp, String maNv, long sl) {
         this.soPhieu = soPhieu;
         this.ngayCap = ngayCap;
         this.maVpp = maVpp;
@@ -18,13 +16,6 @@ public class CapPhat {
         this.sl = sl;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getSoPhieu() {
         return soPhieu;

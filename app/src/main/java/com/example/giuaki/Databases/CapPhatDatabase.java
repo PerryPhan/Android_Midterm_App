@@ -38,8 +38,8 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Script to create table.
         String script = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "("
-                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                + COLUMN_SOPHIEU + " TEXT NOT NULL UNIQUE,"
+//                + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                + COLUMN_SOPHIEU + " TEXT PRIMARY KEY,"
                 + COLUMN_NGAYCAP + " TEXT NOT NULL,"
                 + COLUMN_MAVPP + "TEXT NOT NULL,"
                 + COLUMN_MANV + "TEXT NOT NULL,"
@@ -47,7 +47,10 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
         // Execute script.
         db.execSQL(script);
     }
-
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.setVersion(oldVersion);
+    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop table
@@ -78,7 +81,6 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
-                COLUMN_ID,
                 COLUMN_SOPHIEU,
                 COLUMN_NGAYCAP,
                 COLUMN_MAVPP,
@@ -87,7 +89,8 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
         };
 
         // How you want the results sorted in the resulting Cursor
-        String sortOrder = PhongBanDatabase.COLUMN_ID + " DESC";
+//        String sortOrder = PhongBanDatabase.COLUMN_ID + " DESC";
+        String sortOrder = null;
 
         Cursor cursor = db.query(
                 TABLE_NAME,   // The table to query
@@ -103,12 +106,11 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
 
         while(cursor.moveToNext()){
             list_capphat.add(new CapPhat(
-                    cursor.getLong(0),
+                    cursor.getString(0),
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3),
-                    cursor.getString(4),
-                    cursor.getLong(5)
+                    cursor.getLong(4)
             ));
         }
 

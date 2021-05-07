@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.CursorWindow;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -30,6 +32,7 @@ import com.example.giuaki.Entities.NhanVien;
 import com.example.giuaki.Entities.PhongBan;
 import com.example.giuaki.R;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +105,17 @@ public class NhanvienLayout extends AppCompatActivity {
     }
 
     // --------------- MAIN HELPER -----------------------------------------------------------------
+    public void setCursorWindowImageSize( int B ){
+        // Khai báo một field mới cho khả năng lưu hình độ phân giải lớn
+        try {
+            Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+            field.setAccessible(true);
+            field.set(null, B); //the 100MB is the new size
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setControl() {
         nhanvien_table_list = findViewById(R.id.NV_table_list);
         PB_spinner = findViewById(R.id.NV_PBSpinner);
@@ -119,8 +133,8 @@ public class NhanvienLayout extends AppCompatActivity {
         Log.d("data","Load Database --------");
         nhanvienDB = new NhanVienDatabase(NhanvienLayout.this);
         phongbanDB = new PhongBanDatabase(NhanvienLayout.this);
-
         nhanvienlist = new ArrayList<>();
+        setCursorWindowImageSize(100*1024*1024);
         TableRow tr = null;
         nhanvienlist = nhanvienDB.select();
         // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn

@@ -49,7 +49,10 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
         // Execute script.
         db.execSQL(script);
     }
-
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.setVersion(oldVersion);
+    }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop table

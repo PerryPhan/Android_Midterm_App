@@ -34,6 +34,10 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
     public VanPhongPhamDatabase(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.setVersion(oldVersion);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

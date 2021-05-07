@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.CursorWindow;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.example.giuaki.Databases.PhongBanDatabase;
 import com.example.giuaki.Entities.PhongBan;
 import com.example.giuaki.R;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +79,17 @@ public class PhongbanLayout extends AppCompatActivity {
     }
 
     // --------------- MAIN HELPER -----------------------------------------------------------------
+    public void setCursorWindowImageSize( int B ){
+        // Khai báo một field mới cho khả năng lưu hình độ phân giải lớn
+        try {
+            Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+            field.setAccessible(true);
+            field.set(null, B); //the 100MB is the new size
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setControl() {
         phongban_table_list = findViewById(R.id.PB_table_list);
         insertBtn = findViewById(R.id.PB_insertBtn);
@@ -232,6 +245,7 @@ public class PhongbanLayout extends AppCompatActivity {
         phongbanDB = new PhongBanDatabase(this);
         List<PhongBan> list = new ArrayList<>();
         TableRow tr = null;
+        setCursorWindowImageSize(100 * 1024* 1024);
         list = phongbanDB.select();
         // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn
         for (int i = 0; i < list.size(); i++) {
@@ -406,7 +420,10 @@ public class PhongbanLayout extends AppCompatActivity {
                         showMPBError.setVisibility(View.VISIBLE);
                         return noError = false;
                     }
-                if (tenpb.equalsIgnoreCase(tenpb_data.getText().toString())) {
+                if (tenpb.equalsIgnoreCase(tenpb_data.getText().toString())
+                        && !tenpb_data.getText().toString().equalsIgnoreCase(
+                        focusTenPB.getText().toString().trim() )
+                    ) {
                     showTPBError.setText("Tên PB không được trùng");
                     showTPBError.setVisibility(View.VISIBLE);
                     return noError = false;
