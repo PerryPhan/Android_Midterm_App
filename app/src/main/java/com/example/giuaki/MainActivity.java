@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // TESTING ZONE --------------------------------------------------------------------
         PhongBanDatabase phongBanDatabase = new PhongBanDatabase(MainActivity.this);
         phongBanDatabase.reset();
         NhanVienDatabase nhanvienDatabase = new NhanVienDatabase(MainActivity.this);
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("data",cp.toString());
         VanPhongPhamDatabase vanPhongPhamDatabase = new VanPhongPhamDatabase(MainActivity.this);
         vanPhongPhamDatabase.reset();
+        // TESTING ZONE --------------------------------------------------------------------
 
     }
 
