@@ -22,7 +22,7 @@ public class PhongBanDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GiuaKi.db";
 
     // Table name: Note.
-    private static final String TABLE_NAME = "PHONGBAN";
+    public static final String TABLE_NAME = "PHONGBAN";
 
     public static final String COLUMN_ID ="ID";
     public static final String COLUMN_MAPB ="MAPB";
@@ -30,6 +30,11 @@ public class PhongBanDatabase extends SQLiteOpenHelper {
 
     public PhongBanDatabase(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+    public void dropTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
     }
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -55,7 +60,7 @@ public class PhongBanDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
     public List<PhongBan> reset(){
-        deleteAll();
+        dropTable();
         insert( new PhongBan("PB01", "Phòng Giám đốc"));
         insert( new PhongBan("PB02", "Phòng Kinh doanh"));
         insert( new PhongBan("PB03", "Phòng Kỹ thuật"));

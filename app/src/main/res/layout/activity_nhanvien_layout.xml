@@ -75,7 +75,7 @@
             android:layout_gravity="center"
             android:id="@+id/NV_PBSpinner"
             android:layout_width="240dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"/>
         <!--  Header of the table -->
@@ -184,7 +184,7 @@
             android:gravity="right">
             <Button
                 style="@style/Btn"
-                android:id="@+id/Capphatnav"
+                android:id="@+id/NV_navbar_capphat"
                 android:text="@string/cap_phat_VPP"
                 android:backgroundTint="@color/disable_color"
                 android:textColor="@color/black"

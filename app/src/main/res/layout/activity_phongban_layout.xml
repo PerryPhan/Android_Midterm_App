@@ -208,7 +208,7 @@ tools:context=".Main.PhongbanLayout"
         android:gravity="right">
         <Button
             style="@style/Btn"
-            android:id="@+id/Capphatnav"
+            android:id="@+id/PB_navbar_capphat"
             android:text="@string/cap_phat_VPP"
             android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"

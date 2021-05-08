@@ -24,21 +24,21 @@
         <activity android:name=".Main.ThongkeLayout" />
         <activity android:name=".Statistics.CapphatVPP2Layout" />
         <activity android:name=".Statistics.CapphatVPPLayout" >
+
+        </activity>
+        <activity android:name=".Main.VanphongphamLayout" >
+
+        </activity>
+        <activity android:name=".Main.NhanvienLayout" >
+        </activity>
+        <activity android:name=".Main.PhongbanLayout" >
+        </activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".Main.VanphongphamLayout" >
-        </activity>
-        <activity android:name=".Main.NhanvienLayout" >
-
-        </activity>
-        <activity android:name=".Main.PhongbanLayout" >
-        </activity>
-        <activity android:name=".MainActivity">
-
         </activity>
     </application>
 

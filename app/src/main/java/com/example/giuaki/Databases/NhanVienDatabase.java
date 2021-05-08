@@ -22,7 +22,7 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GiuaKi.db";
 
     // Table name: Note.
-    private static final String TABLE_NAME = "NHANVIEN";
+    public static final String TABLE_NAME = "NHANVIEN";
 
 //    public static final String COLUMN_ID ="ID";
     public static final String COLUMN_MANV ="MANV";
@@ -32,7 +32,6 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
 
     public NhanVienDatabase(Context context)  {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
     }
 
     @Override
@@ -59,8 +58,13 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
         // Recreate
         onCreate(db);
     }
+    public void dropTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + NhanVienDatabase.TABLE_NAME);
+        onCreate(db);
+    }
     public List<NhanVien> reset(){
-        deleteAll();
+        dropTable();
         insert(new NhanVien("NV1","Nguyễn Thành Nam", "1982-08-01", "PB01"));
         insert(new NhanVien("NV2","Vũ Thị Thắm"     , "1992-08-12", "PB01"));
         insert(new NhanVien("NV3","Hồ Thanh Tâm"    , "1990-06-05", "PB02"));

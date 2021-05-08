@@ -34,7 +34,11 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
-
+    public void dropTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Script to create table.
@@ -64,7 +68,7 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
     }
 
     public List<CapPhat> reset(){
-        deleteAll();
+        dropTable();
         insert(new CapPhat("PHIEU1","2018-05-07","VPP1","NV1",10));
         insert(new CapPhat("PHIEU2","2018-08-25","VPP2","NV2",15));
         insert(new CapPhat("PHIEU3","2017-01-04","VPP1","NV1",24));
@@ -167,6 +171,106 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
     public long deleteAll(){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(CapPhatDatabase.TABLE_NAME,null,null);
+    }
+
+    public List<String> getListResult(Cursor cursor){
+        List<String> results = new ArrayList<>();
+        while(cursor.moveToNext()){
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                results.add(cursor.getString(i));
+            }
+        }
+        return results;
+    }
+
+    public List<String> thongKeCau2a(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT NV.MANV, NV.HOTEN, PB.TENPB, VPP.TENVPP, SUM(CP.SOLUONG) AS TONGSL FROM \n" +
+                CapPhatDatabase.TABLE_NAME + " CP ," +
+                NhanVienDatabase.TABLE_NAME + " NV, " +
+                VanPhongPhamDatabase.TABLE_NAME + " VPP, " +
+                PhongBanDatabase.TABLE_NAME +  " PB " +
+                "WHERE VPP.TENVPP = 'Giấy A4'\n" +
+                "AND CP.MANV = NV.MANV\n" +
+                "AND CP.MAVPP = VPP.MAVPP\n" +
+                "AND NV.MAPB = PB.MAPB\n" +
+                "GROUP BY NV.MANV\n" +
+                "ORDER BY TONGSL DESC\n" +
+                "LIMIT 2";
+        Cursor cursor = db.rawQuery(sql,null);
+        return getListResult(cursor);
+    }
+
+    public List<String> thongKeCau2b(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT DISTINCT VPP.MAVPP, VPP.TENVPP, CP.NGAYCAP FROM " +
+                CapPhatDatabase.TABLE_NAME + " CP ," +
+                VanPhongPhamDatabase.TABLE_NAME + " VPP " +
+                "WHERE CP.MAVPP = VPP.MAVPP";
+        Cursor cursor = db.rawQuery(sql, null);
+        return getListResult(cursor);
+    }
+
+    public List<String> thongKeCau2c(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + NhanVienDatabase.TABLE_NAME + "\n" +
+                "WHERE MANV NOT IN\n" +
+                "(\n" +
+                "SELECT NV.MANV AS MILISEC \n" +
+                "FROM " +
+                CapPhatDatabase.TABLE_NAME + " CP, " +
+                NhanVienDatabase.TABLE_NAME + " NV, " +
+                PhongBanDatabase.TABLE_NAME + " PB " +
+                "WHERE CP.MANV = NV.MANV\n" +
+                "AND NV.MAPB = PB.MAPB\n" +
+                "AND \n" +
+                "(\n" +
+                "strftime('%s',CP.NGAYCAP) >= strftime('%s','2018-01-01')\n" +
+                "AND strftime('%s',CP.NGAYCAP) <= strftime('%s','2018-12-31')\n" +
+                ")\n" +
+                ")";
+        Cursor cursor = db.rawQuery(sql,null);
+        return getListResult(cursor);
+    }
+
+    public List<String> thongKeCau2d(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT B.TENVPP, A.MAPB , A.TENPB, A.TONGSL " +
+                "FROM " +
+                "(SELECT * FROM " +
+                VanPhongPhamDatabase.TABLE_NAME +
+                ") as B " +
+                "LEFT JOIN " +
+                "(SELECT CP.SOPHIEU, CP.NGAYCAP, NV.MANV, NV.HOTEN, PB.MAPB ,PB.TENPB, VPP.MAVPP, VPP.TENVPP " +
+                ", SUM(SOLUONG) AS TONGSL " +
+                "FROM " +
+                CapPhatDatabase.TABLE_NAME + " CP, " +
+                NhanVienDatabase.TABLE_NAME + " NV, " +
+                PhongBanDatabase.TABLE_NAME + " PB, " +
+                VanPhongPhamDatabase.TABLE_NAME + " VPP " +
+                "WHERE CP.MAVPP = VPP.MAVPP " +
+                "AND CP.MANV = NV.MANV " +
+                "AND NV.MAPB = PB.MAPB " +
+                "AND PB.MAPB = 'PB01' " +
+                "GROUP BY CP.MAVPP) as A " +
+                "ON A.MAVPP = B.MAVPP";
+        Cursor cursor = db.rawQuery(sql,null);
+        return getListResult(cursor);
+    }
+
+    public List<String> selectwithVPPandNVwherePB( String maPB ){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT VPP.MAVPP, VPP.TENVPP, VPP.DVT, VPP.GIANHAP, NV.MANV, NV.HOTEN, NV.MAPB ,CP.SOLUONG \n" +
+                "FROM " +
+                VanPhongPhamDatabase.TABLE_NAME + " VPP, " +
+                CapPhatDatabase.TABLE_NAME + " CP, " +
+                NhanVienDatabase.TABLE_NAME + " NV\n" +
+                "WHERE CP.MAVPP = VPP.MAVPP\n " +
+                "AND CP.MANV = NV.MANV " +
+                "AND NV.MAPB = '"+maPB+"'";
+        sql = "SELECT CP.SOPHIEU, CP.MANV, VPP.MAVPP FROM CAPPHAT AS CP JOIN VANPHONGPHAM AS VPP ON CP.MAVPP = VPP.MAVPP ;" ;
+        Cursor cursor = db.rawQuery(sql, null);
+        return getListResult(cursor);
     }
 
 }

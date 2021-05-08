@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.giuaki.Databases.PhongBanDatabase;
 import com.example.giuaki.Entities.PhongBan;
 import com.example.giuaki.R;
+import com.example.giuaki.Statistics.CapphatVPPLayout;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -35,9 +36,11 @@ public class PhongbanLayout extends AppCompatActivity {
     Button delBtn;
     Button exitBtn;
 
+    // Navigation
     Button navPB;
     Button navNV;
     Button navVPP;
+    Button navCP;
 
     // Dialog Layout
     Dialog phongbandialog;
@@ -100,6 +103,7 @@ public class PhongbanLayout extends AppCompatActivity {
         navPB = findViewById(R.id.PB_navbar_phongban);
         navNV = findViewById(R.id.PB_navbar_nhanvien);
         navVPP= findViewById(R.id.PB_navbar_VPP);
+        navCP= findViewById(R.id.PB_navbar_capphat);
     }
 
     public void setEvent() {
@@ -131,6 +135,16 @@ public class PhongbanLayout extends AppCompatActivity {
                 startActivity( intent );
 
             }
+        });
+        // navCP
+        navCP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PhongbanLayout.this, CapphatVPPLayout.class);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                startActivity( intent );
+            }
+
         });
 
         exitBtn.setOnClickListener(new View.OnClickListener() {

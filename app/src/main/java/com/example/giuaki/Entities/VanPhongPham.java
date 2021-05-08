@@ -2,21 +2,12 @@ package com.example.giuaki.Entities;
 
 public class VanPhongPham {
 
-    private long id;
     private String maVpp;
     private String tenVpp;
     private String dvt;
     private String giaNhap;
     private byte[] hinh;
 
-    public VanPhongPham(long id, String maVpp, String tenVpp, String dvt, String giaNhap, byte[] hinh) {
-        this.id = id;
-        this.maVpp = maVpp;
-        this.tenVpp = tenVpp;
-        this.dvt = dvt;
-        this.giaNhap = giaNhap;
-        this.hinh = hinh;
-    }
     public VanPhongPham( String maVpp, String tenVpp, String dvt, String giaNhap, byte[] hinh) {
         this.maVpp = maVpp;
         this.tenVpp = tenVpp;
@@ -24,14 +15,6 @@ public class VanPhongPham {
         this.giaNhap = giaNhap;
         this.hinh = hinh;
     }
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getMaVpp() {
         return maVpp;
     }

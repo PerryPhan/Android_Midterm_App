@@ -22,7 +22,7 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "GiuaKi.db";
 
     // Table name: Note.
-    private static final String TABLE_NAME = "VANPHONGPHAM";
+    public static final String TABLE_NAME = "VANPHONGPHAM";
 
     public static final String text = "text";
     public static final String COLUMN_MAVPP ="MAVPP";
@@ -60,8 +60,13 @@ public class VanPhongPhamDatabase extends SQLiteOpenHelper {
         // Recreate
         onCreate(db);
     }
+    public void dropTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
     public List<VanPhongPham> reset(){
-        deleteAll();
+        dropTable();
         insert( new VanPhongPham("VPP1","Giấy A4","Gram","70000",null));
         insert( new VanPhongPham("VPP2","Kéo "   ,"Cái" ,"12000",null));
         insert( new VanPhongPham("VPP3","Bút"    ,"Cây" ,"5000" ,null));

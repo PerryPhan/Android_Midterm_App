@@ -2,14 +2,21 @@ package com.example.giuaki.Statistics;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -19,10 +26,11 @@ import android.widget.Toast;
 import com.example.giuaki.Databases.CapPhatDatabase;
 import com.example.giuaki.Databases.NhanVienDatabase;
 import com.example.giuaki.Databases.PhongBanDatabase;
+import com.example.giuaki.Databases.VanPhongPhamDatabase;
 import com.example.giuaki.Entities.CapPhat;
 import com.example.giuaki.Entities.NhanVien;
 import com.example.giuaki.Entities.PhongBan;
-import com.example.giuaki.Main.PhongbanLayout;
+import com.example.giuaki.Entities.VanPhongPham;
 import com.example.giuaki.R;
 
 import java.util.ArrayList;
@@ -30,29 +38,43 @@ import java.util.List;
 
 public class CapphatVPPLayout extends AppCompatActivity {
     // Main Layout
-    CapPhatDatabase capphatDB ;
-    NhanVienDatabase nhanvienDB;
-
     Button backBtn;
-    Button searchBtn;
 
     Spinner PBSpinner;
 
+    LinearLayout cp_tablesall_container;
+    LinearLayout cp_tablesindex_container;
     TableLayout cp_tablevpp_list;
     TableLayout cp_tablenv_list;
     TableLayout cp_tablecp_list;
 
+    TextView warningLabel;
+    TextView labelVPP;
     TextView totalCount;
     TextView totalPrice;
 
+    Button previewVPPBtn;
     Button navBC;
     Button navTK;
 
     // Data
+    CapPhatDatabase capphatDB ;
+    NhanVienDatabase nhanvienDB;
+    VanPhongPhamDatabase vanphongphamDB;
+
     List<CapPhat> capphat_list;
     List<NhanVien> nhanvien_list;
+    List<VanPhongPham> vanphongpham_list;
     List<PhongBan> phongban_list;
-    List<String> phongbanNames_list;
+
+    // Dialog
+    Dialog dialog;
+        // Preview Image Layout
+        TextView VPP_IP_maVPP;
+        TextView VPP_IP_tenVPP;
+        TextView VPP_IP_DVT;
+        TextView VPP_IP_Gia;
+        ImageView VPP_IP_Hinh;
 
     // Focus
     TableRow focusRow;
@@ -70,28 +92,48 @@ public class CapphatVPPLayout extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_capphatvpp2_layout);
+        setContentView(R.layout.activity_capphatvpp_layout);
         scale = this.getResources().getDisplayMetrics().density;
         setControl();
         loadDatabase();
         setEvent();
         setNavigation();
+        // Testing Query
+        List<String> cp_vpp_nvlist = capphatDB.selectwithVPPandNVwherePB("PB01");
+        String row = "";
+        int count = 0;
+        for( String str : cp_vpp_nvlist){
+//            Log.d("data", str);
+            if( count == 3) {
+                count = 0;
+                Log.d("data", row+"\n");
+                row = "";
+            }else{
+                count++;
+                row += str+", ";
+            }
+        }
     }
+
     // --------------- MAIN HELPER -----------------------------------------------------------------
     public void setControl() {
 //        Log.d("process", "setControl");
         backBtn = findViewById(R.id.CP_backBtn);
-        searchBtn = findViewById(R.id.CP_searchBtn);
 
         PBSpinner = findViewById(R.id.CP_PBSpinner);
 
+        cp_tablesall_container = findViewById( R.id.CP_tablesAll_container );
+        cp_tablesindex_container = findViewById( R.id.CP_tablesIndex_container );
         cp_tablevpp_list = findViewById(R.id.CP_tableVPP);
         cp_tablenv_list = findViewById(R.id.CP_tableNV);
         cp_tablecp_list = findViewById(R.id.CP_tableCP);
 
+        warningLabel = findViewById(R.id.CP_warningLabel);
         totalCount = findViewById(R.id.CP_totalCount);
         totalPrice = findViewById(R.id.CP_totalPrice);
+        labelVPP = findViewById(R.id.CP_labelVPP);
 
+        previewVPPBtn = findViewById(R.id.CP_previewVPPBtn);
         navBC = findViewById(R.id.CP_navbar_baocao);
         navTK = findViewById(R.id.CP_navbar_thongke);
     }
@@ -117,24 +159,21 @@ public class CapphatVPPLayout extends AppCompatActivity {
             cp_tablenv_list.addView( tr );
 //            Log.d("data",nv.toString()+"");
         }
+        vanphongphamDB = new VanPhongPhamDatabase( CapphatVPPLayout.this );
+        vanphongpham_list = vanphongphamDB.select();
         PBSpinner.setAdapter( loadPBSpinner() );
-    }
 
-    public ArrayAdapter<String> loadPBSpinner(){
-        // 1. Tạo list Phong ban // 2. Đổ Phong_ban.getTenPB() ra 1 List // 3. setAdapter cho cái list getTenPB() đó
-        phongban_list = new PhongBanDatabase(CapphatVPPLayout.this).select();
-        phongbanNames_list = new ArrayList<>();
-        phongbanNames_list.add("Tất cả phòng ban");
-        // Phục vụ cho việc xổ ra Option cho Spinner
-        for ( PhongBan pb : phongban_list){
-            phongbanNames_list.add(pb.getTenpb());
-//            Log.d("data", pb.getTenpb());
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, phongbanNames_list);
-        return adapter;
+//        List<String> listcau2a = capphatDB.thongKeCau2a();
+//        Log.d("count",listcau2a.size() /5 +"");
+//        for( String str : listcau2a){
+//            Log.d("count",str +"");
+//        }
+//        List<String> listcau2b = capphatDB.thongKeCau2a();
     }
 
     public void setEvent(){
+        labelVPP.setVisibility(View.INVISIBLE);
+        previewVPPBtn.setVisibility( View.INVISIBLE );
         // 1. Set Event cho Spinner
         setEventPBSpinner();
         // 2. Set Event Table Rows cho Table _CP và Table _NV simple
@@ -147,13 +186,86 @@ public class CapphatVPPLayout extends AppCompatActivity {
 
     }
 
+    public void setNavigation(){
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        navBC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //   new BaoCao
+            }
+        });
+        navTK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //   new ThongKe
+            }
+        });
+    }
+
+    public void transferLayout( String maPB ){
+        if( maPB.trim().equalsIgnoreCase("")) return;
+        // 1. maPB là all thì chuyển sang layout maPB
+        switch (maPB){
+            case "All" : {
+                warningLabel.setText("Khi chọn phòng ban cụ thể, cấu trúc bảng sẽ khác");
+                // All : show
+                cp_tablesall_container.setLayoutParams( new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT )
+                );
+                // Index : hide
+                cp_tablesindex_container.setLayoutParams( new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        0 )
+                );
+            };
+                break;
+            default: {
+                warningLabel.setText("Khi chọn tất cả phòng ban, cấu trúc bảng sẽ khác");
+                // All : hide
+                cp_tablesall_container.setLayoutParams( new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        0 )
+                );
+                // Index : show
+                cp_tablesindex_container.setLayoutParams( new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT )
+                );
+
+            }; break;
+        }
+    }
+
+    public ArrayAdapter<String> loadPBSpinner(){
+        // 1. Tạo list Phong ban // 2. Đổ Phong_ban.getTenPB() ra 1 List // 3. setAdapter cho cái list getTenPB() đó
+        phongban_list = new PhongBanDatabase(CapphatVPPLayout.this).select();
+        ArrayList<String> phongbanNames_list = new ArrayList<>();
+        phongbanNames_list.add("Tất cả phòng ban");
+        // Phục vụ cho việc xổ ra Option cho Spinner
+        for ( PhongBan pb : phongban_list){
+            phongbanNames_list.add(pb.getTenpb());
+//            Log.d("data", pb.getTenpb());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, phongbanNames_list);
+        return adapter;
+    }
+
     public void setEventPBSpinner(){
         PBSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position == 0) dataMaPBSpinner = "All";
-                else
-                    dataMaPBSpinner = phongban_list.get( position -1 ).getMapb();
+                else {
+                    // 1.
+                    dataMaPBSpinner = phongban_list.get(position - 1).getMapb();
+                }
+                transferLayout( dataMaPBSpinner );
                 Toast.makeText( CapphatVPPLayout.this, dataMaPBSpinner+"", Toast.LENGTH_LONG).show();
             }
 
@@ -192,12 +304,13 @@ public class CapphatVPPLayout extends AppCompatActivity {
                 focusSL = (TextView) focusRow.getChildAt(4);
                 setNormalBGTableRows(list);
                 setEventTableRowsHelper( cp_tablenv_list );
-
+                setEventDisplayVPP( focusMaVPP.getText().toString().trim() );
                 // Testing to get id of focusable row
                 //  Toast.makeText( PhongbanLayout.this, focusRowID+"", Toast.LENGTH_LONG).show();
             }
         });
     }
+
     public int findMaNVinTableNV( TableLayout list ){
         TableRow tr = null;
         TextView maNV = null;
@@ -211,6 +324,15 @@ public class CapphatVPPLayout extends AppCompatActivity {
         }
         return -1;
     }
+
+    public VanPhongPham findVPPinListVPP ( String maVPP ){
+        for( VanPhongPham vpp : vanphongpham_list){
+            if( vpp.getMaVpp().trim().equalsIgnoreCase( maVPP ))
+                return vpp;
+        }
+        return null;
+    }
+
     // Hàm này giúp hàm trên bằng cách dẫn tới những dữ liệu có thể cụ thể hóa dữ liệu của hàm trên
     public void setEventTableRowsHelper( TableLayout sublist) {
         // Kiểm tra focus MaNv
@@ -230,6 +352,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
         tr.getDrawingRect( rc );
         tr.requestRectangleOnScreen( rc );
         tr.setBackgroundColor(getResources().getColor(R.color.selectedColor));
+        // Reset background white for others
         for (int i = 1; i < cp_tablenv_list.getChildCount(); i++) {
             TableRow row = (TableRow) cp_tablenv_list.getChildAt((int) i);
             if (index != (int) row.getId())
@@ -237,32 +360,61 @@ public class CapphatVPPLayout extends AppCompatActivity {
         }
     }
 
-    public void setNavigation(){
-        backBtn.setOnClickListener(new View.OnClickListener() {
+    public void setDataImageView(ImageView imageView, byte[] imageBytes){
+        if (imageBytes != null){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
+    public void setEventDisplayVPP( String maVPP ){
+        // 1. Gọi VPP _ Database để trả về List thông tin // 2. Dựa trên list đó để dò maVPP sau đó get 1 hàng trong đó
+        labelVPP.setVisibility(View.VISIBLE);
+            VanPhongPham vpp = findVPPinListVPP( maVPP );
+            if(vpp == null) return;
+            String label = vpp.getMaVpp() + ":    " + vpp.getTenVpp();
+            labelVPP.setText(label);
+        // 1. Có VanPhongPham rồi thì set on click // 2. Gọi Dialog để xem
+        previewVPPBtn.setVisibility(View.VISIBLE);
+        previewVPPBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                // Image from Database is handled to load here
+                createDialog(R.layout.popup_vpp_previewimage);
+                // Custom set Control
+                VPP_IP_maVPP = dialog.findViewById(R.id.VPP_IP_maVPP);
+                VPP_IP_tenVPP = dialog.findViewById(R.id.VPP_IP_tenVPP);
+                VPP_IP_DVT = dialog.findViewById(R.id.VPP_IP_DVT);
+                VPP_IP_Gia = dialog.findViewById(R.id.VPP_IP_Gia);
+                VPP_IP_Hinh = dialog.findViewById(R.id.VPP_IP_Hinh);
+                // Load Data
+                setDataImageView( VPP_IP_Hinh, vpp.getHinh() );
+                VPP_IP_maVPP.setText( vpp.getMaVpp().toString().trim());
+                VPP_IP_tenVPP.setText( vpp.getTenVpp().toString().trim());
+                VPP_IP_DVT.setText( vpp.getDvt().toString().trim());
+                VPP_IP_Gia.setText( vpp.getGiaNhap().toString().trim());
             }
         });
-        navBC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //   new BaoCao
-            }
-        });
-        navTK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //   new ThongKe
-            }
-        });
+
+    }
+
+
+    // DIALOG HELPER ----------------------------------------------------------------------------
+    public void createDialog(int layout) {
+        dialog = new Dialog(CapphatVPPLayout.this);
+        dialog.setContentView(layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    public void setControlDialog( ){
+        // 1 Form của CP
+    }
+    public void setEventDialog( ){
+        // Them/Xoa/Sua CP
     }
 
     // LAYOUT 01 -----------------------------------------------
-    // Khi có 1 hàng từ PBSpinner mới có VPP Table ( VPP được cấp cho Phòng Ban đó )
-    public void setPBSpinner(){
-
-    }
     // Văn phòng phẩm khi init thì select theo thằng CP, sau đó focus vào thằng đầu tiên của VPP
     public void setEventTableVPP(){
 
@@ -286,6 +438,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
 
         return result;
     }
+
     // This Custom Columns' Max Width : 80 / 300
 //    public TableRow createRow(Context context, NhanVien nv) {
 //        TableRow tr = new TableRow(context);
@@ -318,6 +471,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
 
     // Table 2
     // <!-- 80 / 230 / 90-->
+
 
     // Table 3
     // <!-- 80 / 150 / 60 / 60 / 60 -->

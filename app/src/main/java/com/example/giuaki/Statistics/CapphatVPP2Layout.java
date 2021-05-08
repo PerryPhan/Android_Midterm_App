@@ -11,6 +11,6 @@ public class CapphatVPP2Layout extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_capphatvpp2_layout);
+        setContentView(R.layout.activity_capphatvpp_layout);
     }
 }

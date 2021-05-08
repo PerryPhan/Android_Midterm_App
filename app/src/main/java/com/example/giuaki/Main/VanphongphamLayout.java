@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.example.giuaki.Databases.VanPhongPhamDatabase;
 import com.example.giuaki.Entities.VanPhongPham;
 import com.example.giuaki.R;
+import com.example.giuaki.Statistics.CapphatVPPLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -57,9 +58,11 @@ public class VanphongphamLayout extends AppCompatActivity {
         ImageView VPP_IP_Hinh;
     // --------------
 
+    // Navigation
     Button navPB;
     Button navNV;
     Button navVPP;
+    Button navCP;
 
     EditText search;
 
@@ -126,6 +129,7 @@ public class VanphongphamLayout extends AppCompatActivity {
         navPB = findViewById(R.id.VPP_navbar_phongban);
         navNV = findViewById(R.id.VPP_navbar_nhanvien);
         navVPP = findViewById(R.id.VPP_navbar_VPP);
+        navCP = findViewById(R.id.VPP_navbar_capphat);
 
         search = findViewById(R.id.VPP_searchEdit);
 
@@ -189,7 +193,16 @@ public class VanphongphamLayout extends AppCompatActivity {
 
             }
         });
+        // navCP
+        navCP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VanphongphamLayout.this, CapphatVPPLayout.class);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                startActivity( intent );
+            }
 
+        });
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -325,7 +338,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                 focusTenVPP = (TextView) focusRow.getChildAt(1);
                 focusDVT = (TextView) focusRow.getChildAt(2);
                 focusGia = (TextView) focusRow.getChildAt(3);
-                focusDataHinh = image_list.get( focusRow.getId() - 1);
+                focusDataHinh = image_list.get( focusRow.getId() -1 );
                 setNormalBGTableRows(list);
                 // Testing to get id of focusable row
                 //  Toast.makeText( PhongbanLayout.this, focusRowID+"", Toast.LENGTH_LONG).show();

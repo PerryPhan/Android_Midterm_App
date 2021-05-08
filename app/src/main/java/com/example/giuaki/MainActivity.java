@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.example.giuaki.Databases.CapPhatDatabase;
 import com.example.giuaki.Databases.NhanVienDatabase;
@@ -32,13 +33,18 @@ public class MainActivity extends AppCompatActivity {
         // TESTING ZONE --------------------------------------------------------------------
         PhongBanDatabase phongBanDatabase = new PhongBanDatabase(MainActivity.this);
         phongBanDatabase.reset();
+//        phongBanDatabase.select();
         NhanVienDatabase nhanvienDatabase = new NhanVienDatabase(MainActivity.this);
         nhanvienDatabase.reset();
-        CapPhatDatabase capPhatDatabase = new CapPhatDatabase(MainActivity.this);
-        for(CapPhat cp : capPhatDatabase.reset() )
-            Log.d("data",cp.toString());
+//        nhanvienDatabase.select();
         VanPhongPhamDatabase vanPhongPhamDatabase = new VanPhongPhamDatabase(MainActivity.this);
         vanPhongPhamDatabase.reset();
+//        vanPhongPhamDatabase.select();
+        CapPhatDatabase capPhatDatabase = new CapPhatDatabase(MainActivity.this);
+        capPhatDatabase.reset();
+//        capPhatDatabase.select();
+//        int len = capPhatDatabase.reset().size();
+//        Toast.makeText( MainActivity.this, len +"" ,Toast.LENGTH_LONG).show();
         // TESTING ZONE --------------------------------------------------------------------
 
     }

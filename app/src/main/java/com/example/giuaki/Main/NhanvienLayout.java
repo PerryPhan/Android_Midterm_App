@@ -31,6 +31,7 @@ import com.example.giuaki.Databases.PhongBanDatabase;
 import com.example.giuaki.Entities.NhanVien;
 import com.example.giuaki.Entities.PhongBan;
 import com.example.giuaki.R;
+import com.example.giuaki.Statistics.CapphatVPPLayout;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -48,9 +49,11 @@ public class NhanvienLayout extends AppCompatActivity {
     Button delBtn;
     Button exitBtn;
 
+    // Navigation
     Button navPB;
     Button navNV;
     Button navVPP;
+    Button navCP;
 
     // Dialog Layout
     Dialog nhanviendialog;
@@ -127,6 +130,7 @@ public class NhanvienLayout extends AppCompatActivity {
         navPB = findViewById(R.id.NV_navbar_phongban);
         navNV = findViewById(R.id.NV_navbar_nhanvien);
         navVPP= findViewById(R.id.NV_navbar_VPP);
+        navCP= findViewById(R.id.NV_navbar_capphat);
     }
 
     public void loadDatabase() {
@@ -184,6 +188,16 @@ public class NhanvienLayout extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 startActivity( intent );
 
+            }
+
+        });
+        // navCP
+        navCP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NhanvienLayout.this, CapphatVPPLayout.class);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                startActivity( intent );
             }
 
         });
