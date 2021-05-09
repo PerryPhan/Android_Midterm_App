@@ -268,7 +268,40 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
                 "WHERE CP.MAVPP = VPP.MAVPP\n " +
                 "AND CP.MANV = NV.MANV " +
                 "AND NV.MAPB = '"+maPB+"'";
-        sql = "SELECT CP.SOPHIEU, CP.MANV, VPP.MAVPP FROM CAPPHAT AS CP JOIN VANPHONGPHAM AS VPP ON CP.MAVPP = VPP.MAVPP ;" ;
+        sql =   "SELECT DISTINCT  R.MANV , R.HOTEN, R.MAPB, L.MAVPP, L.TENVPP, L.DVT, L.GIANHAP, SUM(SOLUONG) AS SOLUONGMUON FROM \n" +
+                "( SELECT * FROM VANPHONGPHAM ) AS L\n" +
+                "JOIN\n" +
+                "-- NÀY LÀ TÌM NHỮNG NHÂN VIÊN CÓ MẶT TRONG CẤP PHÁT ( KÈM THEO MAPB )\n" +
+                " (\tSELECT CP.MAVPP, CP.SOLUONG, CP.MANV ,NV.HOTEN,NV.MAPB FROM CAPPHAT AS CP JOIN NHANVIEN AS NV ON CP.MANV = NV.MANV ) AS R\n" +
+                "ON L.MAVPP = R.MAVPP WHERE R.MAPB = 'PB01'\n" +
+                "GROUP BY R.MAVPP, R.MANV";
+        Cursor cursor = db.rawQuery(sql, null);
+        return getListResult(cursor);
+    }
+
+    public List<String> select_listVPP_withPB( String maPB ){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql =
+                "SELECT DISTINCT  L.MAVPP, L.TENVPP, L.DVT, L.GIANHAP FROM \n" +
+                "( SELECT * FROM VANPHONGPHAM ) AS L\n" +
+                "JOIN\n" +
+                "-- NÀY LÀ TÌM NHỮNG NHÂN VIÊN CÓ MẶT TRONG CẤP PHÁT ( KÈM THEO MAPB )\n" +
+                " (\tSELECT CP.MAVPP, CP.SOLUONG, CP.MANV ,NV.HOTEN,NV.MAPB FROM CAPPHAT AS CP JOIN NHANVIEN AS NV ON CP.MANV = NV.MANV ) AS R\n" +
+                "ON L.MAVPP = R.MAVPP WHERE R.MAPB = '"+maPB+"'\n" +
+                "GROUP BY R.MAVPP";
+        Cursor cursor = db.rawQuery(sql, null);
+        return getListResult(cursor);
+    }
+
+    public List<String> select_listNV_withVPP_andPB( String maPB, String maVPP ){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT DISTINCT  R.MANV , R.HOTEN, SUM(SOLUONG) AS SOLUONGMUON FROM \n" +
+                "( SELECT * FROM VANPHONGPHAM ) AS L\n" +
+                "JOIN\n" +
+                "-- NÀY LÀ TÌM NHỮNG NHÂN VIÊN CÓ MẶT TRONG CẤP PHÁT ( KÈM THEO MAPB )\n" +
+                " (\tSELECT CP.MAVPP, CP.SOLUONG, CP.MANV ,NV.HOTEN,NV.MAPB FROM CAPPHAT AS CP JOIN NHANVIEN AS NV ON CP.MANV = NV.MANV ) AS R\n" +
+                "ON L.MAVPP = R.MAVPP WHERE R.MAPB = '"+maPB+"' AND R.MAVPP = '"+maVPP+"'"  +
+                "GROUP BY R.MAVPP, R.MANV";
         Cursor cursor = db.rawQuery(sql, null);
         return getListResult(cursor);
     }

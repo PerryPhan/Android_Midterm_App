@@ -336,6 +336,7 @@
             </ScrollView>
         </LinearLayout>
         <TextView
+            android:id="@+id/CP_noteVppLabel"
             style="@style/textRed"
             android:text="VPP4 được cấp cho các nhân viên dưới đây"
             android:layout_width="match_parent"
@@ -352,7 +353,6 @@
             <!--    Header of the table -->
             <!-- 80 / 230 / 100-->
             <TableLayout
-                android:id="@+id/CP_tableNV2"
                 style="@style/tableLayoutStyle"
                 android:stretchColumns="2"
                 >
@@ -380,6 +380,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TableLayout
+                    android:id="@+id/CP_tableNV2"
                     style="@style/tableLayoutStyle"
                     android:layout_width="match_parent"
                     android:stretchColumns="2"
@@ -390,8 +391,8 @@
                             android:visibility="invisible"
                             style="@style/PBRow_firstCellWidth"
                             android:text="NV1"
-                            android:layout_height="0dp"
                             android:layout_width="80dp"
+                            android:layout_height="0dp"
                             />
                         <TextView
                             android:visibility="invisible"
@@ -412,6 +413,7 @@
             </ScrollView>
         </LinearLayout>
         <TextView
+            android:id="@+id/CP_noteTotalLabel"
             style="@style/textRed"
             android:text="Tổng Chi phí trong Phòng Kỹ thuật được cấp :"
             android:layout_width="match_parent"

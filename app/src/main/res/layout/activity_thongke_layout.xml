@@ -14,6 +14,7 @@
         android:orientation="horizontal"
         >
         <Button
+            android:id="@+id/TK_backBtn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -34,13 +35,14 @@
         style="@style/Btn"
         android:layout_width="match_parent"
         android:paddingVertical="15dp"
-        android:id="@+id/Capphatnav"
+        android:id="@+id/TK_btn_cau1"
         android:text="1. Tìm 02 nhân viên được cấp nhiều giấy A4 nhất"
         android:backgroundTint="@color/thongke_activeBtn"
 
         />
     <Button
         style="@style/Btn"
+        android:id="@+id/TK_btn_cau2"
         android:layout_width="match_parent"
         android:paddingVertical="15dp"
         android:text="2. Liệt kê các VPP được cấp phát cùng ngày"
@@ -49,6 +51,7 @@
         />
     <Button
         style="@style/Btn"
+        android:id="@+id/TK_btn_cau3"
         android:layout_width="match_parent"
         android:paddingVertical="15dp"
         android:text="3. Các nhân viên chưa được cấp VPP năm 2018"
@@ -57,6 +60,7 @@
         />
     <Button
         style="@style/Btn"
+        android:id="@+id/TK_btn_cau4"
         android:layout_width="match_parent"
         android:paddingVertical="15dp"
         android:text="4. Thống kê số lượng các VPP cấp cho phòng ban"

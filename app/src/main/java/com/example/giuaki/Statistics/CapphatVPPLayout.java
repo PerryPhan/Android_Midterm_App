@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -30,7 +31,11 @@ import com.example.giuaki.Databases.VanPhongPhamDatabase;
 import com.example.giuaki.Entities.CapPhat;
 import com.example.giuaki.Entities.NhanVien;
 import com.example.giuaki.Entities.PhongBan;
+import com.example.giuaki.Entities.Rows;
 import com.example.giuaki.Entities.VanPhongPham;
+import com.example.giuaki.Main.NhanvienLayout;
+import com.example.giuaki.Main.PhongbanLayout;
+import com.example.giuaki.Main.ThongkeLayout;
 import com.example.giuaki.R;
 
 import java.util.ArrayList;
@@ -48,10 +53,13 @@ public class CapphatVPPLayout extends AppCompatActivity {
     TableLayout cp_tablenv_list;
     TableLayout cp_tablecp_list;
 
+    TextView cp_totalCount;
+    TextView cp_totalPrice;
     TextView warningLabel;
     TextView labelVPP;
-    TextView totalCount;
-    TextView totalPrice;
+    TextView noteVPPLabel;
+    TextView noteTotalLabel;
+
 
     Button previewVPPBtn;
     Button navBC;
@@ -66,6 +74,8 @@ public class CapphatVPPLayout extends AppCompatActivity {
     List<NhanVien> nhanvien_list;
     List<VanPhongPham> vanphongpham_list;
     List<PhongBan> phongban_list;
+
+    int totalPrice = 0;
 
     // Dialog
     Dialog dialog;
@@ -94,25 +104,14 @@ public class CapphatVPPLayout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_capphatvpp_layout);
         scale = this.getResources().getDisplayMetrics().density;
+        Rows.scale = scale;
+        Rows.tvtemplate = R.layout.tvtemplate;
+
         setControl();
         loadDatabase();
         setEvent();
         setNavigation();
-        // Testing Query
-        List<String> cp_vpp_nvlist = capphatDB.selectwithVPPandNVwherePB("PB01");
-        String row = "";
-        int count = 0;
-        for( String str : cp_vpp_nvlist){
-//            Log.d("data", str);
-            if( count == 3) {
-                count = 0;
-                Log.d("data", row+"\n");
-                row = "";
-            }else{
-                count++;
-                row += str+", ";
-            }
-        }
+
     }
 
     // --------------- MAIN HELPER -----------------------------------------------------------------
@@ -129,8 +128,6 @@ public class CapphatVPPLayout extends AppCompatActivity {
         cp_tablecp_list = findViewById(R.id.CP_tableCP);
 
         warningLabel = findViewById(R.id.CP_warningLabel);
-        totalCount = findViewById(R.id.CP_totalCount);
-        totalPrice = findViewById(R.id.CP_totalPrice);
         labelVPP = findViewById(R.id.CP_labelVPP);
 
         previewVPPBtn = findViewById(R.id.CP_previewVPPBtn);
@@ -163,12 +160,6 @@ public class CapphatVPPLayout extends AppCompatActivity {
         vanphongpham_list = vanphongphamDB.select();
         PBSpinner.setAdapter( loadPBSpinner() );
 
-//        List<String> listcau2a = capphatDB.thongKeCau2a();
-//        Log.d("count",listcau2a.size() /5 +"");
-//        for( String str : listcau2a){
-//            Log.d("count",str +"");
-//        }
-//        List<String> listcau2b = capphatDB.thongKeCau2a();
     }
 
     public void setEvent(){
@@ -202,7 +193,9 @@ public class CapphatVPPLayout extends AppCompatActivity {
         navTK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //   new ThongKe
+                Intent intent = new Intent(CapphatVPPLayout.this, ThongkeLayout.class);
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                startActivity( intent );
             }
         });
     }
@@ -237,11 +230,116 @@ public class CapphatVPPLayout extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT )
                 );
-
+                createCPLayout_fromPB( maPB );
             }; break;
         }
     }
 
+    public void createCPLayout_fromPB( String maPB ) {
+        if( maPB.trim().equalsIgnoreCase("All") ) return;
+        // Init Variables and Control
+        Rows rowGenarator = new Rows(this );
+        TableLayout cp_table1 = cp_tablesindex_container.findViewById(R.id.CP_tableVPP);
+                    cp_table1.removeViews(1, cp_table1.getChildCount() -1);
+                    int[] sizeOfCell = {85,180,50,80};
+                    boolean[] isPaddingZero = {false, true, true, false};
+        TableLayout cp_table2 = cp_tablesindex_container.findViewById(R.id.CP_tableNV2);
+                    cp_table2.removeViews(1,cp_table2.getChildCount()-1);
+                    int[] sizeOfCell2 = {90, 240, 100};
+                    boolean[] isPaddingZero2 = {false,false,false};
+        cp_totalCount = cp_tablesindex_container.findViewById(R.id.CP_totalCount);
+        cp_totalPrice = cp_tablesindex_container.findViewById(R.id.CP_totalPrice);
+        noteVPPLabel = cp_tablesindex_container.findViewById(R.id.CP_noteVppLabel);
+        noteTotalLabel = cp_tablesindex_container.findViewById(R.id.CP_noteTotalLabel);
+//        for( PhongBan pb : phongban_list ){
+//            noteVPPLabel
+//        }
+        totalPrice = 0;
+        // Create List<TableRow> for TableList
+        // TABLE CP INDEX 01 ----------------------------------------------------------------------------------------
+        rowGenarator.setData( rowGenarator.enhanceRowData( capphatDB.select_listVPP_withPB(maPB), 4 ) );
+            rowGenarator.setSizeOfCell(sizeOfCell);
+            rowGenarator.setIsCellPaddingZero(isPaddingZero);
+        List<TableRow> rows = rowGenarator.generateArrayofRows();
+            for( TableRow row : rows) {
+                cp_table1.addView(row);
+            }
+            rowGenarator.setSizeOfCell(sizeOfCell2);
+            rowGenarator.setIsCellPaddingZero(isPaddingZero2);
+
+        for( int i =1; i< cp_table1.getChildCount(); i++) {
+            TableRow row = (TableRow) cp_table1.getChildAt(i);
+
+            // Từ thằng VPP được bấm gen ra thằng nhân viên đã mượn nó
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                // TABLE CP INDEX 02 ----------------------------------------------------------------------------------------
+                    TextView price = (TextView) row.getChildAt( row.getChildCount() -1);
+                    int each_price = Integer.parseInt( price.getText().toString().trim() );
+                    TextView maVPP = (TextView) row.getChildAt(0);
+                    for( TableRow row : rows) {
+                        row.setBackgroundColor(getResources().getColor(R.color.white));
+                    }
+                    row.setBackgroundColor(getResources().getColor(R.color.selectedColor));
+                    rowGenarator.setData( rowGenarator.enhanceRowData(
+                            capphatDB.select_listNV_withVPP_andPB(
+                                    maPB,
+                                    maVPP.getText().toString().trim()
+                            ), 3 ) );
+                    cp_table2.removeViews(1,cp_table2.getChildCount()-1);
+                    List<TableRow> rows2 = rowGenarator.generateArrayofRows();
+                        for( TableRow row2 : rows2) {
+                            cp_table2.addView(row2);
+                        }
+
+                }
+            });
+        }
+        // CP_totalCount : Tổng số các VPP được cấp
+        cp_totalCount.setText( (cp_table1.getChildCount() -1) + "" );
+        // CP_totalPrice : Tổng số tiền VPP  = số lượng loại VPP mà NV mượn * số tiền của mỗi loại VPP
+            // Quy trình tính số tiền tổng
+            for( TableRow row : rows) {
+                // Lấy số tiền mỗi loại : VD 60.000
+                TextView maVPPView = (TextView) row.getChildAt(0);
+                String maVPP = maVPPView.getText().toString().trim();
+                TextView pricetypeView = (TextView) row.getChildAt( row.getChildCount() -1 );
+                int priceofType = Integer.parseInt( pricetypeView.getText().toString().trim() );
+                // Gen lại các TableRow
+                rowGenarator.setData( rowGenarator.enhanceRowData(
+                        capphatDB.select_listNV_withVPP_andPB(
+                                maPB,
+                                maVPP
+                        ), 3 ) );
+                List<TableRow> rows2 = rowGenarator.generateArrayofRows();
+                for( TableRow row2 : rows2 ) {
+                    // Lấy số lượng mượn mỗi loại
+                    TextView numberofTypeView = (TextView) row2.getChildAt( row2.getChildCount() -1 );
+                    int numberofType = Integer.parseInt( numberofTypeView.getText().toString().trim() );
+                    // Tổng += giá * số lượng mượn
+                    totalPrice += priceofType*numberofType;
+                }
+            }
+        cp_totalPrice.setText(MoneyFormat(totalPrice) );
+
+    }
+    public String MoneyFormat( int money ){
+        if( money == 0) return "0 đ";
+        int temp_money = money;
+        String moneyFormat = "";
+        if( money < 1000) return String.valueOf(money) +" đ";
+        else {
+            int count = 0;
+            while (temp_money != 0) {
+                moneyFormat += (temp_money % 10) + "";
+                if ((count + 1) % 3 == 0) moneyFormat += ".";
+                count++;
+                temp_money /= 10;
+            }
+        }
+        return new StringBuilder(moneyFormat).reverse().toString() +" đ";
+    }
     public ArrayAdapter<String> loadPBSpinner(){
         // 1. Tạo list Phong ban // 2. Đổ Phong_ban.getTenPB() ra 1 List // 3. setAdapter cho cái list getTenPB() đó
         phongban_list = new PhongBanDatabase(CapphatVPPLayout.this).select();
@@ -264,9 +362,10 @@ public class CapphatVPPLayout extends AppCompatActivity {
                 else {
                     // 1.
                     dataMaPBSpinner = phongban_list.get(position - 1).getMapb();
+
                 }
                 transferLayout( dataMaPBSpinner );
-                Toast.makeText( CapphatVPPLayout.this, dataMaPBSpinner+"", Toast.LENGTH_LONG).show();
+//                Toast.makeText( CapphatVPPLayout.this, dataMaPBSpinner+"", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -286,7 +385,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
                 row.setBackgroundColor(getResources().getColor(R.color.white));
         }
 //             Toast.makeText( PhongbanLayout.this, indexofRow+"", Toast.LENGTH_LONG).show();
-        Toast.makeText(CapphatVPPLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
+//        Toast.makeText(CapphatVPPLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
     }
 
     public void setEventTableRows(TableRow tr, TableLayout list) {

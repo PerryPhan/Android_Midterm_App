@@ -232,7 +232,7 @@ public class PhongbanLayout extends AppCompatActivity {
                 row.setBackgroundColor(getResources().getColor(R.color.white));
         }
 //             Toast.makeText( PhongbanLayout.this, indexofRow+"", Toast.LENGTH_LONG).show();
-        Toast.makeText(PhongbanLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
+//        Toast.makeText(PhongbanLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
     }
 
     public void setEventTableRows(TableRow tr, TableLayout list) {

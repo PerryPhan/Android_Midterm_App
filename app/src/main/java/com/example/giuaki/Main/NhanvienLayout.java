@@ -279,7 +279,7 @@ public class NhanvienLayout extends AppCompatActivity {
                 setControlDialog();
                 // Event
                 strDate = formatDate(InttoStringDate(30,8,1999), true);
-                Toast.makeText( NhanvienLayout.this, strDate+"", Toast.LENGTH_LONG).show();
+//                Toast.makeText( NhanvienLayout.this, strDate+"", Toast.LENGTH_LONG).show();
                 setEventDialog(v);
 //                Log.d("date",strDate+"");
 
@@ -369,7 +369,7 @@ public class NhanvienLayout extends AppCompatActivity {
             if (indexofRow != (int) row.getId())
                 row.setBackgroundColor(getResources().getColor(R.color.white));
         }
-        Toast.makeText(NhanvienLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
+//        Toast.makeText(NhanvienLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
     }
 
     public void setEventTableRows(TableRow tr, TableLayout list) {
@@ -423,7 +423,7 @@ public class NhanvienLayout extends AppCompatActivity {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                  strDate = formatDate(InttoStringDate(dayOfMonth,monthOfYear+1,year), true);
-                 Toast.makeText( NhanvienLayout.this, strDate+"", Toast.LENGTH_LONG).show();
+//                 Toast.makeText( NhanvienLayout.this, strDate+"", Toast.LENGTH_LONG).show();
             }
 
         });

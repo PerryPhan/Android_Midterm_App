@@ -320,7 +320,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                 row.setBackgroundColor(getResources().getColor(R.color.white));
         }
 //             Toast.makeText( PhongbanLayout.this, indexofRow+"", Toast.LENGTH_LONG).show();
-        Toast.makeText(VanphongphamLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
+//        Toast.makeText(VanphongphamLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
     }
 
     public void setEventTableRows(TableRow tr, TableLayout list) {
