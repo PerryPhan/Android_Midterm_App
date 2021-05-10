@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.example.giuaki.Databases.CapPhatDatabase;
+import com.example.giuaki.Databases.NhanVienDatabase;
+import com.example.giuaki.Databases.PhongBanDatabase;
+import com.example.giuaki.Databases.VanPhongPhamDatabase;
 import com.example.giuaki.Entities.CapPhat;
 import com.example.giuaki.Entities.NhanVien;
 import com.example.giuaki.Main.NhanvienLayout;
@@ -24,10 +28,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        resetAll();
         setControl();
         setEvent();
         setAnim();
+    }
 
+    private void resetAll() {
+        PhongBanDatabase pbDB = new PhongBanDatabase(this);
+        NhanVienDatabase nvDB = new NhanVienDatabase(this);
+        VanPhongPhamDatabase vppDB = new VanPhongPhamDatabase(this);
+        CapPhatDatabase cpDB = new CapPhatDatabase(this);
+
+        pbDB.reset();
+        nvDB.reset();
+        vppDB.reset();
+        cpDB.reset();
     }
 
     private void setEvent() {

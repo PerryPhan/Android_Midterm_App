@@ -282,7 +282,7 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
     public List<String> select_listVPP_withPB( String maPB ){
         SQLiteDatabase db = this.getReadableDatabase();
         String sql =
-                "SELECT DISTINCT  L.MAVPP, L.TENVPP, L.DVT, L.GIANHAP FROM \n" +
+                "SELECT DISTINCT  L.MAVPP, L.TENVPP, L.DVT, L.GIANHAP*SUM(R.SOLUONG) AS TRIGIA FROM \n" +
                 "( SELECT * FROM VANPHONGPHAM ) AS L\n" +
                 "JOIN\n" +
                 "-- NÀY LÀ TÌM NHỮNG NHÂN VIÊN CÓ MẶT TRONG CẤP PHÁT ( KÈM THEO MAPB )\n" +

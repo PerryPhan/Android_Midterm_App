@@ -33,6 +33,7 @@
     <string name="error_of_this_line">Error of this line</string>
     <string name="don_vi_tinh">Đơn vị tính</string>
     <string name="hinh">Hình</string>
+    <string name="tri_gia">Trị giá</string>
     <array name="phongban">
         <item>PB01</item>
         <item>PB02</item>

@@ -41,7 +41,7 @@ public class Welcome extends AppCompatActivity {
                 overridePendingTransition(R.anim.left, R.anim.right);
                 startActivity( intent );
             }
-        }, 4500);
+        }, 3000);
     }
     private void setControl() {
 

@@ -230,6 +230,8 @@ public class CapphatVPPLayout extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT )
                 );
+                noteVPPLabel = cp_tablesindex_container.findViewById(R.id.CP_noteVppLabel);
+                noteVPPLabel.setVisibility(View.INVISIBLE);
                 createCPLayout_fromPB( maPB );
             }; break;
         }
@@ -242,18 +244,22 @@ public class CapphatVPPLayout extends AppCompatActivity {
         TableLayout cp_table1 = cp_tablesindex_container.findViewById(R.id.CP_tableVPP);
                     cp_table1.removeViews(1, cp_table1.getChildCount() -1);
                     int[] sizeOfCell = {85,180,50,80};
-                    boolean[] isPaddingZero = {false, true, true, false};
+                    boolean[] isPaddingZero = {false, true, true, true};
         TableLayout cp_table2 = cp_tablesindex_container.findViewById(R.id.CP_tableNV2);
                     cp_table2.removeViews(1,cp_table2.getChildCount()-1);
                     int[] sizeOfCell2 = {90, 240, 100};
                     boolean[] isPaddingZero2 = {false,false,false};
         cp_totalCount = cp_tablesindex_container.findViewById(R.id.CP_totalCount);
         cp_totalPrice = cp_tablesindex_container.findViewById(R.id.CP_totalPrice);
-        noteVPPLabel = cp_tablesindex_container.findViewById(R.id.CP_noteVppLabel);
+
         noteTotalLabel = cp_tablesindex_container.findViewById(R.id.CP_noteTotalLabel);
-//        for( PhongBan pb : phongban_list ){
-//            noteVPPLabel
-//        }
+        for( PhongBan pb : phongban_list ){
+            if( maPB.equalsIgnoreCase(pb.getMapb().trim()) )
+            {
+                noteTotalLabel.setText("Tổng Chi phí trong "+pb.getTenpb()+" được cấp :");
+                break;
+            }
+        }
         totalPrice = 0;
         // Create List<TableRow> for TableList
         // TABLE CP INDEX 01 ----------------------------------------------------------------------------------------
@@ -263,6 +269,9 @@ public class CapphatVPPLayout extends AppCompatActivity {
         List<TableRow> rows = rowGenarator.generateArrayofRows();
             for( TableRow row : rows) {
                 cp_table1.addView(row);
+                TextView totalpriceofVPPView = (TextView) row.getChildAt( row.getChildCount() -1);
+                int totalpriceofVPP = Integer.parseInt(totalpriceofVPPView.getText().toString().trim());
+                totalPrice += totalpriceofVPP;
             }
             rowGenarator.setSizeOfCell(sizeOfCell2);
             rowGenarator.setIsCellPaddingZero(isPaddingZero2);
@@ -275,9 +284,12 @@ public class CapphatVPPLayout extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                 // TABLE CP INDEX 02 ----------------------------------------------------------------------------------------
-                    TextView price = (TextView) row.getChildAt( row.getChildCount() -1);
-                    int each_price = Integer.parseInt( price.getText().toString().trim() );
-                    TextView maVPP = (TextView) row.getChildAt(0);
+                    // Set text for noteVPPLabel -------------------------------------------------------------------------
+                    TextView tenVPPView = (TextView) row.getChildAt( 1);
+                    noteVPPLabel.setVisibility(View.VISIBLE);
+                    noteVPPLabel.setText(tenVPPView.getText().toString().trim() + " được cấp cho các nhân viên dưới đây");
+                    // ----------------------------------------------------------------------------------------------------
+                    TextView maVPPView = (TextView) row.getChildAt(0);
                     for( TableRow row : rows) {
                         row.setBackgroundColor(getResources().getColor(R.color.white));
                     }
@@ -285,42 +297,19 @@ public class CapphatVPPLayout extends AppCompatActivity {
                     rowGenarator.setData( rowGenarator.enhanceRowData(
                             capphatDB.select_listNV_withVPP_andPB(
                                     maPB,
-                                    maVPP.getText().toString().trim()
+                                    maVPPView.getText().toString().trim()
                             ), 3 ) );
                     cp_table2.removeViews(1,cp_table2.getChildCount()-1);
                     List<TableRow> rows2 = rowGenarator.generateArrayofRows();
                         for( TableRow row2 : rows2) {
                             cp_table2.addView(row2);
                         }
-
                 }
             });
         }
         // CP_totalCount : Tổng số các VPP được cấp
         cp_totalCount.setText( (cp_table1.getChildCount() -1) + "" );
         // CP_totalPrice : Tổng số tiền VPP  = số lượng loại VPP mà NV mượn * số tiền của mỗi loại VPP
-            // Quy trình tính số tiền tổng
-            for( TableRow row : rows) {
-                // Lấy số tiền mỗi loại : VD 60.000
-                TextView maVPPView = (TextView) row.getChildAt(0);
-                String maVPP = maVPPView.getText().toString().trim();
-                TextView pricetypeView = (TextView) row.getChildAt( row.getChildCount() -1 );
-                int priceofType = Integer.parseInt( pricetypeView.getText().toString().trim() );
-                // Gen lại các TableRow
-                rowGenarator.setData( rowGenarator.enhanceRowData(
-                        capphatDB.select_listNV_withVPP_andPB(
-                                maPB,
-                                maVPP
-                        ), 3 ) );
-                List<TableRow> rows2 = rowGenarator.generateArrayofRows();
-                for( TableRow row2 : rows2 ) {
-                    // Lấy số lượng mượn mỗi loại
-                    TextView numberofTypeView = (TextView) row2.getChildAt( row2.getChildCount() -1 );
-                    int numberofType = Integer.parseInt( numberofTypeView.getText().toString().trim() );
-                    // Tổng += giá * số lượng mượn
-                    totalPrice += priceofType*numberofType;
-                }
-            }
         cp_totalPrice.setText(MoneyFormat(totalPrice) );
 
     }
@@ -655,3 +644,26 @@ public class CapphatVPPLayout extends AppCompatActivity {
 }
 
 }
+
+// Quy trình tính số tiền tổng
+//            for( TableRow row : rows) {
+//                // Lấy số tiền mỗi loại : VD 60.000
+//                TextView maVPPView = (TextView) row.getChildAt(0);
+//                String maVPP = maVPPView.getText().toString().trim();
+//                TextView pricetypeView = (TextView) row.getChildAt( row.getChildCount() -1 );
+//                int priceofType = Integer.parseInt( pricetypeView.getText().toString().trim() );
+//                // Gen lại các TableRow
+//                rowGenarator.setData( rowGenarator.enhanceRowData(
+//                        capphatDB.select_listNV_withVPP_andPB(
+//                                maPB,
+//                                maVPP
+//                        ), 3 ) );
+//                List<TableRow> rows2 = rowGenarator.generateArrayofRows();
+//                for( TableRow row2 : rows2 ) {
+//                    // Lấy số lượng mượn mỗi loại
+//                    TextView numberofTypeView = (TextView) row2.getChildAt( row2.getChildCount() -1 );
+//                    int numberofType = Integer.parseInt( numberofTypeView.getText().toString().trim() );
+//                    // Tổng += giá * số lượng mượn
+//                    totalPrice += priceofType*numberofType;
+//                }
+//            }
