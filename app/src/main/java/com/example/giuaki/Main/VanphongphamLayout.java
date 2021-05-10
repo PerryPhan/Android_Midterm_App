@@ -269,7 +269,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                     // Event
                     setEventDialog(v);
                     setEventImagePicker();
-                    setDataImageView(inputHinh, image_list.get(indexofRow -1 ));
+                    setDataImageView(inputHinh, focusDataHinh);
                     inputMaVPP.setText(focusMaVPP.getText());
                     inputTenVPP.setText(focusTenVPP.getText());
                     inputDVT.setText(focusDVT.getText());
@@ -290,7 +290,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                     createDialog(R.layout.popup_vpp);
                     // Control
                     setControlDialog();
-                    showLabel.setText("Sửa văn phòng phẩm");
+                    showLabel.setText("Xóa văn phòng phẩm");
                     showConfirm.setText("Bạn có muốn sửa hàng này không?");
                     // Event
                     setEventDialog(v);
@@ -338,7 +338,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                 focusTenVPP = (TextView) focusRow.getChildAt(1);
                 focusDVT = (TextView) focusRow.getChildAt(2);
                 focusGia = (TextView) focusRow.getChildAt(3);
-                focusDataHinh = image_list.get( focusRow.getId() -1 );
+                focusDataHinh = image_list.get( focusRow.getId() - Integer.parseInt("1") );
                 setNormalBGTableRows(list);
                 // Testing to get id of focusable row
                 //  Toast.makeText( PhongbanLayout.this, focusRowID+"", Toast.LENGTH_LONG).show();
@@ -519,7 +519,8 @@ public class VanphongphamLayout extends AppCompatActivity {
                         focusTenVPP.setText( inputTenVPP.getText().toString().trim() + "");
                         focusDVT.setText( inputDVT.getText().toString().trim() + "");
                         focusGia.setText( inputGia.getText().toString().trim() + "");
-                        image_list.set(indexofRow-1, vpp.getHinh() );
+                        image_list.set( indexofRow-1, vpp.getHinh() );
+                        focusDataHinh = vpp.getHinh();
                         success = true;
                     }
                     break;
@@ -530,7 +531,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                                         focusTenVPP.getText().toString().trim()+"",
                                         focusDVT.getText().toString().trim() + "",
                                         focusGia.getText().toString().trim()+"",
-                                        getImageDataPicker()
+                                        focusDataHinh
                                 ))
                                 == -1 ) break;
                         if (indexofRow == vpp_table_list.getChildCount() - 1) {
@@ -552,6 +553,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                         focusTenVPP = null;
                         focusDVT = null;
                         focusGia = null;
+                        focusDataHinh = null;
                         success = true;
                     }
                     break;
