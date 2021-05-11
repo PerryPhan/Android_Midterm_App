@@ -58,61 +58,39 @@
                     android:text="NV4"
                     android:layout_width="70dp"
                     android:padding="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     />
                 <TextView
                     style="@style/tableRow"
                     android:text="Ngô Đức Trung"
                     android:layout_width="160dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     />
                 <TextView
                     style="@style/tableRow"
                     android:text="PB02"
                     android:layout_width="60dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     />
                 <TextView
                     style="@style/tableRow"
                     android:text="Giấy A4"
+                    android:padding="0dp"
                     android:layout_width="60dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     />
                 <TextView
                     style="@style/tableRow"
                     android:text="32"
                     android:maxWidth="46dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     />
             </TableRow>
-<!--            <TableRow>-->
-<!--                <TextView-->
-<!--                    style="@style/PBRow_firstCellWidth"-->
-<!--                    android:text="NV1"-->
-<!--                    android:layout_width="70dp"-->
-<!--                    android:padding="0dp"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    />-->
-<!--                <TextView-->
-<!--                    style="@style/tableRow"-->
-<!--                    android:text="Nguyễn Thành Nam"-->
-<!--                    android:layout_width="160dp"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    />-->
-<!--                <TextView-->
-<!--                    style="@style/tableRow"-->
-<!--                    android:text="PB02"-->
-<!--                    android:layout_width="60dp"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    />-->
-<!--                <TextView-->
-<!--                    style="@style/tableRow"-->
-<!--                    android:text="Giấy A4"-->
-<!--                    android:layout_width="60dp"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    />-->
-<!--                <TextView-->
-<!--                    style="@style/tableRow"-->
-<!--                    android:text="10"-->
-<!--                    android:maxWidth="46dp"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    />-->
-<!--            </TableRow>-->
         </TableLayout>
     </ScrollView>
 </LinearLayout>

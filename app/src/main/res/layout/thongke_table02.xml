@@ -47,39 +47,24 @@
                     style="@style/PBRow_firstCellWidth"
                     android:text="VPP4"
                     android:layout_width="130dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     />
                 <TextView
                     style="@style/tableRow"
                     android:text="Kim bấm"
                     android:layout_width="160dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     />
                 <TextView
                     style="@style/tableRow"
                     android:text="04/08/2018"
                     android:maxWidth="122dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     />
             </TableRow>
-<!--            <TableRow>-->
-<!--                <TextView-->
-<!--                    style="@style/PBRow_firstCellWidth"-->
-<!--                    android:text="NV1"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    android:layout_width="130dp"-->
-<!--                    />-->
-<!--                <TextView-->
-<!--                    style="@style/tableRow"-->
-<!--                    android:text="Keo dán"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    android:layout_width="160dp"-->
-<!--                    />-->
-<!--                <TextView-->
-<!--                    style="@style/tableRow"-->
-<!--                    android:text="04/08/2018"-->
-<!--                    android:background="@drawable/table_lightdark_border"-->
-<!--                    android:maxWidth="122dp"-->
-<!--                    />-->
-
-<!--            </TableRow>-->
         </TableLayout>
     </ScrollView>
 </LinearLayout>

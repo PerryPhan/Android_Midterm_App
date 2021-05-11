@@ -138,6 +138,8 @@ public class Rows {
         this.rows = new ArrayList<>();
         tr.setBackgroundColor( Color.parseColor( "#FFFFFF" ) );
         String rowCells[] = null;
+        if( this.data == null ) return null;
+        if( this.data.size() == 0) return null;
         for( String row : this.data){
             // VD: "NV1,Nguyễn Thành Nam,PB01,...,34" -> ["NV1","Nguyễn Thành Nam","PB01",...,"34"]
             rowCells = row.split(",");

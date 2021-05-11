@@ -19,8 +19,6 @@ public class Welcome extends AppCompatActivity {
         setControl();
         setAnim();
 
-
-
     }
     private void setAnim() {
         new Handler().postDelayed(new Runnable()

@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CapphatVPPLayout extends AppCompatActivity {
+    public static String maPB = "All";
     // Main Layout
     Button backBtn;
 
@@ -203,6 +204,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
     public void transferLayout( String maPB ){
         if( maPB.trim().equalsIgnoreCase("")) return;
         // 1. maPB là all thì chuyển sang layout maPB
+        CapphatVPPLayout.maPB = maPB;
         switch (maPB){
             case "All" : {
                 warningLabel.setText("Khi chọn phòng ban cụ thể, cấu trúc bảng sẽ khác");

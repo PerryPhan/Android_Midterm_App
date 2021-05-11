@@ -185,16 +185,14 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
 
     public List<String> thongKeCau2a(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT NV.MANV, NV.HOTEN, PB.TENPB, VPP.TENVPP, SUM(CP.SOLUONG) AS TONGSL FROM \n" +
-                CapPhatDatabase.TABLE_NAME + " CP ," +
-                NhanVienDatabase.TABLE_NAME + " NV, " +
-                VanPhongPhamDatabase.TABLE_NAME + " VPP, " +
-                PhongBanDatabase.TABLE_NAME +  " PB " +
-                "WHERE VPP.TENVPP = 'Giấy A4'\n" +
-                "AND CP.MANV = NV.MANV\n" +
-                "AND CP.MAVPP = VPP.MAVPP\n" +
-                "AND NV.MAPB = PB.MAPB\n" +
-                "GROUP BY NV.MANV\n" +
+        String sql =
+                " SELECT L.MANV, L.HOTEN, L.MAPB, R.TENVPP, SUM(R.SOLUONG) AS TONGSL FROM \n" +
+                "( SELECT * FROM NHANVIEN ) AS L\n" +
+                "JOIN\n" +
+                "( SELECT CP.MANV, VPP.MAVPP, VPP.TENVPP, CP.SOLUONG from CAPPHAT CP join VANPHONGPHAM VPP on CP.maVPP = VPP.maVPP ) as R\n" +
+                "ON L.MANV = R.MANV\n" +
+                "WHERE R.TENVPP = 'Giấy A4'\n" +
+                "GROUP BY L.MANV\n" +
                 "ORDER BY TONGSL DESC\n" +
                 "LIMIT 2";
         Cursor cursor = db.rawQuery(sql,null);
