@@ -177,7 +177,7 @@ public class ThongkeLayout extends AppCompatActivity {
 //                <!-- 130 / 160 / <= 122  -->
                 int[] sizeOfCell = {130, 160, 122};
                 boolean[] isPaddingZero = {false, false, false};
-//                rowGenarator.setData( rowGenarator.enhanceRowData(  , 5 ) );
+                rowGenarator.setData( rowGenarator.enhanceRowData( capphatDB.thongKeCau2b() , 3 ) );
                 rowGenarator.setSizeOfCell(sizeOfCell);
                 rowGenarator.setIsCellPaddingZero(isPaddingZero);
             };
@@ -186,7 +186,7 @@ public class ThongkeLayout extends AppCompatActivity {
 //               <!-- 70 p0 / 150 p0 / 90 p0 / <= 80 p0 -->
                 int[] sizeOfCell = {70, 150, 90, 80};
                 boolean[] isPaddingZero = {true, true, true, true};
-//                rowGenarator.setData( rowGenarator.enhanceRowData(  , 5 ) );
+                rowGenarator.setData( rowGenarator.enhanceRowData(  capphatDB.thongKeCau2c(), 4 ) );
                 rowGenarator.setSizeOfCell(sizeOfCell);
                 rowGenarator.setIsCellPaddingZero(isPaddingZero);
             };

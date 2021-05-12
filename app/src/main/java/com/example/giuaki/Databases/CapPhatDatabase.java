@@ -69,14 +69,14 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
 
     public List<CapPhat> reset(){
         dropTable();
-        insert(new CapPhat("PHIEU1","2018-05-07","VPP1","NV1",10));
+        insert(new CapPhat("PHIEU1","2018-08-25","VPP1","NV1",10));
         insert(new CapPhat("PHIEU2","2018-08-25","VPP2","NV2",15));
-        insert(new CapPhat("PHIEU3","2017-01-04","VPP1","NV1",24));
+        insert(new CapPhat("PHIEU3","2018-08-25","VPP1","NV1",24));
         insert(new CapPhat("PHIEU4","2019-02-24","VPP3","NV3",4));
         insert(new CapPhat("PHIEU5","2018-10-30","VPP5","NV5",7));
-        insert(new CapPhat("PHIEU6","2019-05-07","VPP1","NV3",16));
-        insert(new CapPhat("PHIEU7","2020-07-01","VPP2","NV1",15));
-        insert(new CapPhat("PHIEU8","2019-02-02","VPP6","NV4",16));
+        insert(new CapPhat("PHIEU6","2020-05-07","VPP1","NV3",16));
+        insert(new CapPhat("PHIEU7","2020-05-07","VPP2","NV1",15));
+        insert(new CapPhat("PHIEU8","2020-02-07","VPP6","NV4",16));
         insert(new CapPhat("PHIEU9","2018-02-09","VPP1","NV5",14));
         return select();
     }
@@ -182,7 +182,7 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
         }
         return results;
     }
-
+    //  THONG KE ------------------------------
     public List<String> thongKeCau2a(){
         SQLiteDatabase db = this.getReadableDatabase();
         String sql =
@@ -201,31 +201,29 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
 
     public List<String> thongKeCau2b(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT DISTINCT VPP.MAVPP, VPP.TENVPP, CP.NGAYCAP FROM " +
-                CapPhatDatabase.TABLE_NAME + " CP ," +
-                VanPhongPhamDatabase.TABLE_NAME + " VPP " +
-                "WHERE CP.MAVPP = VPP.MAVPP";
+        String sql =
+                "SELECT DISTINCT CP.MAVPP, VPP.TENVPP, CP.NGAYCAP FROM \n" +
+                "( SELECT L.MAVPP, L.NGAYCAP FROM\n" +
+                "( SELECT MAVPP, NGAYCAP FROM CAPPHAT ) AS L\n" +
+                "JOIN\n" +
+                "( SELECT MAVPP, NGAYCAP, COUNT(NGAYCAP) AS SOLUONG FROM CAPPHAT GROUP BY NGAYCAP \n" +
+                "HAVING COUNT(NGAYCAP) > 1 ) AS R\n" +
+                "WHERE  L.NGAYCAP = R.NGAYCAP ) AS CP\n" +
+                "JOIN VANPHONGPHAM VPP\n" +
+                "ON CP.MAVPP = VPP.MAVPP\n" +
+                "ORDER BY CP.NGAYCAP";
         Cursor cursor = db.rawQuery(sql, null);
         return getListResult(cursor);
     }
 
     public List<String> thongKeCau2c(){
         SQLiteDatabase db = this.getReadableDatabase();
-        String sql = "SELECT * FROM " + NhanVienDatabase.TABLE_NAME + "\n" +
+        String sql = "SELECT NV.MANV, NV.HOTEN, NV.NGAYSINH , PB.TENPB FROM NHANVIEN NV JOIN PHONGBAN PB\n" +
+                "ON NV.MAPB = PB.MAPB\n" +
                 "WHERE MANV NOT IN\n" +
-                "(\n" +
-                "SELECT NV.MANV AS MILISEC \n" +
-                "FROM " +
-                CapPhatDatabase.TABLE_NAME + " CP, " +
-                NhanVienDatabase.TABLE_NAME + " NV, " +
-                PhongBanDatabase.TABLE_NAME + " PB " +
-                "WHERE CP.MANV = NV.MANV\n" +
-                "AND NV.MAPB = PB.MAPB\n" +
-                "AND \n" +
-                "(\n" +
-                "strftime('%s',CP.NGAYCAP) >= strftime('%s','2018-01-01')\n" +
-                "AND strftime('%s',CP.NGAYCAP) <= strftime('%s','2018-12-31')\n" +
-                ")\n" +
+                "( \n" +
+                "SELECT MANV FROM \n" +
+                "( SELECT MANV, NGAYCAP FROM CAPPHAT WHERE NGAYCAP BETWEEN '2018-01-01' AND '2018-12-31' )\n" +
                 ")";
         Cursor cursor = db.rawQuery(sql,null);
         return getListResult(cursor);
