@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.giuaki.Entities.CapPhat;
+import com.example.giuaki.Entities.PhongBan;
 import com.example.giuaki.Entities.VanPhongPham;
 
 import java.util.ArrayList;
@@ -300,6 +302,59 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
                 "GROUP BY R.MAVPP, R.MANV";
         Cursor cursor = db.rawQuery(sql, null);
         return getListResult(cursor);
+    }
+
+    public List<String> countVPPfromPB( PhongBan pb ){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql =
+                "SELECT NV.MAPB, SUM(SOLUONG) AS TONGSL \n" +
+                "FROM CAPPHAT CP JOIN NHANVIEN NV \n" +
+                "ON CP.MANV = NV.MANV \n" +
+                "AND NV.MAPB = '"+pb.getMapb()+"' \n" +
+                "GROUP BY MAPB";
+        Cursor cursor = db.rawQuery(sql, null);
+        return getListResult(cursor);
+    }
+
+    public List<String> BaocaoQuery( PhongBan pb){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT BC.SOPHIEU,BC.MANV,BC.NGAYCAP,BC.TENVPP,BC.TRIGIA FROM  \n" +
+                "(\n" +
+                "SELECT R.SOPHIEU,R.NGAYCAP,R.TENVPP,R.TRIGIA,L.MANV,L.MAPB FROM\n" +
+                "\t(SELECT * FROM NHANVIEN NV JOIN PHONGBAN PB ON NV.MAPB = PB.MAPB ) AS L\n" +
+                "\tJOIN\n" +
+                "\t(SELECT CP.SOPHIEU, CP.NGAYCAP, VPP.TENVPP, CP.SOLUONG*VPP.GIANHAP AS TRIGIA ,CP.MANV \n" +
+                "\tFROM CAPPHAT CP JOIN VANPHONGPHAM VPP \n" +
+                "\tON CP.MAVPP = VPP.MAVPP) AS R \n" +
+                "\tON L.MANV = R.MANV \n" +
+                ") BC\n" +
+                "\tWHERE BC.MAPB = '"+pb.getMapb()+"'";
+        Cursor cursor = db.rawQuery(sql, null);
+        List<String> results = new ArrayList<>();
+        int count = 1;
+        while(cursor.moveToNext()){
+            results.add(count++ + "");
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                if( i == 2) results.add(formatDate(cursor.getString(i), false));
+                else
+                results.add(cursor.getString(i));
+            }
+        }
+        return results;
+    }
+
+    public String formatDate(String str, boolean toSQL ){
+        String[] date ;
+        String result = "";
+        if( toSQL ){
+            date = str.split("/");
+            result = date[2] +"-"+ date[1] +"-"+ date[0];
+        }else{
+            date = str.split("-");
+            result = date[2] +"/"+ date[1] +"/"+ date[0];
+        }
+
+        return result;
     }
 
 }

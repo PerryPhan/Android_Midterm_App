@@ -485,7 +485,7 @@
             style="@style/Btn"
             android:textSize="20dp"
             android:textColor="@color/black"
-            android:text="in báo cáo"
+            android:text="@string/bao_cao"
             android:textAllCaps="true"
             app:backgroundTint="@color/lightdark"
             />

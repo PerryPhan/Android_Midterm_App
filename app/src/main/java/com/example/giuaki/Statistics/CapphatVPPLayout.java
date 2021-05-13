@@ -42,7 +42,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CapphatVPPLayout extends AppCompatActivity {
-    public static String maPB = "All";
+    public static PhongBan selectedPB = null;
+    public static int totalMoney = 0;
     // Main Layout
     Button backBtn;
 
@@ -77,6 +78,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
     List<PhongBan> phongban_list;
 
     int totalPrice = 0;
+    int VPPCount = 0;
 
     // Dialog
     Dialog dialog;
@@ -188,14 +190,21 @@ public class CapphatVPPLayout extends AppCompatActivity {
         navBC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //   new BaoCao
+                Intent intent;
+                if( selectedPB != null )
+                 intent = new Intent(CapphatVPPLayout.this, BaocaoVPPLayout.class);
+                else
+                 intent = new Intent(CapphatVPPLayout.this, BaocaoVPP2Layout.class);
+                if( totalPrice != 0 ) totalMoney = totalPrice;  // with selectedPB
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                startActivity( intent );
             }
         });
         navTK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CapphatVPPLayout.this, ThongkeLayout.class);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 startActivity( intent );
             }
         });
@@ -204,7 +213,6 @@ public class CapphatVPPLayout extends AppCompatActivity {
     public void transferLayout( String maPB ){
         if( maPB.trim().equalsIgnoreCase("")) return;
         // 1. maPB là all thì chuyển sang layout maPB
-        CapphatVPPLayout.maPB = maPB;
         switch (maPB){
             case "All" : {
                 warningLabel.setText("Khi chọn phòng ban cụ thể, cấu trúc bảng sẽ khác");
@@ -258,6 +266,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
         for( PhongBan pb : phongban_list ){
             if( maPB.equalsIgnoreCase(pb.getMapb().trim()) )
             {
+                selectedPB = pb;
                 noteTotalLabel.setText("Tổng Chi phí trong "+pb.getTenpb()+" được cấp :");
                 break;
             }
@@ -528,40 +537,6 @@ public class CapphatVPPLayout extends AppCompatActivity {
 
         return result;
     }
-
-    // This Custom Columns' Max Width : 80 / 300
-//    public TableRow createRow(Context context, NhanVien nv) {
-//        TableRow tr = new TableRow(context);
-//        // Id
-//
-//        //   Ma PB
-//        TextView maPB = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
-//        // Cần cái này để khi mà maPB đạt tới max width thì nó sẽ tăng height cho bên tenPB luôn
-//        // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
-//        maPB.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
-//        maPB.setMaxWidth(DPtoPix(80));
-//        maPB.setText(pb.getMapb());
-//
-//        //   Ten PB
-//        TextView tenPB = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
-//        // Cần cái này để khi mà tenPB đạt tới max width thì nó sẽ tăng height cho bên maPB luôn
-//        tenPB.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
-//        tenPB.setText(pb.getTenpb());
-//        tenPB.setMaxWidth(DPtoPix(300));
-//
-//        tr.setBackgroundColor(getResources().getColor(R.color.white));
-//        // Add 2 thứ vào row
-//        tr.addView(maPB);
-//        tr.addView(tenPB);
-//
-//        return tr;
-//    }
-    // Table 1
-    //    <!-- 85 / 180 p0 / 50 p0 / 80  -->
-
-    // Table 2
-    // <!-- 80 / 230 / 90-->
-
 
     // Table 3
     // <!-- 80 / 150 / 60 / 60 / 60 -->

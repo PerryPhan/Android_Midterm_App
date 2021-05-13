@@ -24,13 +24,7 @@
             app:iconPadding="5dp"
             app:iconTint="#000"
             />
-        <Switch
-            android:layout_width="match_parent"
-            android:gravity="right"
-            android:layout_height="wrap_content"
-            android:text="Tất cả phòng ban"
-            android:checked="true"
-            />
+
     </LinearLayout>
     <TextView
         style="@style/Heading"

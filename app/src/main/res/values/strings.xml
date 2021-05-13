@@ -34,6 +34,7 @@
     <string name="don_vi_tinh">Đơn vị tính</string>
     <string name="hinh">Hình</string>
     <string name="tri_gia">Trị giá</string>
+    <string name="bao_cao">báo cáo</string>
     <array name="phongban">
         <item>PB01</item>
         <item>PB02</item>

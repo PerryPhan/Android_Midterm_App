@@ -164,4 +164,23 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(NhanVienDatabase.TABLE_NAME,null,null);
     }
+
+    public List<String> getListResult(Cursor cursor){
+        List<String> results = new ArrayList<>();
+        while(cursor.moveToNext()){
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                results.add(cursor.getString(i));
+            }
+        }
+        return results;
+    }
+
+    public List<String> CountNVfromPB( PhongBan pb ){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT MAPB, COUNT(*) FROM NHANVIEN " +
+                " WHERE MAPB = '"+pb.getMapb()+"' " +
+                " GROUP BY MAPB ";
+        Cursor cursor = db.rawQuery(sql,null);
+        return getListResult(cursor);
+    }
 }
