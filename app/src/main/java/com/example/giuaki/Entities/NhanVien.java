@@ -31,13 +31,24 @@ public class NhanVien {
                 ", maPb='" + maPb + '\'' +
                 '}';
     }
-//    public long getId() {
-//        return id;
-//    }
-//
-//    public void setId(long id) {
-//        this.id = id;
-//    }
+
+    public String toSpinnerString() {
+        return maNv+", "+hoTen+", "+formatDate(ngaySinh, false);
+    }
+
+    public String formatDate(String str, boolean toSQL ){
+        String[] date ;
+        String result = "";
+        if( toSQL ){
+            date = str.split("/");
+            result = date[2] +"-"+ date[1] +"-"+ date[0];
+        }else{
+            date = str.split("-");
+            result = date[2] +"/"+ date[1] +"/"+ date[0];
+        }
+
+        return result;
+    }
 
     public String getMaNv() {
         return maNv;

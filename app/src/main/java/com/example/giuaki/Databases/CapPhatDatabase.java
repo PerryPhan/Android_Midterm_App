@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.giuaki.Entities.CapPhat;
+import com.example.giuaki.Entities.NhanVien;
 import com.example.giuaki.Entities.PhongBan;
 import com.example.giuaki.Entities.VanPhongPham;
 
@@ -338,6 +339,29 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
                 if( i == 2) results.add(formatDate(cursor.getString(i), false));
                 else
                 results.add(cursor.getString(i));
+            }
+        }
+        return results;
+    }
+
+    public List<String> BaocaoQuery( NhanVien nv ){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql =
+                "SELECT SOPHIEU, NGAYCAP, TENVPP, TRIGIA FROM (\n" +
+                "SELECT CP.SOPHIEU, NGAYCAP, TENVPP, SOLUONG * GIANHAP AS TRIGIA, MANV\n" +
+                " FROM CAPPHAT CP JOIN VANPHONGPHAM VPP \n" +
+                " ON CP.MAVPP = VPP.MAVPP \n" +
+                " WHERE CP.MANV = '"+nv.getMaNv()+"'\n" +
+                ") ";
+        Cursor cursor = db.rawQuery(sql, null);
+        List<String> results = new ArrayList<>();
+        int count = 1;
+        while(cursor.moveToNext()){
+            results.add(count++ + "");
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                if( i == 1) results.add(formatDate(cursor.getString(i), false));
+                else
+                    results.add(cursor.getString(i));
             }
         }
         return results;

@@ -3,6 +3,7 @@ package com.example.giuaki.Statistics;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.giuaki.Entities.PhongBan;
 import com.example.giuaki.Entities.Rows;
 import com.example.giuaki.Main.ThongkeLayout;
 import com.example.giuaki.R;
+import com.example.giuaki.XinchoLayout;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -74,7 +76,9 @@ public class BaocaoVPPLayout extends AppCompatActivity {
         printBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Print !!
+                Intent intent = new Intent(BaocaoVPPLayout.this, XinchoLayout.class);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                startActivity( intent );
             }
         });
         setPhongBanView();
@@ -94,7 +98,7 @@ public class BaocaoVPPLayout extends AppCompatActivity {
         capPhatDatabase = new CapPhatDatabase(this);
         Rows rowGenarator = new Rows(this );
         int[] sizeOfCell = {40,80,50,90,67,63};
-        boolean[] isPaddingZero = {false, true, true, true ,true, true};
+        boolean[] isPaddingZero = {false, false, true, true ,true, true};
         rowGenarator.setSizeOfCell(sizeOfCell);
         rowGenarator.setIsCellPaddingZero(isPaddingZero);
         rowGenarator.setData( rowGenarator.enhanceRowData( capPhatDatabase.BaocaoQuery( pb ), 6 ) );
@@ -135,7 +139,7 @@ public class BaocaoVPPLayout extends AppCompatActivity {
             int count = 0;
             while (temp_money != 0) {
                 moneyFormat += (temp_money % 10) + "";
-                if ((count + 1) % 3 == 0) moneyFormat += ".";
+                if ((count + 1) % 3 == 0 && temp_money > 10) moneyFormat += ".";
                 count++;
                 temp_money /= 10;
             }

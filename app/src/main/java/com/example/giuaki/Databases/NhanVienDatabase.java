@@ -183,4 +183,47 @@ public class NhanVienDatabase extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(sql,null);
         return getListResult(cursor);
     }
+
+    public List<NhanVien> select( PhongBan pb ){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+//                COLUMN_ID,
+                COLUMN_MANV,
+                COLUMN_HOTEN,
+                COLUMN_NGAYSINH,
+                COLUMN_MAPB
+        };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder = null;
+        String selection = "MAPB = ?";
+        String[] selectionArgs = new String[]{pb.getMapb()};
+
+        Cursor cursor = db.query(
+                NhanVienDatabase.TABLE_NAME,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                sortOrder               // The sort order
+        );
+
+        List<NhanVien> list_nhanvien = new ArrayList<>();
+
+        while(cursor.moveToNext()){
+            list_nhanvien.add(new NhanVien(
+                    cursor.getString(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3)
+            ));
+        }
+
+        return list_nhanvien;
+    }
+
 }

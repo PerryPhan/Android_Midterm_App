@@ -15,6 +15,7 @@
         android:orientation="horizontal"
         >
         <Button
+            android:id="@+id/BC_All_backBtn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -43,11 +44,15 @@
             style="@style/textBlack"
             android:text="@string/ten_pb"
             android:paddingHorizontal="30dp"
+            android:layout_width="120dp"
             />
-        <TextView
-            style="@style/tempCombobox"
-            android:layout_margin="0dp"
-            />
+        <Spinner
+            android:layout_gravity="center"
+            android:id="@+id/BC_All_PBSpinner"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,22 +63,116 @@
             style="@style/textBlack"
             android:text="Chọn NV"
             android:paddingHorizontal="25dp"
+            android:layout_width="120dp"
             />
-        <TextView
-            style="@style/tempCombobox"
-            android:layout_margin="0dp"
-            />
+        <Spinner
+            android:layout_gravity="center"
+            android:id="@+id/BC_All_NVSpinner"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@drawable/dotted_line"/>
-    <include
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginVertical="10dp"
-        layout="@layout/baocao_table02"
-        />
+        android:orientation="vertical"
+        tools:context=".Main.NhanvienLayout"
+        >
+        <!--    Header of the table -->
+        <!-- 40 / 100 / 100 / 80 / 80 -->
+        <TableLayout
+            style="@style/tableLayoutStyle"
+            android:stretchColumns="4"
+            >
+            <TableRow>
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="Stt"
+                    android:textSize="@dimen/smallTextSize"
+                    android:layout_width="40dp"
+                    android:padding="0dp"
+                    />
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="Số phiếu"
+                    android:textSize="@dimen/smallTextSize"
+                    android:layout_width="96dp" />
+
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="Ngày cấp"
+                    android:textSize="@dimen/smallTextSize"
+                    android:layout_width="98dp"/>
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="Tên VPP"
+                    android:textSize="@dimen/smallTextSize"
+                    android:layout_width="80dp"/>
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="Trị giá"
+                    android:textSize="@dimen/smallTextSize"
+                    android:maxWidth="100dp"/>
+            </TableRow>
+
+        </TableLayout>
+        <!--    Content of the table -->
+        <!-- 40 p0 / 100 / 100 p0/ 80 / 80 -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TableLayout
+                android:id="@+id/BC_All_table"
+                style="@style/tableLayoutStyle"
+                android:stretchColumns="4"
+                >
+                <TableRow
+                    >
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="1"
+                        android:textSize="@dimen/smallTextSize"
+                        android:layout_width="40dp"
+                        android:padding="0dp"
+                        android:layout_height="0dp"
+                        />
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="P006"
+                        android:textSize="@dimen/smallTextSize"
+                        android:layout_width="95dp"
+                        />
+
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="04/08/2018"
+                        android:textSize="@dimen/smallTextSize"
+                        android:layout_width="100dp"
+                        android:padding="0dp"
+                        />
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="Kim bấm"
+                        android:textSize="@dimen/smallTextSize"
+                        android:layout_width="80dp"
+                        />
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="140.000"
+                        android:textSize="@dimen/smallTextSize"
+                        android:maxWidth="100dp"
+                        />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
@@ -92,6 +191,7 @@
             android:paddingLeft="30dp"
             />
         <TextView
+            android:id="@+id/BC_All_totalMoney"
             style="@style/textBlack"
             android:text="840.000đ"
             android:textStyle="bold"
@@ -100,6 +200,7 @@
             />
     </LinearLayout>
     <TextView
+        android:id="@+id/BC_All_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
@@ -117,6 +218,7 @@
         android:layout_margin="3dp"
         >
         <Button
+            android:id="@+id/BC_All_printBtn"
             style="@style/Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

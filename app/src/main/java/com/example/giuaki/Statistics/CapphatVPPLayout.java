@@ -33,8 +33,6 @@ import com.example.giuaki.Entities.NhanVien;
 import com.example.giuaki.Entities.PhongBan;
 import com.example.giuaki.Entities.Rows;
 import com.example.giuaki.Entities.VanPhongPham;
-import com.example.giuaki.Main.NhanvienLayout;
-import com.example.giuaki.Main.PhongbanLayout;
 import com.example.giuaki.Main.ThongkeLayout;
 import com.example.giuaki.R;
 
@@ -194,7 +192,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
                 if( selectedPB != null )
                  intent = new Intent(CapphatVPPLayout.this, BaocaoVPPLayout.class);
                 else
-                 intent = new Intent(CapphatVPPLayout.this, BaocaoVPP2Layout.class);
+                 intent = new Intent(CapphatVPPLayout.this, BaocaoVPPAllLayout.class);
                 if( totalPrice != 0 ) totalMoney = totalPrice;  // with selectedPB
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
                 startActivity( intent );
@@ -226,6 +224,8 @@ public class CapphatVPPLayout extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         0 )
                 );
+                selectedPB = null;
+                totalMoney = 0;
             };
                 break;
             default: {
@@ -278,6 +278,11 @@ public class CapphatVPPLayout extends AppCompatActivity {
             rowGenarator.setSizeOfCell(sizeOfCell);
             rowGenarator.setIsCellPaddingZero(isPaddingZero);
         List<TableRow> rows = rowGenarator.generateArrayofRows();
+        if( rows == null) {
+            cp_totalCount.setText("0");
+            cp_totalPrice.setText("0");
+            return;
+        }
             for( TableRow row : rows) {
                 cp_table1.addView(row);
                 TextView totalpriceofVPPView = (TextView) row.getChildAt( row.getChildCount() -1);
@@ -333,7 +338,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
             int count = 0;
             while (temp_money != 0) {
                 moneyFormat += (temp_money % 10) + "";
-                if ((count + 1) % 3 == 0) moneyFormat += ".";
+                if ((count + 1) % 3 == 0 && temp_money > 10) moneyFormat += ".";
                 count++;
                 temp_money /= 10;
             }

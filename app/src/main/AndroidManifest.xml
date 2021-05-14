@@ -15,7 +15,7 @@
         <activity android:name=".XinchoLayout" />
         <activity android:name=".Tables.BaocaoTable02" />
         <activity android:name=".Tables.BaocaoTable01" />
-        <activity android:name=".Statistics.BaocaoVPP2Layout" />
+        <activity android:name=".Statistics.BaocaoVPPAllLayout" />
         <activity android:name=".Statistics.BaocaoVPPLayout" />
         <activity android:name=".Tables.ThongkeTable04" />
         <activity android:name=".Tables.ThongkeTable03" />
