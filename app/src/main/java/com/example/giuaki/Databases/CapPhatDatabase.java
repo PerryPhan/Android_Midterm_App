@@ -367,6 +367,21 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
         return results;
     }
 
+    public List<String> countVPPfromPB(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql =
+                "SELECT L.TENPB, COALESCE(SUM(R.SOLUONG), 0 ) AS SOLUONG FROM \n" +
+                "PHONGBAN AS L\n" +
+                "LEFT JOIN \n" +
+                "(\n" +
+                "SELECT CP.*,NV.MAPB FROM CAPPHAT CP JOIN NHANVIEN NV ON CP.MANV = NV.MANV \n" +
+                ") AS R \n" +
+                " ON L.MAPB = R.MAPB\n" +
+                " GROUP BY L.MAPB";
+        Cursor cursor = db.rawQuery(sql, null);
+        return getListResult(cursor);
+    }
+
     public String formatDate(String str, boolean toSQL ){
         String[] date ;
         String result = "";

@@ -155,4 +155,6 @@ public class PhongBanDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(PhongBanDatabase.TABLE_NAME,null,null);
     }
+
+
 }

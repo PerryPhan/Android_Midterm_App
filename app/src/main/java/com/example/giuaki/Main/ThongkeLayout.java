@@ -3,6 +3,7 @@ package com.example.giuaki.Main;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.example.giuaki.Chart.ThongkeChart;
 import com.example.giuaki.Databases.CapPhatDatabase;
 import com.example.giuaki.Entities.Rows;
 import com.example.giuaki.R;
@@ -34,7 +36,8 @@ public class ThongkeLayout extends AppCompatActivity {
                  tableCau3,
                  tableCau4;
 
-    Button backBtn;
+    Button backBtn,
+           chartBtn;
     Button   btn_cau1,
              btn_cau2,
              btn_cau3,
@@ -70,6 +73,7 @@ public class ThongkeLayout extends AppCompatActivity {
         tableCau4 = findViewById(R.id.TK_tableCau4);
         // Buttons
         backBtn = findViewById(R.id.TK_backBtn);
+        chartBtn = findViewById(R.id.TK_chartBtn);
         btn_cau1 = findViewById(R.id.TK_btn_cau1);
         btn_cau2 = findViewById(R.id.TK_btn_cau2);
         btn_cau3 = findViewById(R.id.TK_btn_cau3);
@@ -86,6 +90,14 @@ public class ThongkeLayout extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
 
+            }
+        });
+        chartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ThongkeLayout.this, ThongkeChart.class);
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                startActivity( intent );
             }
         });
         setButtonClick( btn_cau1 );

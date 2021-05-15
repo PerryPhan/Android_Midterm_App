@@ -11,7 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Giuaki">
-        <activity android:name=".Main.ThongbaoLayout"></activity>
+        <activity android:name=".Chart.ThongkeChart">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Main.ThongbaoLayout" />
         <activity android:name=".XinchoLayout" />
         <activity android:name=".Tables.BaocaoTable02" />
         <activity android:name=".Tables.BaocaoTable01" />
@@ -23,26 +30,12 @@
         <activity android:name=".Tables.ThongkeTable01" />
         <activity android:name=".Main.ThongkeLayout" />
         <activity android:name=".Statistics.CapphatVPP2Layout" />
-        <activity android:name=".Statistics.CapphatVPPLayout" >
-
-        </activity>
-        <activity android:name=".Main.VanphongphamLayout" >
-
-        </activity>
-        <activity android:name=".Main.NhanvienLayout" >
-        </activity>
-        <activity android:name=".Main.PhongbanLayout" >
-
-        </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".Statistics.CapphatVPPLayout"></activity>
+        <activity android:name=".Main.VanphongphamLayout"></activity>
+        <activity android:name=".Main.NhanvienLayout"></activity>
+        <activity android:name=".Main.PhongbanLayout"></activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".Welcome">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
