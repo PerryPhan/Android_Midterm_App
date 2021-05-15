@@ -35,6 +35,7 @@
     <string name="hinh">Hình</string>
     <string name="tri_gia">Trị giá</string>
     <string name="bao_cao">báo cáo</string>
+    <string name="so_luong_vpp">Số lượng VPP</string>
     <array name="phongban">
         <item>PB01</item>
         <item>PB02</item>

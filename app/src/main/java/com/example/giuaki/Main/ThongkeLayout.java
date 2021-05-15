@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.example.giuaki.Chart.ThongkeChart;
 import com.example.giuaki.Databases.CapPhatDatabase;
@@ -29,12 +30,14 @@ public class ThongkeLayout extends AppCompatActivity {
     LinearLayout wrapper_tableCau1,
                  wrapper_tableCau2,
                  wrapper_tableCau3,
-                 wrapper_tableCau4;
+                 wrapper_tableCau4,
+                 wrapper_tableDefault;
 
     TableLayout  tableCau1,
                  tableCau2,
                  tableCau3,
-                 tableCau4;
+                 tableCau4,
+                 tableDefault;
 
     Button backBtn,
            chartBtn;
@@ -66,11 +69,13 @@ public class ThongkeLayout extends AppCompatActivity {
         wrapper_tableCau2 = findViewById(R.id.TK_wrapper_tableCau2);
         wrapper_tableCau3 = findViewById(R.id.TK_wrapper_tableCau3);
         wrapper_tableCau4 = findViewById(R.id.TK_wrapper_tableCau4);
+        wrapper_tableDefault = findViewById(R.id.TK_wrapper_tableDefault);
         // TableLayouts
         tableCau1 = findViewById(R.id.TK_tableCau1);
         tableCau2 = findViewById(R.id.TK_tableCau2);
         tableCau3 = findViewById(R.id.TK_tableCau3);
         tableCau4 = findViewById(R.id.TK_tableCau4);
+        tableDefault = findViewById(R.id.TK_tableDefault);
         // Buttons
         backBtn = findViewById(R.id.TK_backBtn);
         chartBtn = findViewById(R.id.TK_chartBtn);
@@ -132,6 +137,7 @@ public class ThongkeLayout extends AppCompatActivity {
                 normalAllButton();
                 activeButton(btn);
                 index = Integer.parseInt(btn.getTag()+"");
+                Toast.makeText(ThongkeLayout.this, index+"",Toast.LENGTH_LONG).show();
                 handleEvent(index);
             }
         });
@@ -160,7 +166,10 @@ public class ThongkeLayout extends AppCompatActivity {
                 showTableWrapper(wrapper_tableCau4);
                 loadDataRows( tableCau4 );
               break;
-            default: break;
+            default:
+                showTableWrapper(wrapper_tableDefault);
+                loadDataRows( tableDefault );
+                break;
         }
     }
 
@@ -202,16 +211,23 @@ public class ThongkeLayout extends AppCompatActivity {
                 rowGenarator.setSizeOfCell(sizeOfCell);
                 rowGenarator.setIsCellPaddingZero(isPaddingZero);
             };
+                break;
             case 3:{
+//              <!-- 90 / 160 / 80 -->
+                int[] sizeOfCell = {90, 160, 80};
+                boolean[] isPaddingZero = {false, false, false};
+                rowGenarator.setData( rowGenarator.enhanceRowData( capphatDB.thongKeCau2d() , 3 ) );
+                rowGenarator.setSizeOfCell(sizeOfCell);
+                rowGenarator.setIsCellPaddingZero(isPaddingZero);
+            };
+                break;
+            default:
 //              <!-- 80 p0 / 80 / 80 / 80 / <= 80 -->
                 int[] sizeOfCell = {80, 80, 80, 80, 80};
                 boolean[] isPaddingZero = {true, false, false, false, false};
 //                rowGenarator.setData( rowGenarator.enhanceRowData(  , 5 ) );
                 rowGenarator.setSizeOfCell(sizeOfCell);
                 rowGenarator.setIsCellPaddingZero(isPaddingZero);
-            };
-                break;
-            default:
                 break;
         }
         rows = rowGenarator.generateArrayofRows();
@@ -238,6 +254,10 @@ public class ThongkeLayout extends AppCompatActivity {
                 0 ));
         wrapper_tableCau4.setVisibility(View.INVISIBLE);
         wrapper_tableCau4.setLayoutParams( new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                0 ));
+        wrapper_tableDefault.setVisibility(View.INVISIBLE);
+        wrapper_tableDefault.setLayoutParams( new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 0 ));
     }

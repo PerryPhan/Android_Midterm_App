@@ -216,7 +216,15 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
                 "ON CP.MAVPP = VPP.MAVPP\n" +
                 "ORDER BY CP.NGAYCAP";
         Cursor cursor = db.rawQuery(sql, null);
-        return getListResult(cursor);
+        List<String> results = new ArrayList<>();
+        while(cursor.moveToNext()){
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                if( i == 2) results.add(formatDate(cursor.getString(i), false));
+                else
+                    results.add(cursor.getString(i));
+            }
+        }
+        return results;
     }
 
     public List<String> thongKeCau2c(){
@@ -229,10 +237,31 @@ public class CapPhatDatabase extends SQLiteOpenHelper {
                 "( SELECT MANV, NGAYCAP FROM CAPPHAT WHERE NGAYCAP BETWEEN '2018-01-01' AND '2018-12-31' )\n" +
                 ")";
         Cursor cursor = db.rawQuery(sql,null);
+        List<String> results = new ArrayList<>();
+        while(cursor.moveToNext()){
+            for(int i = 0; i < cursor.getColumnCount(); i++){
+                if( i == 2) results.add(formatDate(cursor.getString(i), false));
+                else
+                    results.add(cursor.getString(i));
+            }
+        }
+        return results;
+    }
+    public List<String> thongKeCau2d(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql =
+                "SELECT L.MAPB, L.TENPB , COALESCE(SUM(R.SOLUONG), 0 ) AS SOLUONG FROM \n" +
+                "PHONGBAN AS L\n" +
+                "LEFT JOIN \n" +
+                "(\n" +
+                "SELECT CP.*,NV.MAPB FROM CAPPHAT CP JOIN NHANVIEN NV ON CP.MANV = NV.MANV \n" +
+                ") AS R \n" +
+                " ON L.MAPB = R.MAPB\n" +
+                " GROUP BY L.MAPB";
+        Cursor cursor = db.rawQuery(sql,null);
         return getListResult(cursor);
     }
-
-    public List<String> thongKeCau2d(){
+    public List<String> thongKeDefault(){
         SQLiteDatabase db = this.getReadableDatabase();
         String sql = "SELECT B.TENVPP, A.MAPB , A.TENPB, A.TONGSL " +
                 "FROM " +

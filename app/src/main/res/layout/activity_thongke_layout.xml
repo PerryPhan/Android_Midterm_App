@@ -95,6 +95,7 @@
             app:iconPadding="5dp"
             app:iconTint="#000"
             />
+
     </LinearLayout>
     // CAU 1 ------------------------------------------------ TABLE ---------
     <LinearLayout
@@ -364,6 +365,71 @@
         >
 
         <!--    Header of the table -->
+        <!-- 90 / 160 / 80 -->
+        <TableLayout
+            style="@style/tableLayoutStyle"
+            android:stretchColumns="2"
+            >
+            <TableRow>
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/ma_pb"
+                    android:layout_width="90dp"
+                    />
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/ten_pb"
+                    android:layout_width="160dp"
+                    />
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/so_luong_vpp"
+                    android:layout_width="80dp"
+                    />
+            </TableRow>
+
+        </TableLayout>
+        <!--    Content of the table -->
+        <!-- 90 / 160 / 80 -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableLayout
+                android:id="@+id/TK_tableCau4"
+                style="@style/tableLayoutStyle"
+                android:stretchColumns="2">
+                <!--         Generate Row based on Data here   -->
+                <TableRow>
+                    <TextView
+                        style="@style/PBRow_firstCellWidth"
+                        android:text="PB01"
+                        android:layout_width="90dp"
+                        android:layout_height="0dp"
+                        />
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="Phòng Giám đốc"
+                        android:layout_width="160dp"
+                        />
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="40"
+                        android:layout_width="80dp"
+                        />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    // DEFAULT ------------------------------------------------ TABLE ---------
+    <LinearLayout
+        android:id="@+id/TK_wrapper_tableDefault"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        >
+
+        <!--    Header of the table -->
         <!-- 80 p0 / 80 / 80 / 80 / <= 80 -->
         <TableLayout
             style="@style/tableLayoutStyle"
@@ -405,7 +471,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TableLayout
-                android:id="@+id/TK_tableCau4"
+                android:id="@+id/TK_tableDefault"
                 style="@style/tableLayoutStyle"
                 android:stretchColumns="4">
                 <!--         Generate Row based on Data here   -->
