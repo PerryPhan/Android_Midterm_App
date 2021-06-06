@@ -36,6 +36,22 @@
     <string name="tri_gia">Trị giá</string>
     <string name="bao_cao">báo cáo</string>
     <string name="so_luong_vpp">Số lượng VPP</string>
+    <string name="cung_cap">Cung cấp</string>
+    <string name="nha_cc">Nhà CC</string>
+    <string name="ncc">NCC</string>
+    <string name="tong_tien">Tổng tiền</string>
+    <string name="phieu_cung_cap">Phiếu cung cấp</string>
+    <string name="ngay_giao">Ngày giao</string>
+    <string name="trang_thai">Trạng thái</string>
+    <string name="id">ID</string>
+    <string name="thanh_tien">Thành tiền</string>
+    <string name="chon_nv">Chọn NV</string>
+    <string name="chon_vpp">Chọn VPP</string>
+    <string name="sp">SP</string>
+    <string name="nv">NV</string>
+    <string name="so_phieu">Số phiếu</string>
+    <string name="nha_cung_cap">Nhà cung cấp</string>
+    <string name="thong_bao">Thông báo</string>
     <array name="phongban">
         <item>PB01</item>
         <item>PB02</item>

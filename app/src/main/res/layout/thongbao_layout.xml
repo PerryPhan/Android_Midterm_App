@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
+        >
+        <Button
+            android:id="@+id/NV_backBtn2"
+            android:layout_width="50dp"
+            android:layout_height="fill_parent"
+            android:background="@color/transparent"
+            android:drawableLeft="@drawable/baseline_arrow_back_ios_black_18" />
+
+        <TextView
+            android:id="@+id/heading2"
+            style="@style/Heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thong_bao"
+            android:layout_marginLeft="50dp"/>
+
+            <ImageView
+                android:id="@+id/VPP_inputHinh"
+                android:layout_marginLeft="10dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:src="@drawable/notiicon"
+                />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            style="@style/textBlack"
+            android:textSize="16dp"
+            android:layout_marginLeft="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày 02 tháng 06 năm 2021"
+            android:textColor="@color/disable_color" />
+        <TextView
+            style="@style/textBlack"
+            android:textSize="16dp"
+            android:layout_marginLeft="70dp"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/notiborder"
+            />
+    </LinearLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+    </ListView>
+</LinearLayout>

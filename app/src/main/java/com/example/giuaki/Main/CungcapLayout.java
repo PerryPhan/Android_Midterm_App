@@ -1,4 +1,4 @@
-package com.example.giuaki.Statistics;
+package com.example.giuaki.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.giuaki.R;
 
-public class CapphatVPP2Layout extends AppCompatActivity {
+public class CungcapLayout extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_capphatvpp_layout);
+        setContentView(R.layout.activity_cungcap_layout);
     }
 }

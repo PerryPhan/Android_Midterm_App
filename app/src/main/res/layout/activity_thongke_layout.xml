@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
         <Button
             android:id="@+id/TK_backBtn"
             android:layout_width="50dp"
@@ -21,8 +22,7 @@
             app:icon="@drawable/baseline_arrow_back_ios_black_18"
             app:iconGravity="textStart"
             app:iconPadding="5dp"
-            app:iconTint="#000"
-            />
+            app:iconTint="#000" />
 
     </LinearLayout>
     <TextView

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Main.PhongbanLayout"
+    tools:context=".Main.CTCungcapLayout"
     >
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -16,31 +16,22 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/VPP_exitBtn"
-            style="@style/Btn"
-            android:text="@string/thoat"
-            android:textColor="#ffffff"
-            android:backgroundTint="@color/thoatbtn_bgcolor"
-
-            />
-
-        <EditText
-            android:id="@+id/VPP_searchEdit"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
+            android:id="@+id/TK_backBtn"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_corner"
-            android:drawableLeft="@drawable/outline_search_black_24"
-            android:padding="5dp"
-            android:textSize="15dp"
-            android:layout_marginVertical="4dp"
-            android:layout_marginHorizontal="10dp"
-            android:hint="@string/search"
-            android:layout_gravity="center"
-            >
-
-        </EditText>
-
+            android:background="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            app:icon="@drawable/baseline_arrow_back_ios_black_18"
+            app:iconGravity="textStart"
+            app:iconPadding="5dp"
+            app:iconTint="#000" />
+        <TextView
+            android:id="@+id/heading"
+            android:layout_below="@+id/toolbar"
+            style="@style/Heading"
+            android:text="CT Cung cấp"
+            android:layout_weight="1"
+            />
         <Button
             android:id="@+id/VPP_insertBtn"
             style="@style/Btn"
@@ -52,6 +43,78 @@
             app:cornerRadius="100dp"
             android:backgroundTint="@color/disable_color"
             />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="30dp">
+            <TextView
+                style="@style/textBlack"
+                android:text="@string/phieu_cung_cap" />
+            <TextView
+                android:layout_marginLeft="20dp"
+                style="@style/textBlack"
+                android:textSize="20dp"
+                android:text="P001"
+                android:textColor="@color/thoatbtn_bgcolor"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="30dp">
+            <TextView
+                style="@style/textBlack"
+                android:text="@string/ngay_giao" />
+            <TextView
+                android:layout_marginLeft="20dp"
+                style="@style/textBlack"
+                android:text="02/06/2018"
+                android:textColor="@color/thoatbtn_bgcolor"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="30dp">
+            <TextView
+                style="@style/textBlack"
+                android:text="@string/nha_cc" />
+            <TextView
+                android:layout_marginLeft="20dp"
+                style="@style/textBlack"
+                android:text="A"
+                android:textColor="@color/thoatbtn_bgcolor"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="30dp">
+            <TextView
+                style="@style/textBlack"
+                android:text="@string/trang_thai" />
+            <TextView
+                android:layout_marginLeft="20dp"
+                style="@style/textBlack"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:text="OPENING"
+                android:textColor="@color/thoatbtn_bgcolor"
+                />
+        </LinearLayout>
     </LinearLayout>
     <!-- + @+id/Toolbar + -->
     <!--///////////////////////////////////////////////////////-->
@@ -65,65 +128,39 @@
         android:orientation="vertical"
         tools:context=".Main.NhanvienLayout"
         >
-        <TextView
-            android:id="@+id/heading"
-            android:layout_below="@+id/toolbar"
-            style="@style/Heading"
-            android:text="Văn phòng phẩm"
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal">
-            <Spinner
-                android:layout_gravity="center"
-                android:id="@+id/VPP_NCCSpinner"
-                android:layout_width="240dp"
-                android:layout_height="40dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"/>
-            <Button
-                android:id="@+id/VPP_navbar_cungcap"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:drawableLeft="@drawable/outline_local_shipping_black_36"
-                android:background="@color/transparent"
-                />
-        </LinearLayout>
         <!--    Header of the table -->
-        <!--    70 p0 / 200 / 55 p0 / <= 85 p0-->
+        <!--    70 p0 / 70 p0 / 85 p0 / 55 p0 / 110 p0-->
         <TableLayout
             style="@style/tableLayoutStyle"
             android:layout_width="match_parent"
-            android:stretchColumns="4">
+            android:stretchColumns="4"
+            >
             <TableRow>
                 <TextView
                     style="@style/tableHeader"
-                    android:text="@string/ma_vpp"
+                    android:text="@string/id"
                     android:layout_width="70dp"
-                    android:padding="0dp"
                     />
-
                 <TextView
                     style="@style/VPPHeader_secCellWidth"
-                    android:text="@string/ten_vpp"
-                    android:layout_width="140dp"/>
+                    android:text="@string/vpp"
+                    android:layout_width="70dp"
+                    android:padding="0dp"/>
 
                 <TextView
                     style="@style/tableHeader"
-                    android:text="@string/dvt"
-                    android:layout_width="55dp"
-                    android:padding="0dp"/>
-                <TextView
-                    style="@style/tableHeader"
-                    android:text="@string/gia"
-                    android:width="85dp"
+                    android:text="@string/ten_vpp"
+                    android:layout_width="85dp"
                     android:padding="0dp"/>
                 <TextView
                     style="@style/tableHeader"
                     android:text="@string/sl"
-                    android:maxWidth="85dp"
+                    android:width="55dp"
+                    android:padding="0dp"/>
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/thanh_tien"
+                    android:layout_width="110dp"
                     android:padding="0dp"/>
             </TableRow>
             <!--    Content of the table -->
@@ -140,31 +177,31 @@
                 <!--         Generate Row based on Data here   -->
                 <TableRow>
                     <TextView
-                        android:layout_height="0dp"
-                        android:visibility="invisible"
-                        style="@style/VPPRow_firstCellWidth"
+                        style="@style/tableRow"
+                        android:text="1"
                         android:layout_width="70dp"
-                        android:padding="0dp"
-                        />
-                    <TextView
-                        style="@style/VPPRow_secCellWidth"
-                        android:layout_width="140dp"
                         />
                     <TextView
                         style="@style/tableRow"
-                        android:layout_width="55dp"
-                        android:padding="0dp"
-                        />
+                        android:text="VPP1"
+                        android:layout_width="70dp"
+                        android:padding="0dp"/>
+
                     <TextView
                         style="@style/tableRow"
+                        android:text="Giấy A4"
                         android:layout_width="85dp"
-                        android:padding="0dp"
-                        />
+                        android:padding="0dp"/>
                     <TextView
                         style="@style/tableRow"
-                        android:maxWidth="55dp"
-                        android:padding="0dp"
-                        />
+                        android:text="20"
+                        android:width="55dp"
+                        android:padding="0dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="4.000.000đ"
+                        android:layout_width="110dp"
+                        android:padding="0dp"/>
                 </TableRow>
             </TableLayout>
         </ScrollView>

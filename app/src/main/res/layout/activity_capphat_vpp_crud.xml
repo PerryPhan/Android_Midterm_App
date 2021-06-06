@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Main.PhongbanLayout"
+    tools:context=".Statistics.CapphatVPPcrud"
     >
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -16,31 +16,22 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/VPP_exitBtn"
-            style="@style/Btn"
-            android:text="@string/thoat"
-            android:textColor="#ffffff"
-            android:backgroundTint="@color/thoatbtn_bgcolor"
-
-            />
-
-        <EditText
-            android:id="@+id/VPP_searchEdit"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
+            android:id="@+id/TK_backBtn"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_corner"
-            android:drawableLeft="@drawable/outline_search_black_24"
-            android:padding="5dp"
-            android:textSize="15dp"
-            android:layout_marginVertical="4dp"
-            android:layout_marginHorizontal="10dp"
-            android:hint="@string/search"
-            android:layout_gravity="center"
-            >
-
-        </EditText>
-
+            android:background="@color/transparent"
+            android:backgroundTint="@color/transparent"
+            app:icon="@drawable/baseline_arrow_back_ios_black_18"
+            app:iconGravity="textStart"
+            app:iconPadding="5dp"
+            app:iconTint="#000" />
+        <TextView
+            android:id="@+id/heading"
+            android:layout_below="@+id/toolbar"
+            style="@style/Heading"
+            android:text="@string/cap_phat_VPP"
+            android:layout_weight="1"
+            />
         <Button
             android:id="@+id/VPP_insertBtn"
             style="@style/Btn"
@@ -52,6 +43,65 @@
             app:cornerRadius="100dp"
             android:backgroundTint="@color/disable_color"
             />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="30dp">
+            <TextView
+                style="@style/textBlack"
+                android:text="@string/ten_pb"
+                android:layout_marginRight="21dp"/>
+            <Spinner
+                android:layout_gravity="center"
+                android:id="@+id/CPcrud_PBSpinner"
+                android:layout_width="240dp"
+                android:layout_height="40dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="30dp">
+            <TextView
+                style="@style/textBlack"
+                android:text="@string/chon_nv"
+                android:layout_marginRight="10dp"/>
+            <Spinner
+                android:layout_gravity="center"
+                android:id="@+id/CPcrud_NVSpinner"
+                android:layout_width="240dp"
+                android:layout_height="40dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:paddingHorizontal="30dp">
+            <TextView
+                style="@style/textBlack"
+                android:text="@string/chon_vpp" />
+            <Spinner
+                android:layout_gravity="center"
+                android:id="@+id/CPcrud_VPPSpinner"
+                android:layout_width="240dp"
+                android:layout_height="40dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"/>
+        </LinearLayout>
+
     </LinearLayout>
     <!-- + @+id/Toolbar + -->
     <!--///////////////////////////////////////////////////////-->
@@ -65,70 +115,44 @@
         android:orientation="vertical"
         tools:context=".Main.NhanvienLayout"
         >
-        <TextView
-            android:id="@+id/heading"
-            android:layout_below="@+id/toolbar"
-            style="@style/Heading"
-            android:text="Văn phòng phẩm"
-            />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal">
-            <Spinner
-                android:layout_gravity="center"
-                android:id="@+id/VPP_NCCSpinner"
-                android:layout_width="240dp"
-                android:layout_height="40dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"/>
-            <Button
-                android:id="@+id/VPP_navbar_cungcap"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:drawableLeft="@drawable/outline_local_shipping_black_36"
-                android:background="@color/transparent"
-                />
-        </LinearLayout>
         <!--    Header of the table -->
-        <!--    70 p0 / 200 / 55 p0 / <= 85 p0-->
+        <!--    70 p0 / 125 p0 / 75 p0 / 65 p0 / 55 p0-->
         <TableLayout
             style="@style/tableLayoutStyle"
             android:layout_width="match_parent"
-            android:stretchColumns="4">
+            android:stretchColumns="4"
+            >
             <TableRow>
                 <TextView
                     style="@style/tableHeader"
-                    android:text="@string/ma_vpp"
+                    android:text="@string/sp"
                     android:layout_width="70dp"
-                    android:padding="0dp"
                     />
-
                 <TextView
                     style="@style/VPPHeader_secCellWidth"
-                    android:text="@string/ten_vpp"
-                    android:layout_width="140dp"/>
+                    android:text="Ngày"
+                    android:layout_width="125dp"
+                    android:padding="0dp"/>
 
                 <TextView
                     style="@style/tableHeader"
-                    android:text="@string/dvt"
-                    android:layout_width="55dp"
+                    android:text="@string/vpp"
+                    android:layout_width="75dp"
                     android:padding="0dp"/>
                 <TextView
                     style="@style/tableHeader"
-                    android:text="@string/gia"
-                    android:width="85dp"
+                    android:text="@string/nv"
+                    android:width="65dp"
                     android:padding="0dp"/>
                 <TextView
                     style="@style/tableHeader"
                     android:text="@string/sl"
-                    android:maxWidth="85dp"
+                    android:layout_width="55dp"
                     android:padding="0dp"/>
             </TableRow>
             <!--    Content of the table -->
         </TableLayout>
-        <!--    70 p0 / 140 / 55 p0 / 85 p0 / <= 55 p0-->
+        <!--    70 p0 / 125 p0 / 75 p0 / 65 p0 / 55 p0-->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -140,31 +164,31 @@
                 <!--         Generate Row based on Data here   -->
                 <TableRow>
                     <TextView
-                        android:layout_height="0dp"
-                        android:visibility="invisible"
-                        style="@style/VPPRow_firstCellWidth"
+                        style="@style/tableRow"
+                        android:text="P001"
                         android:layout_width="70dp"
-                        android:padding="0dp"
-                        />
-                    <TextView
-                        style="@style/VPPRow_secCellWidth"
-                        android:layout_width="140dp"
                         />
                     <TextView
                         style="@style/tableRow"
+                        android:text="02/06/2018"
+                        android:layout_width="125dp"
+                        android:padding="0dp"/>
+
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="VPP1"
+                        android:layout_width="75dp"
+                        android:padding="0dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="NV01"
+                        android:width="65dp"
+                        android:padding="0dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="10"
                         android:layout_width="55dp"
-                        android:padding="0dp"
-                        />
-                    <TextView
-                        style="@style/tableRow"
-                        android:layout_width="85dp"
-                        android:padding="0dp"
-                        />
-                    <TextView
-                        style="@style/tableRow"
-                        android:maxWidth="55dp"
-                        android:padding="0dp"
-                        />
+                        android:padding="0dp"/>
                 </TableRow>
             </TableLayout>
         </ScrollView>

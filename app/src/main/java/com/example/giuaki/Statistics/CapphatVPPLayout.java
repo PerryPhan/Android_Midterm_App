@@ -133,6 +133,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
 
         previewVPPBtn = findViewById(R.id.CP_previewVPPBtn);
         navBC = findViewById(R.id.CP_navbar_baocao);
+        navBC.setVisibility(View.INVISIBLE);
         navTK = findViewById(R.id.CP_navbar_thongke);
     }
 
@@ -213,6 +214,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
         // 1. maPB là all thì chuyển sang layout maPB
         switch (maPB){
             case "All" : {
+                navBC.setVisibility(View.VISIBLE);
                 warningLabel.setText("Khi chọn phòng ban cụ thể, cấu trúc bảng sẽ khác");
                 // All : show
                 cp_tablesall_container.setLayoutParams( new LinearLayout.LayoutParams(
@@ -229,6 +231,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
             };
                 break;
             default: {
+                navBC.setVisibility(View.INVISIBLE);
                 warningLabel.setText("Khi chọn tất cả phòng ban, cấu trúc bảng sẽ khác");
                 // All : hide
                 cp_tablesall_container.setLayoutParams( new LinearLayout.LayoutParams(
@@ -243,6 +246,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
                 noteVPPLabel = cp_tablesindex_container.findViewById(R.id.CP_noteVppLabel);
                 noteVPPLabel.setVisibility(View.INVISIBLE);
                 createCPLayout_fromPB( maPB );
+                if( !cp_totalCount.getText().equals("0") ) navBC.setVisibility(View.VISIBLE);
             }; break;
         }
     }

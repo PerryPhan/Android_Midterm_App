@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Main.CungcapLayout"
+    >
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:id="@+id/Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/PB_exitBtn"
+            android:layout_width="80dp"
+            style="@style/Btn"
+            android:text="@string/thoat"
+            android:textColor="#ffffff"
+            android:backgroundTint="@color/thoatbtn_bgcolor"
+            />
+
+        <TextView
+            android:id="@+id/heading"
+            style="@style/Heading"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/toolbar"
+            android:text="@string/cung_cap"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/PB_insertBtn"
+            style="@style/Btn"
+            android:layout_width="50dp"
+            app:icon="@drawable/outline_add_black_24"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="#000"
+            app:cornerRadius="100dp"
+            android:backgroundTint="@color/disable_color"
+            />
+    </LinearLayout>
+    <!-- + @+id/Toolbar + -->
+    <!--///////////////////////////////////////////////////////-->
+    <!-- + Table Container + -->
+    <!--///////////////////////////////////////////////////////-->
+    <!-- + @+id/subToolbar + -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        tools:context=".Main.PhongbanLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp">
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_marginVertical="5dp"
+               android:gravity="center|center">
+               <TextView
+                   style="@style/textBlack"
+                   android:layout_width="80dp"
+                   android:layout_marginRight="10dp"
+                   android:text="@string/nha_cc"/>
+               <Spinner
+                   android:layout_gravity="center"
+                   android:id="@+id/CC_NCCSpinner"
+                   android:layout_width="240dp"
+                   android:layout_height="40dp"
+                   android:background="@android:drawable/btn_dropdown"
+                   android:spinnerMode="dropdown"/>
+           </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center|center">
+                <TextView
+                    style="@style/textBlack"
+                    android:layout_width="80dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Trạng thái"/>
+                <Spinner
+                    android:layout_gravity="center"
+                    android:id="@+id/CC_TTSpinner"
+                    android:layout_width="240dp"
+                    android:layout_height="40dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <!--    Header of the table -->
+        <TableLayout
+            style="@style/tableLayoutStyle"
+            android:stretchColumns="3"
+            >
+        <!--   80 p0 / 120 / 85 p0 / <= 100 p0     -->
+            <TableRow>
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/ma_pb"
+                    android:layout_width="80dp"
+                    android:padding="0dp"/>
+
+                <TextView
+                    style="@style/tableHeader"
+                    android:layout_width="120dp"
+                    android:text="Ngày giao" />
+                <TextView
+                    style="@style/tableHeader"
+                    android:text="@string/ncc"
+                    android:padding="0dp"
+                    android:layout_width="85dp"/>
+
+                <TextView
+                    style="@style/tableHeader"
+                    android:maxWidth="100dp"
+                    android:padding="0dp"
+                    android:text="@string/tong_tien" />
+            </TableRow>
+
+        </TableLayout>
+        <!--    Content of the table -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/PB_table_list"
+                style="@style/tableLayoutStyle"
+                android:stretchColumns="3">
+                <!--         Generate Row based on Data here   -->
+                <!-- This Row called Example Row,
+                        other Rows will follow this Row Format-->
+                <TableRow
+                    android:background="#F89393"
+                    >
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="P001"
+                        android:layout_width="80dp"
+                        android:padding="0dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:layout_width="120dp"
+                        android:text="02/06/2021" />
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="Kim biên"
+                        android:padding="0dp"
+                        android:layout_width="85dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:maxWidth="100dp"
+                        android:padding="0dp"
+                        android:text="100.000đ" />
+                </TableRow>
+                <TableRow
+                    android:background="#FAC099"
+                    >
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="P001"
+                        android:layout_width="80dp"
+                        android:padding="0dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:layout_width="120dp"
+                        android:text="02/06/2021" />
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="Kim biên"
+                        android:padding="0dp"
+                        android:layout_width="85dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:maxWidth="100dp"
+                        android:padding="0dp"
+                        android:text="100.000đ" />
+                </TableRow>
+                <TableRow
+                    android:background="#9CFA98"
+                    >
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="P001"
+                        android:layout_width="80dp"
+                        android:padding="0dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:layout_width="120dp"
+                        android:text="02/06/2021" />
+                    <TextView
+                        style="@style/tableRow"
+                        android:text="Kim biên"
+                        android:padding="0dp"
+                        android:layout_width="85dp"/>
+                    <TextView
+                        style="@style/tableRow"
+                        android:maxWidth="100dp"
+                        android:padding="0dp"
+                        android:text="100.000đ" />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginHorizontal="10dp"
+        android:layout_below="@+id/table_container"
+        android:id="@+id/subToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/PB_delBtn"
+            style="@style/Btn"
+            android:text="@string/xoa"
+            android:backgroundTint="#DD4545"
+            app:icon="@drawable/outline_delete_24"
+            app:iconGravity="textStart"
+            app:iconPadding="5dp"
+            app:iconTint="#000"
+            android:textColor="@color/black"
+            />
+        <Button
+            android:layout_marginLeft="10dp"
+            android:id="@+id/PB_editBtn"
+            style="@style/Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sua"
+            android:textColor="#000"
+            android:backgroundTint="#3C7AD8"
+            app:icon="@drawable/outline_settings_24"
+            app:iconGravity="textStart"
+            app:iconPadding="5dp"
+            app:iconTint="#000"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="right">
+            <Button
+                android:id="@+id/VPP_previewBtn"
+                android:drawableLeft="@drawable/outline_style_black_24"
+                style="@style/Btn"
+                android:paddingLeft="12dp"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#4BE6D4"
+                android:layout_marginRight="5dp"/>
+            <Button
+                style="@style/Btn"
+                android:id="@+id/PB_navbar_capphat"
+                android:text="@string/cap_phat_VPP"
+                android:backgroundTint="@color/disable_color"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:id="@+id/navbar"
+        android:layout_below="@+id/subtoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            style="@style/Btn"
+            android:id="@+id/PB_navbar_phongban"
+            android:backgroundTint="@color/active_color"
+            android:textColor="@color/black"
+            android:text="@string/phong_ban"/>
+
+        <Button
+            style="@style/Btn"
+            android:id="@+id/PB_navbar_nhanvien"
+            android:backgroundTint="@color/disable_color"
+            android:textColor="@color/black"
+            android:text="@string/nhan_vien"/>
+
+        <Button
+            style="@style/Btn"
+            android:id="@+id/PB_navbar_VPP"
+            android:backgroundTint="@color/disable_color"
+            android:textColor="@color/black"
+            android:text="@string/vpp"/>
+
+    </LinearLayout>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        layout="@layout/_created_by_3xdteam"/>
+</LinearLayout>

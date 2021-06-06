@@ -1,5 +1,6 @@
 package com.example.giuaki.Statistics;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.giuaki.Databases.CapPhatDatabase;
 import com.example.giuaki.Databases.NhanVienDatabase;
@@ -65,6 +67,20 @@ public class BaocaoVPPLayout extends AppCompatActivity {
         printBtn = findViewById(R.id.BC_index_printBtn);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1){
+            if( resultCode == RESULT_OK ) {
+                Toast.makeText(BaocaoVPPLayout.this, "In báo cáo thành công", Toast.LENGTH_LONG).show();
+                int result = data.getIntExtra("result",0);
+            } else {
+                Toast.makeText(BaocaoVPPLayout.this, "In báo cáo thất bại", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setEvent() {
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +94,7 @@ public class BaocaoVPPLayout extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BaocaoVPPLayout.this, XinchoLayout.class);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                startActivity( intent );
+                startActivityForResult( intent, 1 );
             }
         });
         setPhongBanView();

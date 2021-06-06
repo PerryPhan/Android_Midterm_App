@@ -67,7 +67,13 @@
             style="@style/textRed"
             android:text="Khi chọn tất cả phòng ban cấu trúc bảng sẽ khác"
             />
-
+        <Button
+            android:id="@+id/CP_navbar_crud"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:drawableLeft="@drawable/outline_storage_black_24"
+            android:background="@color/transparent"
+            />
     </LinearLayout>
 
     // ALL PB  -------------------------------- TABLES -----------------

@@ -684,7 +684,7 @@ public class VanphongphamLayout extends AppCompatActivity {
         return (int) (dps * scale + 0.5f);
     }
 
-    // This Custom Columns' Max Width : 70 p0 / 200 / 55 p0 / <= 55 p0
+    // This Custom Columns' Max Width : 70 p0 / 140 / 55 p0 / 85 p0 / 55 p0
     public TableRow createRow(Context context, VanPhongPham vpp) {
         TableRow tr = new TableRow(context);
         // Id
@@ -697,12 +697,15 @@ public class VanphongphamLayout extends AppCompatActivity {
         maVPP.setPadding(0,0,0,0);
         maVPP.setText(vpp.getMaVpp());
 
+//      Cũ
         //   Ten PB
         TextView tenVPP = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
         // Cần cái này để khi mà tenVPP đạt tới max width thì nó sẽ tăng height cho bên maVPP luôn
         tenVPP.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
         tenVPP.setText(vpp.getTenVpp());
-        tenVPP.setMaxWidth(DPtoPix(200));
+//        tenVPP.setMaxWidth(DPtoPix(200));
+//      Mới
+        tenVPP.setMaxWidth(DPtoPix(140));
 
         TextView dvt = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
         // Cần cái này để khi mà tenVPP đạt tới max width thì nó sẽ tăng height cho bên maVPP luôn
@@ -711,12 +714,24 @@ public class VanphongphamLayout extends AppCompatActivity {
         dvt.setPadding(0,0,0,0);
         dvt.setMaxWidth(DPtoPix(55));
 
+//      Cũ
         TextView gianhap = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
         // Cần cái này để khi mà tenVPP đạt tới max width thì nó sẽ tăng height cho bên maVPP luôn
         gianhap.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
         gianhap.setText(vpp.getGiaNhap());
         gianhap.setPadding(0,0,0,0);
-        gianhap.setMaxWidth(DPtoPix(55));
+//        gianhap.setMaxWidth(DPtoPix(55));
+//      Mới
+        gianhap.setMaxWidth(DPtoPix(85));
+
+//      Mới
+        TextView soluong = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
+        // Cần cái này để khi mà tenVPP đạt tới max width thì nó sẽ tăng height cho bên maVPP luôn
+        soluong.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
+//        soluong.setText(vpp.getSoluong());
+        soluong.setPadding(0,0,0,0);
+        soluong.setMaxWidth(DPtoPix(85));
+
 
         image_list.add(vpp.getHinh());
 
@@ -725,6 +740,7 @@ public class VanphongphamLayout extends AppCompatActivity {
         tr.addView(tenVPP);
         tr.addView(dvt);
         tr.addView(gianhap);
+//        tr.addView(soluong);
         return tr;
     }
 
