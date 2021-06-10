@@ -22,8 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.giuaki.Api.PhongBan;
 import com.example.giuaki.Helper.JSONHelper;
-import com.example.giuaki.Main.NhanvienLayout;
-import com.example.giuaki.Main.VanphongphamLayout;
+import com.example.giuaki.Mainv2.*;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.PhongBanRequest;
 import com.example.giuaki.Statistics.CapphatVPPLayout;
@@ -179,7 +178,7 @@ public class PhongbanLayout extends AppCompatActivity {
                 // Control
                 setControlDialog();
                 // Event
-//                setEventDialog(v);
+                setEventDialog(v);
             }
         });
         // Khi edit
@@ -195,7 +194,7 @@ public class PhongbanLayout extends AppCompatActivity {
                     showLabel.setText("Sửa phòng ban");
                     showConfirm.setText("Bạn có muốn sửa hàng này không?");
                     // Event
-//                    setEventDialog(v);
+                    setEventDialog(v);
                     inputMaPB.setText(focusMaPB.getText());
                     inputMaPB.setEnabled(false);
                     inputTenPB.setText(focusTenPB.getText());
@@ -203,7 +202,7 @@ public class PhongbanLayout extends AppCompatActivity {
             }
         });
         // Khi delete, có 3 TH : nằm ở cuối hoặc nằm ở đầu hoặc chính giữa
-        // Nằm ở cuối thì chỉ cần xóa cuối
+        // Nằm ở cuối thì chỉ cần xóa cuối0
         // Còn lại thì sau khi xóa xong thì phải cập nhật lại tag cho toàn bộ col
         delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,7 +216,7 @@ public class PhongbanLayout extends AppCompatActivity {
                     showLabel.setText("Xóa phòng ban");
                     showConfirm.setText("Bạn có muốn xóa hàng này không?");
                     // Event
-//                    setEventDialog(v);
+                    setEventDialog(v);
                     inputMaPB.setText(focusMaPB.getText());
                     inputTenPB.setText(focusTenPB.getText());
                     inputMaPB.setEnabled(false);
@@ -266,17 +265,18 @@ public class PhongbanLayout extends AppCompatActivity {
         phongbanDB = new PhongBanRequest();
         List<Object> list = null;
         TableRow tr = null;
-        setCursorWindowImageSize(100 * 1024* 1024);
+//        setCursorWindowImageSize(100 * 1024* 1024);
         String response = phongbanDB.doGet("show");
+//        Log.d("data",response);
         String verify = JSONHelper.verifyJSON(response);
-        if( verify.equalsIgnoreCase("pass") ){
+        if( verify.equals("PASS") ){
             try {
                 list = JSONHelper.parseJSON(response, "PhongBan");
             }catch (JSONException e){
                 Log.e("Exception",e.getMessage());
             }
         }else{
-            Toast.makeText(this,verify,Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"12 "+verify,Toast.LENGTH_LONG).show();
         }
         // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn
         if( list == null) return;
@@ -311,101 +311,115 @@ public class PhongbanLayout extends AppCompatActivity {
         showLabel = phongbandialog.findViewById(R.id.PB_showLabel);
     }
 
-//    public void setEventDialog(View view) {
-//        //  Toast.makeText( PhongbanLayout.this, (view.getId() == R.id.PB_editBtn)+"", Toast.LENGTH_LONG).show();
-//        backBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                phongbandialog.dismiss();
-//            }
-//        });
-//        noBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                phongbandialog.dismiss();
-//            }
-//        });
-//        // Dựa vào các nút mà thằng yesBtn sẽ có event khác
-//        yesBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //  showMPBError.setVisibility(View.VISIBLE);
-//                //  showTPBError.setVisibility(View.VISIBLE);
-//                //  showResult.setVisibility(View.VISIBLE);
-//                boolean success = false;
-//                switch (view.getId()) {
-//                    case R.id.PB_insertBtn: {
-//                        if (!isSafeDialog( false )) break;
-//                        PhongBan pb = new PhongBan(inputMaPB.getText().toString().trim() + "", inputTenPB.getText().toString().trim() + "");
+    public void setEventDialog(View view) {
+        //  Toast.makeText( PhongbanLayout.this, (view.getId() == R.id.PB_editBtn)+"", Toast.LENGTH_LONG).show();
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phongbandialog.dismiss();
+            }
+        });
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phongbandialog.dismiss();
+            }
+        });
+        // Dựa vào các nút mà thằng yesBtn sẽ có event khác
+        yesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                  showMPBError.setVisibility(View.VISIBLE);
+//                  showTPBError.setVisibility(View.VISIBLE);
+//                  showResult.setVisibility(View.VISIBLE);
+                boolean success = false;
+                switch (view.getId()) {
+                    case R.id.PB_insertBtn: {
+                        if (!isSafeDialog( false )) break;
+                        PhongBan pb = new PhongBan(inputMaPB.getText().toString().trim() + "", inputTenPB.getText().toString().trim() + "");
 //                        if (phongbanDB.insert(pb) == -1) break;
-//                        TableRow tr = createRow(PhongbanLayout.this, pb);
-//                        int n = phongban_table_list.getChildCount();
-//                        tr.setId(n);
-//                        phongban_table_list.addView(tr);
-//                        setEventTableRows((TableRow) phongban_table_list.getChildAt(n), phongban_table_list);
-//                        success = true;
-//                        editBtn.setVisibility(View.INVISIBLE);
-//                        delBtn.setVisibility(View.INVISIBLE);
-//                        focusRow = null;
-//                        focusMaPB = null;
-//                        focusTenPB = null;
-//                    }
-//                    break;
-//                    case R.id.PB_editBtn: {
-//                        if (!isSafeDialog( true )) break;
-//                        TableRow tr = (TableRow) phongban_table_list.getChildAt(indexofRow);
-//                        TextView id = (TextView) tr.getChildAt(0);
-//                        TextView name = (TextView) tr.getChildAt(1);
-//                        if(phongbanDB.update(new PhongBan(id.getText().toString().trim(), inputTenPB.getText().toString().trim())) == -1) break;
-//                        name.setText(inputTenPB.getText() + "");
-//                        success = true;
-//
-//                    }
-//                    break;
-//                    case R.id.PB_delBtn: {
-//                        if( phongbanDB.delete( new PhongBan(focusMaPB.getText().toString().trim(), focusTenPB.getText().toString().trim()) ) == -1 ) break;
-//                        if (indexofRow == phongban_table_list.getChildCount() - 1) {
-//                            phongban_table_list.removeViewAt(indexofRow);
-//                        } else {
-//                            phongban_table_list.removeViewAt(indexofRow);
-//                            for (int i = 0; i < phongban_table_list.getChildCount(); i++) {
-//                                phongban_table_list.getChildAt(i).setId((int) i);
-//                            }
-//                        }
-//                        editBtn.setVisibility(View.INVISIBLE);
-//                        delBtn.setVisibility(View.INVISIBLE);
-//                        focusRow = null;
-//                        focusMaPB = null;
-//                        focusTenPB = null;
-//                        success = true;
-//                    }
-//                    break;
-//                    default:
-//                        break;
-//                }
-//                if (success) {
-//                    showResult.setText(showLabel.getText() + " thành công !");
-//                    showResult.setTextColor(getResources().getColor(R.color.yes_color));
-//                    showResult.setVisibility(View.VISIBLE);
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            inputMaPB.setText("");
-//                            inputTenPB.setText("");
-//                            showResult.setVisibility(View.INVISIBLE);
-//                            phongbandialog.dismiss();
-//                        }
-//                    }, 1000);
-//                } else {
-//                    showResult.setTextColor(getResources().getColor(R.color.thoatbtn_bgcolor));
-//                    showResult.setText(showLabel.getText() + " thất bại !");
-//                    showResult.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-//
-//
-//    }
+                        if( !JSONHelper.verifyJSON(phongbanDB.doPost(pb,"insert"))
+                                .equalsIgnoreCase("pass") ) break;
+                        TableRow tr = createRow(PhongbanLayout.this, pb);
+                        int n = phongban_table_list.getChildCount();
+                        tr.setId(n);
+                        phongban_table_list.addView(tr);
+                        setEventTableRows((TableRow) phongban_table_list.getChildAt(n), phongban_table_list);
+                        success = true;
+                        editBtn.setVisibility(View.INVISIBLE);
+                        delBtn.setVisibility(View.INVISIBLE);
+                        focusRow = null;
+                        focusMaPB = null;
+                        focusTenPB = null;
+                    }
+                    break;
+                    case R.id.PB_editBtn: {
+                        if (!isSafeDialog( true )) break;
+                        TableRow tr = (TableRow) phongban_table_list.getChildAt(indexofRow);
+                        TextView id = (TextView) tr.getChildAt(0);
+                        TextView name = (TextView) tr.getChildAt(1);
+                        PhongBan pb = new PhongBan(
+                                id.getText().toString().trim(),
+                                inputTenPB.getText().toString().trim()
+                        );
+//                        if(phongbanDB.update() == -1) break;
+                        if( !JSONHelper.verifyJSON(phongbanDB.doPost(pb,"update"))
+                                .equalsIgnoreCase("pass") ) break;
+                        name.setText(inputTenPB.getText() + "");
+                        success = true;
+
+                    }
+                    break;
+                    case R.id.PB_delBtn: {
+                        PhongBan pb = new PhongBan(
+                                focusMaPB.getText().toString().trim(),
+                                focusTenPB.getText().toString().trim()
+                        );
+//                        if( phongbanDB.delete(  ) == -1 ) break;
+                        if( !JSONHelper.verifyJSON(phongbanDB.doPost(pb,"remove"))
+                                .equalsIgnoreCase("pass") ) break;
+                        if (indexofRow == phongban_table_list.getChildCount() - 1) {
+                            phongban_table_list.removeViewAt(indexofRow);
+                        } else {
+                            phongban_table_list.removeViewAt(indexofRow);
+                            for (int i = 0; i < phongban_table_list.getChildCount(); i++) {
+                                phongban_table_list.getChildAt(i).setId((int) i);
+                            }
+                        }
+                        editBtn.setVisibility(View.INVISIBLE);
+                        delBtn.setVisibility(View.INVISIBLE);
+                        focusRow = null;
+                        focusMaPB = null;
+                        focusTenPB = null;
+                        success = true;
+                    }
+                    break;
+                    default:
+                        break;
+                }
+                if (success) {
+                    showResult.setText(showLabel.getText() + " thành công !");
+                    showResult.setTextColor(getResources().getColor(R.color.yes_color));
+                    showResult.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            inputMaPB.setText("");
+                            inputTenPB.setText("");
+                            showResult.setVisibility(View.INVISIBLE);
+                            phongbandialog.dismiss();
+                        }
+                    }, 1000);
+                } else {
+                    showResult.setTextColor(getResources().getColor(R.color.thoatbtn_bgcolor));
+                    showResult.setText(showLabel.getText() + " thất bại !");
+                    showResult.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+    }
 
     public boolean isSafeDialog( boolean allowSameID ) {
         String id, mapb, tenpb;

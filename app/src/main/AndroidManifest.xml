@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.giuaki">
     <!-- QUAN TRỌNG DÒNG uses-permission -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <application
+        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -31,6 +33,9 @@
         <activity android:name=".Main.NhanvienLayout" />
         <activity android:name=".Main.PhongbanLayout" />
         <activity android:name=".MainActivity" />
+        <!-- Version cuoiki : Version 2 -->
+        <activity android:name=".Mainv2.VanphongphamLayout" />
+        <activity android:name=".Mainv2.NhanvienLayout" />
         <activity android:name=".Mainv2.PhongbanLayout" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

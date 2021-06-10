@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/TK_backBtn"
+            android:id="@+id/CT_backBtn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -58,6 +58,7 @@
                 style="@style/textBlack"
                 android:text="@string/phieu_cung_cap" />
             <TextView
+                android:id="@+id/CT_SPview"
                 android:layout_marginLeft="20dp"
                 style="@style/textBlack"
                 android:textSize="20dp"
@@ -75,6 +76,7 @@
                 style="@style/textBlack"
                 android:text="@string/ngay_giao" />
             <TextView
+                android:id="@+id/CT_NGview"
                 android:layout_marginLeft="20dp"
                 style="@style/textBlack"
                 android:text="02/06/2018"
@@ -91,6 +93,7 @@
                 style="@style/textBlack"
                 android:text="@string/nha_cc" />
             <TextView
+                android:id="@+id/CT_NCCview"
                 android:layout_marginLeft="20dp"
                 style="@style/textBlack"
                 android:text="A"
@@ -107,6 +110,7 @@
                 style="@style/textBlack"
                 android:text="@string/trang_thai" />
             <TextView
+                android:id="@+id/CT_TTview"
                 android:layout_marginLeft="20dp"
                 style="@style/textBlack"
                 android:textSize="22dp"
@@ -170,7 +174,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TableLayout
-                android:id="@+id/VPP_table_list"
+                android:id="@+id/CT_table_list"
                 style="@style/tableLayoutStyle"
                 android:stretchColumns="4"
                 >
@@ -216,7 +220,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/VPP_delBtn"
+            android:id="@+id/CT_delBtn"
             style="@style/Btn"
             android:text="@string/xoa"
             android:backgroundTint="#DD4545"
@@ -228,7 +232,7 @@
             />
         <Button
             android:layout_marginLeft="10dp"
-            android:id="@+id/VPP_editBtn"
+            android:id="@+id/CT_editBtn"
             style="@style/Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -247,7 +251,7 @@
             android:orientation="horizontal"
             android:gravity="right">
             <Button
-                android:id="@+id/VPP_previewBtn"
+                android:id="@+id/CT_previewBtn"
                 android:drawableLeft="@drawable/baseline_visibility_black_24"
                 style="@style/Btn"
                 android:paddingLeft="12dp"
@@ -257,7 +261,7 @@
                 android:layout_marginRight="5dp"/>
             <Button
                 style="@style/Btn"
-                android:id="@+id/VPP_navbar_capphat"
+                android:id="@+id/CT_navbar_capphat"
                 android:text="@string/cap_phat_VPP"
                 android:backgroundTint="@color/disable_color"
                 android:textColor="@color/black"
@@ -275,21 +279,21 @@
         android:gravity="center">
         <Button
             style="@style/Btn"
-            android:id="@+id/VPP_navbar_phongban"
+            android:id="@+id/CT_navbar_phongban"
             android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"
             android:text="@string/phong_ban"/>
 
         <Button
             style="@style/Btn"
-            android:id="@+id/VPP_navbar_nhanvien"
+            android:id="@+id/CT_navbar_nhanvien"
             android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"
             android:text="@string/nhan_vien"/>
 
         <Button
             style="@style/Btn"
-            android:id="@+id/VPP_navbar_VPP"
+            android:id="@+id/CT_navbar_VPP"
             android:backgroundTint="@color/active_color"
             android:textColor="@color/black"
             android:text="@string/vpp"/>

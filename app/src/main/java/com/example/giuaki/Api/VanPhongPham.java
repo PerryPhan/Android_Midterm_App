@@ -7,10 +7,10 @@ public class VanPhongPham {
     private String dvt;
     private String giaNhap;
     private String hinh;
-    private int soLuong;
+    private String soLuong;
     private String maNcc;
 
-    public VanPhongPham(String maVpp, String tenVpp, String dvt, String giaNhap, String hinh, int soLuong, String maNcc) {
+    public VanPhongPham(String maVpp, String tenVpp, String dvt, String giaNhap, String hinh, String soLuong, String maNcc) {
         this.maVpp = maVpp;
         this.tenVpp = tenVpp;
         this.dvt = dvt;
@@ -65,11 +65,11 @@ public class VanPhongPham {
         this.hinh = hinh;
     }
 
-    public int getSoLuong() {
+    public String getSoLuong() {
         return soLuong;
     }
 
-    public void setSoLuong(int soLuong) {
+    public void setSoLuong(String soLuong) {
         this.soLuong = soLuong;
     }
 

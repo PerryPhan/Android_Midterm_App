@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/PB_exitBtn"
+            android:id="@+id/CC_exitBtn"
             android:layout_width="80dp"
             style="@style/Btn"
             android:text="@string/thoat"
@@ -25,7 +25,7 @@
             />
 
         <TextView
-            android:id="@+id/heading"
+            android:id="@+id/CC_heading"
             style="@style/Heading"
             android:layout_width="match_parent"
             android:layout_below="@+id/toolbar"
@@ -34,7 +34,7 @@
             />
 
         <Button
-            android:id="@+id/PB_insertBtn"
+            android:id="@+id/CC_insertBtn"
             style="@style/Btn"
             android:layout_width="50dp"
             app:icon="@drawable/outline_add_black_24"
@@ -143,7 +143,7 @@
             android:layout_height="wrap_content">
 
             <TableLayout
-                android:id="@+id/PB_table_list"
+                android:id="@+id/CC_table_list"
                 style="@style/tableLayoutStyle"
                 android:stretchColumns="3">
                 <!--         Generate Row based on Data here   -->
@@ -230,7 +230,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/PB_delBtn"
+            android:id="@+id/CC_delBtn"
             style="@style/Btn"
             android:text="@string/xoa"
             android:backgroundTint="#DD4545"
@@ -242,7 +242,7 @@
             />
         <Button
             android:layout_marginLeft="10dp"
-            android:id="@+id/PB_editBtn"
+            android:id="@+id/CC_editBtn"
             style="@style/Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
             android:orientation="horizontal"
             android:gravity="right">
             <Button
-                android:id="@+id/VPP_previewBtn"
+                android:id="@+id/CC_detailBtn"
                 android:drawableLeft="@drawable/outline_style_black_24"
                 style="@style/Btn"
                 android:paddingLeft="12dp"
@@ -271,7 +271,7 @@
                 android:layout_marginRight="5dp"/>
             <Button
                 style="@style/Btn"
-                android:id="@+id/PB_navbar_capphat"
+                android:id="@+id/CC_navbar_capphat"
                 android:text="@string/cap_phat_VPP"
                 android:backgroundTint="@color/disable_color"
                 android:textColor="@color/black"
@@ -289,21 +289,21 @@
         android:gravity="center">
         <Button
             style="@style/Btn"
-            android:id="@+id/PB_navbar_phongban"
+            android:id="@+id/CC_navbar_phongban"
             android:backgroundTint="@color/active_color"
             android:textColor="@color/black"
             android:text="@string/phong_ban"/>
 
         <Button
             style="@style/Btn"
-            android:id="@+id/PB_navbar_nhanvien"
+            android:id="@+id/CC_navbar_nhanvien"
             android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"
             android:text="@string/nhan_vien"/>
 
         <Button
             style="@style/Btn"
-            android:id="@+id/PB_navbar_VPP"
+            android:id="@+id/CC_navbar_VPP"
             android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"
             android:text="@string/vpp"/>

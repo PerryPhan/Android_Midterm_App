@@ -1,6 +1,7 @@
 package com.example.giuaki.Helper;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

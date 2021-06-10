@@ -3,8 +3,8 @@ package com.example.giuaki.Request;
 import android.annotation.SuppressLint;
 
 import com.example.giuaki.WebService;
+import com.example.giuaki.Api.NhanVien;
 import com.example.giuaki.Api.VanPhongPham;
-import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.Helper.RequestHelper;
 
 import java.io.File;
@@ -16,11 +16,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class VanPhongPhamRequest {
-    private final RequestHelper requestHelper;
-
-    public VanPhongPhamRequest() {
-        requestHelper = new RequestHelper();
-    }
 
     public String getExtensionName(File file) {
         String fileName = file.getName();
@@ -29,6 +24,7 @@ public class VanPhongPhamRequest {
     }
 
     public String doGet(String method) {
+        RequestHelper requestHelper = new RequestHelper();
         String[] request = {"get", String.format("http://%s/VanPhongPhamController-%s",
                 WebService.host(), method)};
         String response = "";
@@ -45,6 +41,7 @@ public class VanPhongPhamRequest {
     }
 
     public String doPost(VanPhongPham vanPhongPham, File imageFile, String method) {
+        RequestHelper requestHelper = new RequestHelper();
         // Tạo multipart form
         @SuppressLint("DefaultLocale") MultipartBody.Builder formDataPartBuilder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -52,7 +49,7 @@ public class VanPhongPhamRequest {
                 .addFormDataPart("tenvpp", vanPhongPham.getTenVpp())
                 .addFormDataPart("dvt", vanPhongPham.getDvt())
                 .addFormDataPart("gianhap", vanPhongPham.getGiaNhap())
-                .addFormDataPart("soluong", String.format("%d", vanPhongPham.getSoLuong()))
+                .addFormDataPart("soluong", vanPhongPham.getSoLuong())
                 .addFormDataPart("mancc", vanPhongPham.getMaNcc());
 
         // Tạo input:file cho file image theo đúng media type

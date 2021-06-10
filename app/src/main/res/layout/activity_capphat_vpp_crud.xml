@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/TK_backBtn"
+            android:id="@+id/CP_backBtn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -26,14 +26,14 @@
             app:iconPadding="5dp"
             app:iconTint="#000" />
         <TextView
-            android:id="@+id/heading"
+            android:id="@+id/CP_heading"
             android:layout_below="@+id/toolbar"
             style="@style/Heading"
             android:text="@string/cap_phat_VPP"
             android:layout_weight="1"
             />
         <Button
-            android:id="@+id/VPP_insertBtn"
+            android:id="@+id/CP_insertBtn"
             style="@style/Btn"
             android:layout_width="50dp"
             app:icon="@drawable/outline_add_black_24"
@@ -157,7 +157,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TableLayout
-                android:id="@+id/VPP_table_list"
+                android:id="@+id/CPcrud_table_list"
                 style="@style/tableLayoutStyle"
                 android:stretchColumns="4"
                 >
@@ -203,7 +203,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/VPP_delBtn"
+            android:id="@+id/CPcrud_delBtn"
             style="@style/Btn"
             android:text="@string/xoa"
             android:backgroundTint="#DD4545"
@@ -215,7 +215,7 @@
             />
         <Button
             android:layout_marginLeft="10dp"
-            android:id="@+id/VPP_editBtn"
+            android:id="@+id/CPcrud_editBtn"
             style="@style/Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -234,7 +234,7 @@
             android:orientation="horizontal"
             android:gravity="right">
             <Button
-                android:id="@+id/VPP_previewBtn"
+                android:id="@+id/CPcrud_previewBtn"
                 android:drawableLeft="@drawable/baseline_visibility_black_24"
                 style="@style/Btn"
                 android:paddingLeft="12dp"
@@ -244,7 +244,7 @@
                 android:layout_marginRight="5dp"/>
             <Button
                 style="@style/Btn"
-                android:id="@+id/VPP_navbar_capphat"
+                android:id="@+id/CPcrud_navbar_capphat"
                 android:text="@string/cap_phat_VPP"
                 android:backgroundTint="@color/disable_color"
                 android:textColor="@color/black"
@@ -262,21 +262,21 @@
         android:gravity="center">
         <Button
             style="@style/Btn"
-            android:id="@+id/VPP_navbar_phongban"
+            android:id="@+id/CPcrud_navbar_phongban"
             android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"
             android:text="@string/phong_ban"/>
 
         <Button
             style="@style/Btn"
-            android:id="@+id/VPP_navbar_nhanvien"
+            android:id="@+id/CPcrud_navbar_nhanvien"
             android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"
             android:text="@string/nhan_vien"/>
 
         <Button
             style="@style/Btn"
-            android:id="@+id/VPP_navbar_VPP"
+            android:id="@+id/CPcrud_navbar_VPP"
             android:backgroundTint="@color/active_color"
             android:textColor="@color/black"
             android:text="@string/vpp"/>

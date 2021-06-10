@@ -5,19 +5,20 @@ import com.example.giuaki.Api.*;
 import org.json.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class JSONHelper {
 
     /**
      * Kiểm tra xem response có lỗi hay không
-     * @param json
-     * @return
+     * @param json - json string được gửi về từ server
+     * @return - PASS hoặc là error message
      */
     public static String verifyJSON(String json) {
         try {
             JSONObject jsonObj = new JSONObject(json);
-            if (jsonObj.has("error")) {
+            if (!jsonObj.getBoolean("success")) {
                 return jsonObj.getString("message");
             }
         }
@@ -29,8 +30,8 @@ public class JSONHelper {
 
     /**
      * parse cái string json lại theo các entities
-     * @param json
-     * @param objectName
+     * @param json - json string được gửi về từ server
+     * @param objectName - tên của các entity
      * @return Object entities
      * @throws JSONException
      */
@@ -43,8 +44,10 @@ public class JSONHelper {
 
         if (objectName.trim().equals("PhongBan")) {
             for(int i = 0; i < viewData.length(); i++) {
-                PhongBan phongBan = new PhongBan(viewData.getJSONObject(i).getString("MAPB"),
-                        viewData.getJSONObject(i).getString("TENPB"));
+                PhongBan phongBan = new PhongBan(
+                        viewData.getJSONObject(i).get("MAPB").toString(),
+                        viewData.getJSONObject(i).get("TENPB").toString()
+                );
                 entitiesList.add(phongBan);
             }
         }
@@ -52,10 +55,10 @@ public class JSONHelper {
         if (objectName.trim().equals("NhanVien")) {
             for(int i = 0; i < viewData.length(); i++) {
                 NhanVien nhanVien = new NhanVien(
-                        viewData.getJSONObject(i).getString("MANV"),
-                        viewData.getJSONObject(i).getString("HOTEN"),
-                        viewData.getJSONObject(i).getString("NGAYSINH"),
-                        viewData.getJSONObject(i).getString("MAPB")
+                        viewData.getJSONObject(i).get("MANV").toString(),
+                        viewData.getJSONObject(i).get("HOTEN").toString(),
+                        viewData.getJSONObject(i).get("NGAYSINH").toString(),
+                        viewData.getJSONObject(i).get("MAPB").toString()
                 );
                 entitiesList.add(nhanVien);
             }
@@ -64,13 +67,13 @@ public class JSONHelper {
         if (objectName.trim().equals("VanPhongPham")) {
             for(int i = 0; i < viewData.length(); i++) {
                 VanPhongPham vanPhongPham = new VanPhongPham(
-                        viewData.getJSONObject(i).getString("MAVPP"),
-                        viewData.getJSONObject(i).getString("TENVPP"),
-                        viewData.getJSONObject(i).getString("DVT"),
-                        viewData.getJSONObject(i).getString("GIANHAP"),
+                        viewData.getJSONObject(i).get("MAVPP").toString(),
+                        viewData.getJSONObject(i).get("TENVPP").toString(),
+                        viewData.getJSONObject(i).get("DVT").toString(),
+                        viewData.getJSONObject(i).get("GIANHAP").toString(),
                         viewData.getJSONObject(i).get("HINH").toString(),
-                        viewData.getJSONObject(i).getInt("SOLUONG"),
-                        viewData.getJSONObject(i).getString("MANCC")
+                        viewData.getJSONObject(i).get("SOLUONG").toString(),
+                        viewData.getJSONObject(i).get("MANCC").toString()
                 );
                 entitiesList.add(vanPhongPham);
             }
@@ -79,11 +82,11 @@ public class JSONHelper {
         if (objectName.trim().equals("CapPhat")) {
             for(int i = 0; i < viewData.length(); i++) {
                 CapPhat capPhat = new CapPhat(
-                        viewData.getJSONObject(i).getString("SOPHIEU"),
-                        viewData.getJSONObject(i).getString("NGAYCAP"),
-                        viewData.getJSONObject(i).getString("MAVPP"),
-                        viewData.getJSONObject(i).getString("MANV"),
-                        (long)viewData.getJSONObject(i).getInt("SOLUONG")
+                        viewData.getJSONObject(i).get("SOPHIEU").toString(),
+                        viewData.getJSONObject(i).get("NGAYCAP").toString(),
+                        viewData.getJSONObject(i).get("MAVPP").toString(),
+                        viewData.getJSONObject(i).get("MANV").toString(),
+                        viewData.getJSONObject(i).get("SOLUONG").toString()
                 );
                 entitiesList.add(capPhat);
             }
@@ -94,20 +97,59 @@ public class JSONHelper {
         }
 
         if (objectName.trim().equals("PhieuCungCap")) {
-
+            for(int i = 0; i < viewData.length(); i++) {
+                PhieuCungCap phieuCungCap = new PhieuCungCap(
+                        viewData.getJSONObject(i).get("SOPHIEU").toString(),
+                        viewData.getJSONObject(i).get("TRANGTHAI").toString(),
+                        viewData.getJSONObject(i).get("MANCC").toString()
+                );
+                entitiesList.add(phieuCungCap);
+            }
         }
 
         return entitiesList;
     }
 
     /**
-     * 
-     * @param json
-     * @return
+     * Phương thức dùng để parse tự động tất cả phần tử trong mảng viewData
+     * @param json - json string được gửi về từ server
+     * @return - 1 cái string chứa tất cả dữ liệu trong đó, nhưng để chỉ show ra để test kết quả
      */
-    public static List<String> parseJSON(String json) {
+    public String rawParseJSON(String json) {
+        String parse = "";
+
+        try {
+            // Khởi tạo json object
+            JSONObject jsonObj = new JSONObject(json);
+            // Trích xuất array viewData để lấy dữ liệu
+            JSONArray viewData = jsonObj.getJSONArray("viewData");
+            for(int i = 0; i < viewData.length(); i++) {
+                JSONObject jsonData = viewData.getJSONObject(i);
+                // Iterator khóa trong từng phần tử json object của viewData
+                Iterator<String> keys = jsonData.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    Object data = jsonData.get(key);
+                    if (data != null) parse += String.format("%s\n", data.toString());
+                }
+            }
+        }
+        catch (JSONException error) {
+            parse = error.getMessage();
+        }
+
+        return parse;
+    }
+
+    /**
+     * Phương thức dùng để parse các hàm thống kê, báo cáo
+     * @param json - json string được gửi về từ server
+     * @return - ArrayList chứa toàn bộ dữ liệu trong đó
+     */
+    public List<String> parseJSON(String json) {
         return new ArrayList<>();
     }
+
 
     public void printPhongBanEntity(List<Object> phongBanList) {
         for(Object obj: phongBanList) {
@@ -115,4 +157,6 @@ public class JSONHelper {
             System.out.println(pb.getTenpb());
         }
     }
+
+
 }

@@ -6,19 +6,25 @@ public class CapPhat {
     private String ngayCap;
     private String maVpp;
     private String maNv;
-    private long sl;
+    private String soLuong;
 
-    public CapPhat( String soPhieu, String ngayCap, String maVpp, String maNv, long sl) {
+    public CapPhat( String soPhieu, String ngayCap, String maVpp, String maNv, String soLuong) {
         this.soPhieu = soPhieu;
         this.ngayCap = ngayCap;
         this.maVpp = maVpp;
         this.maNv = maNv;
-        this.sl = sl;
+        this.soLuong = soLuong;
     }
 
     @Override
     public String toString() {
-        return "CapPhat{" + "soPhieu=" + soPhieu + ", ngayCap=" + ngayCap + ", maVpp=" + maVpp + ", maNv=" + maNv + ", sl=" + sl + '}';
+        return "CapPhat{" +
+                "soPhieu='" + soPhieu + '\'' +
+                ", ngayCap='" + ngayCap + '\'' +
+                ", maVpp='" + maVpp + '\'' +
+                ", maNv='" + maNv + '\'' +
+                ", soLuong='" + soLuong + '\'' +
+                '}';
     }
 
     public String getSoPhieu() {
@@ -53,11 +59,11 @@ public class CapPhat {
         this.maNv = maNv;
     }
 
-    public long getSl() {
-        return sl;
+    public String getSoLuong() {
+        return soLuong;
     }
 
-    public void setSl(long sl) {
-        this.sl = sl;
+    public void setSoLuong(String soLuong) {
+        this.soLuong = soLuong;
     }
 }

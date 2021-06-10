@@ -15,7 +15,7 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/NV_backBtn"
+            android:id="@+id/CC_backBtn"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:drawableLeft="@drawable/baseline_arrow_back_ios_black_18"
@@ -25,7 +25,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/NV_showLabel"
+        android:id="@+id/CC_showLabel"
         style="@style/textBlack"
         android:layout_width="match_parent"
         android:background="#2A91E1"
@@ -53,12 +53,13 @@
                     android:padding="10dp"
                     />
                 <EditText
-                    android:id="@+id/NV_inputMaNV"
+                    android:id="@+id/CC_inputSP"
                     android:paddingLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
                 <TextView
+                    android:id="@+id/CC_showSPError"
                     style="@style/textRed"
                     android:visibility="invisible"
                     android:layout_width="match_parent"
@@ -79,20 +80,13 @@
                     android:padding="10dp"
                     />
                 <Spinner
-                    android:id="@+id/NV_PBSpinner_mini"
+                    android:id="@+id/CC_NCCSpinner"
                     android:layout_width="match_parent"
                     android:layout_marginHorizontal="10dp"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/btn_dropdown"
                     android:spinnerMode="dropdown"/>
-                <TextView
-                    style="@style/textRed"
-                    android:visibility="invisible"
-                    android:layout_width="match_parent"
-                    android:text="@string/error_of_this_line"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    />
+
             </LinearLayout>
 
             <LinearLayout
@@ -108,7 +102,7 @@
                     />
 
                 <DatePicker
-                    android:id="@+id/NV_inputNS"
+                    android:id="@+id/CC_inputNG"
                     android:layout_width="match_parent"
                     android:layout_height="139dp"
                     android:layout_gravity="center"
@@ -129,19 +123,13 @@
                     android:padding="10dp"
                     />
                 <Spinner
+                    android:id="@+id/CC_inputTT"
                     android:layout_width="match_parent"
                     android:layout_marginHorizontal="10dp"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/btn_dropdown"
                     android:spinnerMode="dropdown"/>
-                <TextView
-                    style="@style/textRed"
-                    android:visibility="invisible"
-                    android:layout_width="match_parent"
-                    android:text="@string/error_of_this_line"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -149,7 +137,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/NV_showConfirm"
+            android:id="@+id/CC_showConfirm"
             style="@style/textBlack"
             android:text="Bạn thực sự muốn tạo mới ?"
             android:layout_width="match_parent"
@@ -167,14 +155,14 @@
         android:layout_gravity="bottom">
         <Button
             style="@style/Btn"
-            android:id="@+id/NV_yesInsertBtn"
+            android:id="@+id/CC_yesInsertBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/yes_color"
             android:text="Đồng ý"/>
         <Button
             android:layout_marginLeft="40dp"
-            android:id="@+id/NV_noInsertBtn"
+            android:id="@+id/CC_noInsertBtn"
             style="@style/Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -182,7 +170,7 @@
             android:text="Hủy"/>
     </LinearLayout>
     <TextView
-        android:id="@+id/NV_showResult"
+        android:id="@+id/CC_showResult"
         android:visibility="invisible"
         android:layout_marginTop="10dp"
         style="@style/textBlack"

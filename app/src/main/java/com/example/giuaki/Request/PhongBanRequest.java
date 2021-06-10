@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 public class PhongBanRequest {
 
-    private final RequestHelper requestHelper;
+    public RequestHelper requestHelper;
 
     public PhongBanRequest() {
         requestHelper = new RequestHelper();
@@ -20,7 +20,7 @@ public class PhongBanRequest {
         String[] request = {"get", String.format("http://%s/PhongBanController-%s", WebService.host(), method)};
         String response = "";
         try {
-            response = requestHelper.execute(request).get();
+            response = new RequestHelper().execute(request).get();
         }
         catch(ExecutionException e){
             response = e.getMessage();
@@ -40,6 +40,7 @@ public class PhongBanRequest {
         hashMap.put("tenpb", phongBan.getTenpb());
 
         // Bắt đầu thực hiện request
+        requestHelper = new RequestHelper();
         requestHelper.buildRequestBody(hashMap);
         String[] request = {"post", String.format("http://%s/PhongBanController-%s", WebService.host(), method)};
         String response = "";
@@ -54,4 +55,5 @@ public class PhongBanRequest {
         }
         return response;
     }
+
 }
