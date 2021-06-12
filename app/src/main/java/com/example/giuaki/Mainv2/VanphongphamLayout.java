@@ -655,6 +655,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                         String response = vanphongphamDB.doPost(vpp, inputFile,"update");
                         if( !JSONHelper.verifyJSON(response)
                                 .equalsIgnoreCase("pass") ) break;
+
                         JSONObject fileNameResponse = null;
                         try {
                             fileNameResponse = new JSONObject(response);
@@ -662,7 +663,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                         }catch (Exception e){
                             e.printStackTrace();
                         }
-
+                        
                         focusTenVPP.setText( inputTenVPP.getText().toString().trim() + "");
                         focusDVT.setText( inputDVT.getText().toString().trim() + "");
                         focusGia.setText( inputGia.getText().toString().trim() + "");
