@@ -42,6 +42,17 @@ public class JSONHelper {
 
         List<Object> entitiesList = new ArrayList<>();
 
+        if (objectName.trim().equals("NhaCungCap")) {
+            for(int i = 0; i < viewData.length(); i++) {
+                NhaCungCap nhaCungCap = new NhaCungCap(
+                        viewData.getJSONObject(i).get("MANCC").toString(),
+                        viewData.getJSONObject(i).get("TENNCC").toString(),
+                        viewData.getJSONObject(i).get("EMAIL").toString()
+                );
+                entitiesList.add(nhaCungCap);
+            }
+        }
+
         if (objectName.trim().equals("PhongBan")) {
             for(int i = 0; i < viewData.length(); i++) {
                 PhongBan phongBan = new PhongBan(

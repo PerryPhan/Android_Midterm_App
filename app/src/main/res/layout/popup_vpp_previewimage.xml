@@ -32,6 +32,30 @@
         android:background="@drawable/only_border"
         >
         <TextView
+            style="@style/textBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/nha_cung_cap" />
+        <TextView
+            android:id="@+id/VPP_IP_nhaCC"
+            style="@style/textBlack"
+            android:textColor="@color/custom_dropdown_item_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="right"
+            android:layout_marginRight="10dp"
+            android:text="A" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/only_border"
+        >
+        <TextView
             android:id="@+id/textView"
             style="@style/textBlack"
             android:layout_width="wrap_content"
@@ -97,14 +121,12 @@
             android:layout_marginRight="10dp"
             android:text="@string/dvt" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/only_border"
-        android:layout_marginBottom="50dp">
+        android:background="@drawable/only_border">
         <TextView
             style="@style/textBlack"
             android:layout_width="wrap_content"
@@ -122,5 +144,31 @@
             android:layout_marginRight="10dp"
             android:text="@string/gia_nhap" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/only_border"
+        android:layout_marginBottom="50dp">
+        <TextView
+            style="@style/textBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/so_luong" />
+        <TextView
+            android:id="@+id/VPP_IP_Soluong"
+            style="@style/textBlack"
+            android:textColor="@color/custom_dropdown_item_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="right"
+            android:layout_marginRight="10dp"
+            android:text="@string/so_luong" />
+    </LinearLayout>
+
+
 
 </LinearLayout>

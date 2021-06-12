@@ -77,4 +77,21 @@ public class VanPhongPhamRequest {
         }
         return response;
     }
+
+    public String getNCCList() {
+        RequestHelper requestHelper = new RequestHelper();
+        String[] request = {"get", String.format("http://%s/NhaCungCapController-%s",
+                WebService.host(), "show")};
+        String response = "";
+        try {
+            response = requestHelper.execute(request).get();
+        }
+        catch(ExecutionException e){
+            response = e.getMessage();
+        }
+        catch(InterruptedException e){
+            response = e.getMessage();
+        }
+        return response;
+    }
 }

@@ -10,6 +10,9 @@ public class VanPhongPham {
     private String soLuong;
     private String maNcc;
 
+    public VanPhongPham() {
+    }
+
     public VanPhongPham(String maVpp, String tenVpp, String dvt, String giaNhap, String hinh, String soLuong, String maNcc) {
         this.maVpp = maVpp;
         this.tenVpp = tenVpp;

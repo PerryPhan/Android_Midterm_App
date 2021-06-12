@@ -107,16 +107,6 @@ public class NhanvienLayout extends AppCompatActivity {
     }
 
     // --------------- MAIN HELPER -----------------------------------------------------------------
-    public void setCursorWindowImageSize( int B ){
-        // Khai báo một field mới cho khả năng lưu hình độ phân giải lớn
-        try {
-            Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
-            field.setAccessible(true);
-            field.set(null, B); //the 100MB is the new size
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void setControl() {
         nhanvien_table_list = findViewById(R.id.NV_table_list);
@@ -167,7 +157,6 @@ public class NhanvienLayout extends AppCompatActivity {
         Log.d("data","Load Database --------");
         nhanvienDB = new NhanVienRequest();
         phongbanDB = new PhongBanRequest();
-        setCursorWindowImageSize(100*1024*1024);
         TableRow tr = null;
         nhanvienlist = convertToNhanvienList( returnListfromJSON( nhanvienDB.doGet("show"), "NhanVien" ) );
         // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn

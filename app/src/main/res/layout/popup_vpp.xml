@@ -49,6 +49,25 @@
                     android:orientation="vertical">
                     <TextView
                         style="@style/textBlack"
+                        android:text="@string/nha_cung_cap"
+                        android:padding="10dp"
+                        />
+                    <Spinner
+                        android:id="@+id/VPP_NCCSpinner_mini"
+                        android:layout_width="match_parent"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_height="wrap_content"
+                        android:background="@android:drawable/btn_dropdown"
+                        android:spinnerMode="dropdown"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        style="@style/textBlack"
                         android:text="@string/ma_vpp"
                         android:padding="10dp"
                         />
@@ -145,6 +164,34 @@
                     <TextView
                         style="@style/textRed"
                         android:id="@+id/VPP_showGiaError"
+                        android:visibility="invisible"
+                        android:layout_width="match_parent"
+                        android:text="@string/error_of_this_line"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        style="@style/textBlack"
+                        android:text="@string/so_luong"
+                        android:padding="10dp"
+                        />
+                    <EditText
+                        android:id="@+id/VPP_inputSL"
+                        android:paddingLeft="10dp"
+                        android:inputType="number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        style="@style/textRed"
+                        android:id="@+id/VPP_showSLError"
                         android:visibility="invisible"
                         android:layout_width="match_parent"
                         android:text="@string/error_of_this_line"

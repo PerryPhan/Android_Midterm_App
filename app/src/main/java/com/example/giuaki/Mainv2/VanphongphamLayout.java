@@ -6,11 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.CursorWindow;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -19,9 +15,12 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -31,27 +30,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.giuaki.Api.NhanVien;
+import com.example.giuaki.Api.NhaCungCap;
 import com.example.giuaki.Api.VanPhongPham;
 import com.example.giuaki.Helper.JSONHelper;
-import com.example.giuaki.Mainv2.NhanvienLayout;
-import com.example.giuaki.Mainv2.PhongbanLayout;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.VanPhongPhamRequest;
 import com.example.giuaki.Statistics.CapphatVPPLayout;
+import com.example.giuaki.WebService;
+import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
+import org.json.JSONObject;
+
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VanphongphamLayout extends AppCompatActivity {
     // Main Layout
     TableLayout vpp_table_list;
-
-    List<VanPhongPham> vpplist;
+    Spinner NCCSpinner;
 
     Button insertBtn;
     Button editBtn;
@@ -59,11 +56,14 @@ public class VanphongphamLayout extends AppCompatActivity {
     Button exitBtn;
     Button previewBtn; // <- Nút này để set Preview cái hàng đó, bấm vào là hiên Pop up chỉ để coi, ko chỉnh sửa
     // Preview Image Layout
+        TextView VPP_IP_nhaCC;
         TextView VPP_IP_maVPP;
         TextView VPP_IP_tenVPP;
         TextView VPP_IP_DVT;
         TextView VPP_IP_Gia;
+        TextView VPP_IP_Soluong;
         ImageView VPP_IP_Hinh;
+        
     // --------------
 
     // Navigation
@@ -81,9 +81,11 @@ public class VanphongphamLayout extends AppCompatActivity {
     Button yesBtn;
     Button noBtn;
 
+    Spinner NCCSpinner_mini;
     EditText inputMaVPP;
     EditText inputTenVPP;
     EditText inputDVT;
+    EditText inputSL;
     EditText inputGia;
     ImageView inputHinh;
 
@@ -91,6 +93,7 @@ public class VanphongphamLayout extends AppCompatActivity {
     TextView showTVPPError;
     TextView showDVTError;
     TextView showGiaError;
+    TextView showSLError;
 
     TextView showResult;
     TextView showConfirm;
@@ -105,17 +108,23 @@ public class VanphongphamLayout extends AppCompatActivity {
     TextView focusMaVPP;
     TextView focusTenVPP;
     TextView focusDVT;
+    TextView focusSL;
     TextView focusGia;
-    ArrayList<byte[]> image_list = new ArrayList<>();
-    byte[] focusDataHinh = null;
-    File file_hinh = null;
+    String focusHinh = null;
+    String NCCSpinner_data = null;
+    String NCCSpinner_mini_data = null;
+    File inputFile = null;
+
+    // List
+    List<NhaCungCap> ncclist;
+    List<VanPhongPham> vpplist;
+    ArrayList<String> image_list = new ArrayList<>();
     // Other
     float scale;
-
+    String webPath = "http://"+WebService.host()+"/ImageController-get?hinh=";
     // Key Code
     int IMAGE_FOLDER = 1000;
     int PERMISSION_GRANTED = 1001;
-    int RESULT_LOAD_IMAGE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,19 +150,9 @@ public class VanphongphamLayout extends AppCompatActivity {
         navCP = findViewById(R.id.VPP_navbar_capphat);
 
         search = findViewById(R.id.VPP_searchEdit);
-
+        NCCSpinner = findViewById(R.id.VPP_NCCSpinner);
     }
 
-//    public void setCursorWindowImageSize( int B ){
-//        // Khai báo một field mới cho khả năng lưu hình độ phân giải lớn
-//        try {
-//            Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
-//            field.setAccessible(true);
-//            field.set(null, B); //the 100MB is the new size
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
     public List<Object> returnListfromJSON( String resultfromQuery , String objectClass){
         List<Object> list = null ;
         String response = resultfromQuery;
@@ -166,6 +165,7 @@ public class VanphongphamLayout extends AppCompatActivity {
             return list;
         }
     }
+
     public List<VanPhongPham> convertToVanPhongPhamList(List<Object> list ){
         if( list == null ) return null;
         List<VanPhongPham> vanphongphamlist = new ArrayList<>();
@@ -174,19 +174,40 @@ public class VanphongphamLayout extends AppCompatActivity {
         }
         return vanphongphamlist;
     }
+
+    public List<NhaCungCap> convertToNhaCungCapList(List<Object> list ){
+        if( list == null ) return null;
+        List<NhaCungCap> nhacuncaplist = new ArrayList<>();
+        for( Object li : list ){
+            nhacuncaplist.add( (NhaCungCap) li);
+        }
+        return nhacuncaplist;
+    }
+
+
+    public ArrayAdapter<String> loadSpinnerAdapter(ArrayList<String> tenNCClist) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tenNCClist);
+        return adapter;
+    }
+
     public void loadDatabase(){
         vanphongphamDB = new VanPhongPhamRequest();
         vpplist = new ArrayList<>();
         TableRow tr = null;
-        // Nếu không có dòng này thì nó sẽ báo lỗi Row quá to không thể nhét vào Cursor trong select
-        //        setCursorWindowImageSize(100 * 1024 * 1024); // 100 MB max
         vpplist = convertToVanPhongPhamList( returnListfromJSON( vanphongphamDB.doGet("show"), "VanPhongPham" ) );
-        // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn
         for (int i = 0; i < vpplist.size(); i++) {
             tr = createRow(this, vpplist.get(i));
             tr.setId((int) i + 1);
             vpp_table_list.addView(tr);
         }
+        ncclist = convertToNhaCungCapList( returnListfromJSON(vanphongphamDB.getNCCList(),"NhaCungCap"));
+        if(ncclist == null ) return;
+        ArrayList<String> tenNcclist = new ArrayList<>();
+        tenNcclist.add("Tất cả nhà cung cấp");
+        for( NhaCungCap ncc : ncclist){
+            tenNcclist.add(ncc.getTenNCC());
+        }
+        NCCSpinner.setAdapter(loadSpinnerAdapter(tenNcclist));
     }
 
     public void setEvent(){
@@ -194,7 +215,7 @@ public class VanphongphamLayout extends AppCompatActivity {
         delBtn.setVisibility(View.INVISIBLE);  // this too
         previewBtn.setVisibility(View.INVISIBLE);
         setEventTable(vpp_table_list);
-
+        setEventSpinner();
     }
 
     public void setNavigation(){
@@ -207,7 +228,6 @@ public class VanphongphamLayout extends AppCompatActivity {
                 Intent intent = new Intent(VanphongphamLayout.this, PhongbanLayout.class);
                 overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
                 startActivity( intent );
-
             }
         });
         // navNV
@@ -238,17 +258,74 @@ public class VanphongphamLayout extends AppCompatActivity {
             }
         });
     }
+    public void setEventSpinner() {
+        NCCSpinner_data = "All";
+        NCCSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    if (NCCSpinner.getChildCount() < ncclist.size() + 1) {
+                        NCCSpinner_data = "All";
+                        image_list = new ArrayList<>();
+                        // Nếu có sort trước đó làm cho số nhân viên nhỏ hơn số nhân viên tổng thì mới sort lại theo all
+                        vpp_table_list.removeViews(1,vpp_table_list.getChildCount()-1);
+                        TableRow tr = null;
+                        // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn
+                        for (int i = 0; i < vpplist.size(); i++) {
+                            VanPhongPham vpp = vpplist.get(i);
+                            tr = createRow(VanphongphamLayout.this, vpp);
+                            tr.setId((int) i + 1);
+                            vpp_table_list.addView(tr);
+                            setEventTableRows(tr, vpp_table_list);
+                        }
+                    }
+                } else {
+                    int dem = 1;
+                    String mancc = ncclist.get(position - 1).getMaNCC();
+                    NCCSpinner_data = mancc;
+                    image_list = new ArrayList<>();
+                    // Select lại toàn bộ table
+                    vpp_table_list.removeViews(1,vpp_table_list.getChildCount()-1);
+                    TableRow tr = null;
+                    for (int i = 0; i < vpplist.size(); i++) {
+                        VanPhongPham vpp = vpplist.get(i);
+                        if (vpp.getMaNcc().trim().equals( mancc.trim())) {
+                            tr = createRow(VanphongphamLayout.this, vpp);
+                            // For index count start linearly
+                            tr.setId((int) dem++);
+                            vpp_table_list.addView(tr);
+                            setEventTableRows(tr, vpp_table_list);
+                        }
+                    }
+                }
+                editBtn.setVisibility(View.INVISIBLE); // turn on when click items
+                delBtn.setVisibility(View.INVISIBLE);  // this too
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                NCCSpinner_data = "All";
+            }
+        });
+    }
+    public void setEventSpinnerMini() {
+        NCCSpinner_mini.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                NCCSpinner_mini_data = ncclist.get(position).getMaNCC();
+//                Toast.makeText( NhanvienLayout.this, PB_spinner_mini_maPB+"", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                NCCSpinner_mini_data = ncclist.get(0).getMaNCC();
+            }
+        });
+    }
     public void setEventTable(TableLayout list) {
-        // Log.d("count", list.getChildCount()+""); // số table rows + 1
-        // Không cần thay đổi vì đây chỉ mới set Event
-        // Do có thêm 1 thằng example để làm gốc, nên số row thì luôn luôn phải + 1
-        // Có example thì khi thêm row thì nó sẽ theo khuôn
         for (int i = 0; i < list.getChildCount(); i++) {
             setEventTableRows((TableRow) list.getChildAt(i), list);
         }
-        // Có thêm 1 thằng Preview để xem trước thông tin của hàng đang chỉ định ( focusRow )
-
         previewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -260,12 +337,16 @@ public class VanphongphamLayout extends AppCompatActivity {
                 VPP_IP_DVT = vppdialog.findViewById(R.id.VPP_IP_DVT);
                 VPP_IP_Gia = vppdialog.findViewById(R.id.VPP_IP_Gia);
                 VPP_IP_Hinh = vppdialog.findViewById(R.id.VPP_IP_Hinh);
+                VPP_IP_Soluong = vppdialog.findViewById(R.id.VPP_IP_Soluong);
+                VPP_IP_nhaCC = vppdialog.findViewById(R.id.VPP_IP_nhaCC);
                 // Load Data
                 setDataImageView( VPP_IP_Hinh, image_list.get(indexofRow -1));
+
                 VPP_IP_maVPP.setText(focusMaVPP.getText().toString().trim());
                 VPP_IP_tenVPP.setText(focusTenVPP.getText().toString().trim());
                 VPP_IP_DVT.setText(focusDVT.getText().toString().trim());
                 VPP_IP_Gia.setText(focusGia.getText().toString().trim());
+                VPP_IP_Soluong.setText(focusSL.getText().toString().trim());
             }
         });
 
@@ -278,8 +359,9 @@ public class VanphongphamLayout extends AppCompatActivity {
                 // Control
                 setControlDialog();
                 // Event
-                setEventDialog(v);
+                setEventSpinnerMini();
                 setEventImagePicker();
+                setEventDialog(v);
             }
         });
         // Khi edit
@@ -295,13 +377,15 @@ public class VanphongphamLayout extends AppCompatActivity {
                     showLabel.setText("Sửa văn phòng phẩm");
                     showConfirm.setText("Bạn có muốn sửa hàng này không?");
                     // Event
-                    setEventDialog(v);
+                    setEventSpinnerMini();
                     setEventImagePicker();
-                    setDataImageView(inputHinh, focusDataHinh);
+                    setEventDialog(v);
+                    setDataImageView(inputHinh, focusHinh);
                     inputMaVPP.setText(focusMaVPP.getText());
                     inputTenVPP.setText(focusTenVPP.getText());
                     inputDVT.setText(focusDVT.getText());
                     inputGia.setText(focusGia.getText());
+                    inputSL.setText(focusSL.getText());
                     inputMaVPP.setEnabled(false);
                 }
             }
@@ -322,16 +406,18 @@ public class VanphongphamLayout extends AppCompatActivity {
                     showConfirm.setText("Bạn có muốn sửa hàng này không?");
                     // Event
                     setEventDialog(v);
-                    setDataImageView(inputHinh,focusDataHinh);
+                    setDataImageView(inputHinh, focusHinh);
                     inputMaVPP.setText(focusMaVPP.getText());
                     inputTenVPP.setText(focusTenVPP.getText());
                     inputDVT.setText(focusDVT.getText());
                     inputGia.setText(focusGia.getText());
+                    inputSL.setText(focusSL.getText());
 
                     inputMaVPP.setEnabled(false);
                     inputTenVPP.setEnabled(false);
                     inputDVT.setEnabled(false);
                     inputGia.setEnabled(false);
+                    inputSL.setEnabled(false);
                     inputHinh.setEnabled(false);
                 }
             }
@@ -340,15 +426,11 @@ public class VanphongphamLayout extends AppCompatActivity {
     }
 
     public void setNormalBGTableRows(TableLayout list) {
-        // 0: là thằng example đã INVISIBLE
-        // Nên bắt đầu từ 1 -> 9
         for (int i = 1; i < list.getChildCount(); i++) {
             TableRow row = (TableRow) list.getChildAt((int) i);
             if (indexofRow != (int) row.getId())
                 row.setBackgroundColor(getResources().getColor(R.color.white));
         }
-//             Toast.makeText( PhongbanLayout.this, indexofRow+"", Toast.LENGTH_LONG).show();
-//        Toast.makeText(VanphongphamLayout.this, indexofRow + ":" + (int) list.getChildAt(indexofRow).getId() + "", Toast.LENGTH_LONG).show();
     }
 
     public void setEventTableRows(TableRow tr, TableLayout list) {
@@ -366,30 +448,25 @@ public class VanphongphamLayout extends AppCompatActivity {
                 focusTenVPP = (TextView) focusRow.getChildAt(1);
                 focusDVT = (TextView) focusRow.getChildAt(2);
                 focusGia = (TextView) focusRow.getChildAt(3);
-//                focusDataHinh = image_list.get( focusRow.getId() - Integer.parseInt("1") );
+                focusSL = (TextView) focusRow.getChildAt(4);
+                focusHinh = image_list.get( focusRow.getId() - Integer.parseInt("1") );
                 setNormalBGTableRows(list);
-                // Testing to get id of focusable row
-                //  Toast.makeText( PhongbanLayout.this, focusRowID+"", Toast.LENGTH_LONG).show();
             }
         });
     }
 
     // --------------- IMAGE PICKER/ LOADER HELPER ---------------------------------------------------
     // ! Nhớ thêm dòng <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> trong file Manifest.xml
-    public void setDataImageView(ImageView imageView, byte[] imageBytes){
-        if (imageBytes != null){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            imageView.setImageBitmap(bitmap);
-        }
+    public void setDataImageView(ImageView imageView, String imageUri){
+        if( imageUri == null || imageUri == "null" || imageUri.equalsIgnoreCase("")) return;
+        Log.d("data",webPath+imageUri);
+        Picasso.get().load(webPath+imageUri).into(imageView);
     }
 
     public void pickImageFromStorage(){
-//        Intent intent = new Intent(Intent.ACTION_PICK);
-//        intent.setType("image/*");
-//        startActivityForResult(intent, IMAGE_FOLDER);
-        Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
-        startActivityForResult(intent, RESULT_LOAD_IMAGE);
+        startActivityForResult(intent, IMAGE_FOLDER);
     }
 
     public void setEventImagePicker(){
@@ -412,55 +489,6 @@ public class VanphongphamLayout extends AppCompatActivity {
         });
     }
 
-    public byte[] getImageDataPicker(){
-        byte[] imageBytes = null;
-        try {
-            Bitmap bitmap = ((BitmapDrawable) inputHinh.getDrawable()).getBitmap();
-            if (bitmap != null){
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                imageBytes = byteArrayOutputStream.toByteArray();
-                byteArrayOutputStream.close();
-            }
-        }
-        catch (IOException e){
-            Toast.makeText(VanphongphamLayout.this,"Failed loading image",
-                    Toast.LENGTH_SHORT).show();
-        }
-        finally {
-            return imageBytes;
-        }
-    }
-
-    public String getPath(Uri uri) {
-        String[] filepathColumn = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        String document_id = cursor.getString(0);
-            Log.d("id",document_id);
-//        document_id = document_id.substring(document_id.lastIndexOf(":" ) + 1);
-                Log.d("id",document_id);
-        cursor.close();
-        try {
-            cursor = getContentResolver().query(
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    null,
-                    MediaStore.Images.Media._ID + " = ? ",
-                    new String[]{document_id},
-                    null);
-        }catch (Exception e) {
-            Log.d("exception", "cursor bug");
-        }
-
-        cursor.moveToFirst();
-//        Log.d("exception",cursor.getColumnIndex(MediaStore.Images.Media.DATA)+"");
-        String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)) == null ? "aa":"bb";
-        Log.d("data",path);
-        cursor.close();
-        return path;
-
-//        return new String();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -478,34 +506,31 @@ public class VanphongphamLayout extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == IMAGE_FOLDER && resultCode == RESULT_OK && data != null){
-//            inputHinh.setImageURI(data.getData());
-//            Log.d("process","12");
-//            file_hinh = new File(getPath(data.getData()));
-//            Log.d("process","24");
-//            if (file_hinh.exists()) {
-//                Log.d("process","36");
-//                Toast.makeText(VanphongphamLayout.this,
-//                        String.format("Thêm hình thành công ở %s", file_hinh.getAbsolutePath()),
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//            else {
-//                Log.d("process","48");
-//                Toast.makeText(VanphongphamLayout.this,
-//                        "Tạo Object File hình thất bại",
-//                        Toast.LENGTH_SHORT).show();
-//            }
+        if (requestCode == IMAGE_FOLDER && resultCode == RESULT_OK && data != null) {
+            inputHinh.setImageURI(data.getData());
+
             Uri selectedImage = data.getData();
             String[] filepathColumn = {MediaStore.Images.Media.DATA};
             Cursor cursor = getContentResolver().query(selectedImage,filepathColumn,null,null,null);
             cursor.moveToFirst();
+
             int columnIndex =cursor.getColumnIndex(filepathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
-            Log.d("data",picturePath);
-            cursor.close();
-            inputHinh.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
+            cursor.close();
+            inputFile = new File(picturePath);
+            if (inputFile.exists()) {
+                Toast.makeText(VanphongphamLayout.this,
+                        String.format("Thêm hình thành công ở %s", inputFile.getAbsolutePath()),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                inputFile = null;
+                Toast.makeText(VanphongphamLayout.this,
+                        "Tạo Object File hình thất bại",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
+    }
 
 
     // --------------- DIALOG HELPER -----------------------------------------------------------------
@@ -521,21 +546,32 @@ public class VanphongphamLayout extends AppCompatActivity {
         yesBtn = vppdialog.findViewById(R.id.VPP_yesInsertBtn);
         noBtn = vppdialog.findViewById(R.id.VPP_noInsertBtn);
 
+        ArrayList<String> tenNcclist = new ArrayList<>();
+        for( NhaCungCap ncc : ncclist){
+            tenNcclist.add(ncc.getTenNCC());
+        }
+        NCCSpinner_mini = vppdialog.findViewById(R.id.VPP_NCCSpinner_mini);
+        NCCSpinner_mini.setAdapter(loadSpinnerAdapter(tenNcclist));
+
         inputMaVPP = vppdialog.findViewById(R.id.VPP_inputMaVPP);
         inputTenVPP = vppdialog.findViewById(R.id.VPP_inputTenVPP);
         inputDVT = vppdialog.findViewById(R.id.VPP_inputDVT);
         inputGia = vppdialog.findViewById(R.id.VPP_inputGia);
         inputHinh = vppdialog.findViewById(R.id.VPP_inputHinh);
+        inputSL = vppdialog.findViewById(R.id.VPP_inputSL);
 
         showMVPPError = vppdialog.findViewById(R.id.VPP_showMVPPError);
         showTVPPError = vppdialog.findViewById(R.id.VPP_showTVPPError);
         showDVTError = vppdialog.findViewById(R.id.VPP_showDVTError);
         showGiaError = vppdialog.findViewById(R.id.VPP_showGiaError);
+        showSLError = vppdialog.findViewById(R.id.VPP_showSLError);
 
         showResult = vppdialog.findViewById(R.id.VPP_showResult);
         showConfirm = vppdialog.findViewById(R.id.VPP_showConfirm);
         showLabel = vppdialog.findViewById(R.id.VPP_showLabel);
     }
+
+
 
     public void setEventDialog(View view) {
         //  Toast.makeText( PhongbanLayout.this, (view.getId() == R.id.PB_editBtn)+"", Toast.LENGTH_LONG).show();
@@ -555,34 +591,45 @@ public class VanphongphamLayout extends AppCompatActivity {
         yesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  showMPBError.setVisibility(View.VISIBLE);
-                //  showTPBError.setVisibility(View.VISIBLE);
-                //  showResult.setVisibility(View.VISIBLE);
                 boolean success = false;
                 switch (view.getId()) {
                     case R.id.VPP_insertBtn: {
                         if (!isSafeDialog( false )) break;
-//                        Log.d("process","1True");
+                        // Khai báo
                         VanPhongPham vpp = new VanPhongPham(
                                 inputMaVPP.getText().toString().trim() + "",
                                 inputTenVPP.getText().toString().trim() + "",
                                 inputDVT.getText().toString().trim() + "",
                                 inputGia.getText().toString().trim()+"",
                                 null,
-                                "0",
-                                "VPPSH");
+                                inputSL.getText().toString().trim()+"",
+                                NCCSpinner_mini_data+"");
 //                        if (vanphongphamDB.insert(vpp) == -1) break;
-                        if( !JSONHelper.verifyJSON(vanphongphamDB.doPost(vpp,file_hinh,"insert"))
+                        // Gọi Request
+                        String response = vanphongphamDB.doPost(vpp, inputFile,"insert");
+                        if( !JSONHelper.verifyJSON(response)
                                 .equalsIgnoreCase("pass") ) break;
-//                        Log.d("process","2True");
+                        // Nhận response và trả hình ra theo Bất đồng bộ hóa
+                        JSONObject fileNameResponse = null;
+                        try {
+                            fileNameResponse = new JSONObject(response);
+                            vpp.setHinh(fileNameResponse.getString("fileName"));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        // Tạo ra 1 row
                         TableRow tr = createRow(VanphongphamLayout.this, vpp);
                         int n = vpp_table_list.getChildCount();
                         tr.setId(n);
-                        vpp_table_list.addView(tr);
-//                        Log.d("insert",image_list.size()+"");
-//                        image_list.add(vpp.getHinh());
-//                        Log.d("insert",image_list.size()+"");
-                        setEventTableRows((TableRow) vpp_table_list.getChildAt(n), vpp_table_list);
+                        if ( !NCCSpinner_mini_data.trim().equals( NCCSpinner_data.trim()) ){
+                            if( NCCSpinner_data.trim().equals("All") ){
+                                vpp_table_list.addView(tr);
+                                setEventTableRows((TableRow) vpp_table_list.getChildAt(n), vpp_table_list);
+                            }
+                        }else{
+                            vpp_table_list.addView(tr);
+                            setEventTableRows((TableRow) vpp_table_list.getChildAt(n), vpp_table_list);
+                        }
                         editBtn.setVisibility(View.INVISIBLE);
                         delBtn.setVisibility(View.INVISIBLE);
                         previewBtn.setVisibility(View.INVISIBLE);
@@ -594,59 +641,75 @@ public class VanphongphamLayout extends AppCompatActivity {
                         success = true;
                     }
                     break;
-//                    case R.id.VPP_editBtn: {
-//                        if (!isSafeDialog( true )) break;
-//                        TableRow tr = (TableRow) vpp_table_list.getChildAt(indexofRow);
-//                        TextView id = (TextView) tr.getChildAt(0);
-////                        VanPhongPham vpp = new VanPhongPham(
-////                                id.getText().toString().trim()+"",
-////                                inputTenVPP.getText().toString().trim() + "",
-////                                inputDVT.getText().toString().trim() + "",
-////                                inputGia.getText().toString().trim()+"",
-////                                getImageDataPicker() );
-//                        if( vanphongphamDB.update( vpp ) == -1 ) break;
-//                        focusTenVPP.setText( inputTenVPP.getText().toString().trim() + "");
-//                        focusDVT.setText( inputDVT.getText().toString().trim() + "");
-//                        focusGia.setText( inputGia.getText().toString().trim() + "");
-//                        image_list.set( indexofRow-1, vpp.getHinh() );
-//                        focusDataHinh = vpp.getHinh();
-//                        success = true;
-//                    }
-//                    break;
-//                    case R.id.VPP_delBtn: {
-//                        if( vanphongphamDB.delete(
-////                                new VanPhongPham(
-////                                        focusMaVPP.getText().toString().trim()+"",
-////                                        focusTenVPP.getText().toString().trim()+"",
-////                                        focusDVT.getText().toString().trim() + "",
-////                                        focusGia.getText().toString().trim()+"",
-////                                        focusDataHinh
-////                                )
-//                        )
-//                                == -1 ) break;
-//                        if (indexofRow == vpp_table_list.getChildCount() - 1) {
-//                            vpp_table_list.removeViewAt(indexofRow);
-//                        } else {
-//                            vpp_table_list.removeViewAt(indexofRow);
-//                            for (int i = 0; i < vpp_table_list.getChildCount(); i++) {
-//                                vpp_table_list.getChildAt(i).setId((int) i);
-//                            }
-//                        }
-//                        Log.d("del",image_list.size()+"");
-//                        image_list.remove(indexofRow -1);
-//                        Log.d("del",image_list.size()+"");
-//                        editBtn.setVisibility(View.INVISIBLE);
-//                        delBtn.setVisibility(View.INVISIBLE);
-//                        previewBtn.setVisibility(View.INVISIBLE);
-//                        focusRow = null;
-//                        focusMaVPP = null;
-//                        focusTenVPP = null;
-//                        focusDVT = null;
-//                        focusGia = null;
-//                        focusDataHinh = null;
-//                        success = true;
-//                    }
-//                    break;
+                    case R.id.VPP_editBtn: {
+                        if (!isSafeDialog( true )) break;
+                        TableRow tr = (TableRow) vpp_table_list.getChildAt(indexofRow);
+                        VanPhongPham vpp = new VanPhongPham(
+                                inputMaVPP.getText().toString().trim() + "",
+                                inputTenVPP.getText().toString().trim() + "",
+                                inputDVT.getText().toString().trim() + "",
+                                inputGia.getText().toString().trim()+"",
+                                null,
+                                inputSL.getText().toString().trim()+"",
+                                NCCSpinner_mini_data+"");
+                        String response = vanphongphamDB.doPost(vpp, inputFile,"update");
+                        if( !JSONHelper.verifyJSON(response)
+                                .equalsIgnoreCase("pass") ) break;
+                        JSONObject fileNameResponse = null;
+                        try {
+                            fileNameResponse = new JSONObject(response);
+                            vpp.setHinh(fileNameResponse.getString("fileName"));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                        focusTenVPP.setText( inputTenVPP.getText().toString().trim() + "");
+                        focusDVT.setText( inputDVT.getText().toString().trim() + "");
+                        focusGia.setText( inputGia.getText().toString().trim() + "");
+                        image_list.set( indexofRow-1, vpp.getHinh() );
+                        focusHinh = vpp.getHinh();
+                        success = true;
+                    }
+                    break;
+                    case R.id.VPP_delBtn: {
+                        VanPhongPham vpp = new VanPhongPham(
+                                inputMaVPP.getText().toString().trim() + "",
+                                inputTenVPP.getText().toString().trim() + "",
+                                inputDVT.getText().toString().trim() + "",
+                                inputGia.getText().toString().trim()+"",
+                                null,
+                                inputSL.getText().toString().trim()+"",
+                                NCCSpinner_mini_data+"");
+                        if( !JSONHelper.verifyJSON(vanphongphamDB.doPost(vpp, null,"remove"))
+                                .equalsIgnoreCase("pass") ) break;
+                        if (indexofRow == vpp_table_list.getChildCount() - 1) {
+                            vpp_table_list.removeViewAt(indexofRow);
+                        } else {
+                            vpp_table_list.removeViewAt(indexofRow);
+                            for (int i = 0; i < vpp_table_list.getChildCount(); i++) {
+                                vpp_table_list.getChildAt(i).setId((int) i);
+                            }
+                        }
+                        int index = 0;
+                        for( int i = 0; i< vpplist.size(); i++){
+                            if( vpplist.get(i).getMaVpp().equals(inputMaVPP.getText().toString().trim() + "") ){
+                                index = i ; break;
+                            }
+                        }
+                        vpplist.remove( index );
+                        image_list.remove(indexofRow -1);
+                        editBtn.setVisibility(View.INVISIBLE);
+                        delBtn.setVisibility(View.INVISIBLE);
+                        previewBtn.setVisibility(View.INVISIBLE);
+                        focusRow = null;
+                        focusMaVPP = null;
+                        focusTenVPP = null;
+                        focusDVT = null;
+                        focusGia = null;
+                        focusHinh = null;
+                        success = true;
+                    }
+                    break;
                     default:
                         break;
                 }
@@ -661,6 +724,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                             inputTenVPP.setText("");
                             inputDVT.setText("");
                             inputGia.setText("");
+                            inputSL.setText("");
                             showResult.setVisibility(View.INVISIBLE);
                             vppdialog.dismiss();
                         }
@@ -677,7 +741,7 @@ public class VanphongphamLayout extends AppCompatActivity {
     }
 
     public boolean isSafeDialog( boolean allowSameID ) {
-        String id, mavpp, tenvpp, dvt, gia;
+        String id, mavpp, tenvpp, dvt, gia, sl;
         // Mã PB không được trùng với Mã PB khác và ko để trống
         mavpp = inputMaVPP.getText().toString().trim();
         boolean noError = true;
@@ -718,20 +782,29 @@ public class VanphongphamLayout extends AppCompatActivity {
             noError = true;
         }
 
-        // Gia không được để trống và không chữ cái
+        // Giá không được để trống và không chữ cái
         gia = inputGia.getText().toString().trim();
-        if( gia.charAt(0) == '0') if( gia.length() > 1) gia = gia.substring(1,gia.length()-1);
+        if (gia.length()!= 0 && gia.charAt(0) == '0')
+            if (gia.length() > 1) gia = gia.substring(1, gia.length() - 1);
         if (gia.equals("")) {
             showGiaError.setText("Giá không được trống ");
             showGiaError.setVisibility(View.VISIBLE);
             noError = false;
-        }else{
+        } else {
             showGiaError.setVisibility(View.INVISIBLE);
             noError = true;
         }
-
-//        Log.d("mapb_text",mavpp+ "");
-//        Log.d("tenpb_text",tenvpp+ "");
+        // Số lượng không được để trống và không chữ cái
+        sl = inputSL.getText().toString().trim();
+            if (sl.length()!= 0 && sl.charAt(0) == '0') if (sl.length() > 1) sl = sl.substring(1, gia.length() - 1);
+            if (sl.equals("")) {
+                showSLError.setText("Số lượng không được trống ");
+                showSLError.setVisibility(View.VISIBLE);
+                noError = false;
+            } else {
+                showSLError.setVisibility(View.INVISIBLE);
+                noError = true;
+            }
 
         if( noError ) {
             for (int i = 1; i < vpp_table_list.getChildCount(); i++) {
@@ -739,24 +812,16 @@ public class VanphongphamLayout extends AppCompatActivity {
                 TextView mavpp_data = (TextView) tr.getChildAt(0);
                 TextView tenvpp_data = (TextView) tr.getChildAt(1);
 
-//            Log.d("mavpp",mavpp_data.getText()+ "");
-//            Log.d("tenvpp",tenvpp_data.getText()+ "");
-//            Log.d("mapb_comp",(mavpp.equals(mavpp_data.getText().toString()))+ "");
-//            Log.d("tenpb_comp",(tenvpp.equals(tenvpp_data.getText().toString()))+ "");
-
                 if (!allowSameID)
                     if (mavpp.equalsIgnoreCase(mavpp_data.getText().toString())) {
-                        showMVPPError.setText("Mã PB không được trùng ");
+                        showMVPPError.setText("Mã VPP không được trùng ");
                         showMVPPError.setVisibility(View.VISIBLE);
                         return noError = false;
                     }
-                // Trường hợp chỉ đổi ảnh, những thông tin khác ngoại trừ tên thì phải đổi tên luôn à
+
                 if (tenvpp.equalsIgnoreCase(tenvpp_data.getText().toString())
-                        && !tenvpp_data.getText().toString().equalsIgnoreCase(
-                                focusTenVPP.getText().toString().trim()
-                        )
-                    ) {
-                    showTVPPError.setText("Tên PB không được trùng");
+                    && !tenvpp_data.getText().toString().equalsIgnoreCase( focusTenVPP.getText().toString().trim() )) {
+                    showTVPPError.setText("Tên VPP không được trùng");
                     showTVPPError.setVisibility(View.VISIBLE);
                     return noError = false;
                 }
@@ -765,6 +830,7 @@ public class VanphongphamLayout extends AppCompatActivity {
             showTVPPError.setVisibility(View.INVISIBLE);
             showDVTError.setVisibility(View.INVISIBLE);
             showGiaError.setVisibility(View.INVISIBLE);
+            showSLError.setVisibility(View.INVISIBLE);
         }
         return noError;
     }
@@ -775,10 +841,11 @@ public class VanphongphamLayout extends AppCompatActivity {
     }
 
     // This Custom Columns' Max Width : 70 p0 / 140 / 55 p0 / 85 p0 / 55 p0
+    //  Updated      <!--    70 p0 / 140 / 55 p0 / 85 p0 / <= 55 p0-->
     public TableRow createRow(Context context, VanPhongPham vpp) {
         TableRow tr = new TableRow(context);
         // Id
-        //   Ma
+        //  Ma
         TextView maVPP = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
         // Cần cái này để khi mà maVPP đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
         // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
@@ -818,19 +885,18 @@ public class VanphongphamLayout extends AppCompatActivity {
         TextView soluong = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
         // Cần cái này để khi mà tenVPP đạt tới max width thì nó sẽ tăng height cho bên maVPP luôn
         soluong.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
-//        soluong.setText(vpp.getSoluong());
+        soluong.setText(vpp.getSoLuong());
         soluong.setPadding(0,0,0,0);
-        soluong.setMaxWidth(DPtoPix(85));
+        soluong.setMaxWidth(DPtoPix(55));
 
-
-//        image_list.add(vpp.getHinh());
+        image_list.add(vpp.getHinh());
 
         tr.setBackgroundColor(getResources().getColor(R.color.white));
         tr.addView(maVPP);
         tr.addView(tenVPP);
         tr.addView(dvt);
         tr.addView(gianhap);
-//        tr.addView(soluong);
+        tr.addView(soluong);
         return tr;
     }
 
