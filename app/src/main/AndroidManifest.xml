@@ -14,25 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Giuaki">
         <activity android:name=".Statistics.CapphatVPPcrud"></activity>
-        <activity android:name=".Main.CTCungcapLayout" />
-        <activity android:name=".Main.CungcapLayout" />
-        <activity android:name=".Chart.ThongkeChart" />
         <activity android:name=".Main.ThongbaoLayout" />
         <activity android:name=".XinchoLayout" />
         <activity android:name=".Tables.BaocaoTable02" />
         <activity android:name=".Tables.BaocaoTable01" />
-        <activity android:name=".Statistics.BaocaoVPPAllLayout" />
-        <activity android:name=".Statistics.BaocaoVPPLayout" />
         <activity android:name=".Tables.ThongkeTable04" />
         <activity android:name=".Tables.ThongkeTable03" />
         <activity android:name=".Tables.ThongkeTable02" />
         <activity android:name=".Tables.ThongkeTable01" />
-        <activity android:name=".Main.VanphongphamLayout" />
-        <activity android:name=".Main.NhanvienLayout" />
-        <activity android:name=".Main.PhongbanLayout" />
         <activity android:name=".MainActivity" />
         <!-- Version cuoiki : Version 2 -->
-
+        <activity android:name=".Chart.ThongkeChart" />
         <activity android:name=".Mainv2.ThongkeLayout" />
         <activity android:name=".Mainv2.VanphongphamLayout" />
         <activity android:name=".Mainv2.NhanvienLayout" />
@@ -44,7 +36,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".Mainv2.BaocaoVPPAllLayout" />
+        <activity android:name=".Mainv2.BaocaoVPPLayout" />
         <activity android:name=".Welcome">
 
         </activity>

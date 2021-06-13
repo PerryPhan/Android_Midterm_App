@@ -1,8 +1,8 @@
-package com.example.giuaki.Main;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.giuaki.Mainv2;
 
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.giuaki.R;
 

@@ -3,6 +3,7 @@ package com.example.giuaki.Mainv2;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,11 +18,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.giuaki.Databases.CapPhatDatabase;
-import com.example.giuaki.Databases.NhanVienDatabase;
-import com.example.giuaki.Databases.PhongBanDatabase;
-import com.example.giuaki.Entities.NhanVien;
-import com.example.giuaki.Entities.PhongBan;
+import com.example.giuaki.Api.CapPhat;
+import com.example.giuaki.Api.VanPhongPham;
+import com.example.giuaki.Helper.JSONHelper;
+import com.example.giuaki.Request.CapPhatRequest;
+import com.example.giuaki.Request.NhanVienRequest;
+import com.example.giuaki.Request.PhongBanRequest;
+import com.example.giuaki.Api.NhanVien;
+import com.example.giuaki.Api.PhongBan;
 import com.example.giuaki.Entities.Rows;
 import com.example.giuaki.R;
 import com.example.giuaki.XinchoLayout;
@@ -44,16 +48,16 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
         totalMoneyView;
 
     // CapPhat
-    CapPhatDatabase capPhatDatabase;
+    CapPhatRequest capPhatDatabase;
 
     // NhanVien
-    NhanVienDatabase nhanVienDatabase;
+    NhanVienRequest nhanVienDatabase;
     List<NhanVien> nhanvienList;
     ArrayList<String> nhanvienStringList;
     NhanVien selectedNhanVien;
 
     // PhongBan
-    PhongBanDatabase phongBanDatabase;
+    PhongBanRequest phongBanDatabase;
     List<PhongBan> phongbanList;
     ArrayList<String> tenPhongBanList;
     PhongBan selectedPhongBan;
@@ -77,6 +81,7 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
         setEvent();
 
     }
+
     private void setControl() {
         backBtn = findViewById(R.id.BC_All_backBtn);
         printBtn = findViewById(R.id.BC_All_printBtn);
@@ -91,16 +96,77 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
     }
 
     private void loadDatabase() {
-        nhanVienDatabase = new NhanVienDatabase(this);
-        phongBanDatabase = new PhongBanDatabase(this);
-        capPhatDatabase  = new CapPhatDatabase( this);
-        phongbanList = phongBanDatabase.select();
+        // Khai báo
+        nhanVienDatabase = new NhanVienRequest();
+        phongBanDatabase = new PhongBanRequest();
+        capPhatDatabase  = new CapPhatRequest();
+
+        // Đổ Database ra List
+        phongbanList = convertToPhongBanList(
+                returnListfromJSON( phongBanDatabase.doGet("show"),"PhongBan")
+        );
+
+        // Load database ra Spinner
         tenPhongBanList = new ArrayList<>();
         for( PhongBan pb : phongbanList){
             tenPhongBanList.add(pb.getTenpb().trim());
         }
+
         PBSpinner.setAdapter( loadSpinnerAdapter(tenPhongBanList) );
     }
+
+    //  //----------------------------------{{}}------------------------------------------//   //
+    //    ------------------------------ RETURNER -----------------------------------
+    public List<Object> returnListfromJSON( String resultfromQuery , String objectClass){
+        List<Object> list = null ;
+        String response = resultfromQuery;
+        if( !JSONHelper.verifyJSON(response).equalsIgnoreCase("pass") ) return null;
+        try{
+            list = JSONHelper.parseJSON(response,objectClass);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return list;
+        }
+    }
+    public List<String> returnListfromJSON( String resultfromQuery){
+        String raw = null ;
+        String response = resultfromQuery;
+        if( !JSONHelper.verifyJSON(response).equalsIgnoreCase("pass") ) return null;
+        try{
+            raw = JSONHelper.rawParseJSON(response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return raw != null ? convertRawtoListString(raw,",") : null;
+        }
+    }
+    //    ----------------------------- CONVERTTER ----------------------------------
+    public List<String> convertRawtoListString( String raw , String regex){
+        if(raw == null || raw.length() == 0) return null;
+        List<String> list = new ArrayList<>();
+        for( String s : raw.split(regex+"")){
+            list.add(s);
+        }
+        return list;
+    }
+    public List<NhanVien> convertToNhanvienList(List<Object> list ){
+        if( list == null ) return null;
+        List<com.example.giuaki.Api.NhanVien> nhanvienlist = new ArrayList<>();
+        for( Object li : list ){
+            nhanvienlist.add( (com.example.giuaki.Api.NhanVien) li);
+        }
+        return nhanvienlist;
+    }
+    public List<PhongBan> convertToPhongBanList(List<Object> list ){
+        if( list == null ) return null;
+        List<PhongBan> phongbanlist = new ArrayList<>();
+        for( Object li : list ){
+            phongbanlist.add( (PhongBan) li);
+        }
+        return phongbanlist;
+    }
+    //  //----------------------------------{{}}------------------------------------------//   //
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void setDateView(){
@@ -148,7 +214,13 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedPhongBan = phongbanList.get(position);
-                nhanvienList = nhanVienDatabase.select(selectedPhongBan);
+                nhanvienList =
+                    convertToNhanvienList(
+                            returnListfromJSON(
+                                    nhanVienDatabase.doGet(String.format("show?mapb=%s",selectedPhongBan.getMapb()))
+                                    ,"NhanVien" )
+                    );
+
                 NVtoStringArray( nhanvienList );
                 setNVSpinnerEvent();
             }
@@ -156,15 +228,20 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 selectedPhongBan = phongbanList.get(0);
-                nhanvienList = nhanVienDatabase.select(selectedPhongBan);
+                nhanvienList =
+                    convertToNhanvienList(
+                            returnListfromJSON(
+                                    nhanVienDatabase.doGet(String.format("show?mapb=%s",selectedPhongBan.getMapb()))
+                                    ,"NhanVien" )
+                    );
+
                 NVtoStringArray( nhanvienList );
                 setNVSpinnerEvent();
-
+                Log.d("length",nhanvienList.size()+"");
             }
         });
 
         setDateView();
-        //        NVSpinner
 
     }
     public void setTable( NhanVien nv){
@@ -174,13 +251,18 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
         boolean[] isPaddingZero = {false, false, true, false, true};
         rowGenerator.setSizeOfCell(sizeOfCell);
         rowGenerator.setIsCellPaddingZero(isPaddingZero);
-        rowGenerator.setData( rowGenerator.enhanceRowData( capPhatDatabase.BaocaoQuery( nv ), 5 ) );
+        rowGenerator.enhanceRowData(
+                returnListfromJSON(
+                        capPhatDatabase.doGet(
+                                String.format("baocaoQuery?manv=%s",nv.getMaNv())
+                        )
+                )
+                , 5 );
         rows = rowGenerator.generateArrayofRows();
         if( rows == null ) return;
         for( TableRow row : rows ){
             table.addView(row);
         }
-
     }
 
     public void setTotalMoneyView( ArrayList<TableRow> rows){

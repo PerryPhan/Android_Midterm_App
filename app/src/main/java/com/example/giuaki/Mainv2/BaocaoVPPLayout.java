@@ -14,19 +14,23 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.giuaki.Databases.CapPhatDatabase;
-import com.example.giuaki.Databases.NhanVienDatabase;
-import com.example.giuaki.Entities.PhongBan;
+import com.example.giuaki.Api.NhanVien;
+import com.example.giuaki.Helper.JSONHelper;
+import com.example.giuaki.Request.CapPhatRequest;
+import com.example.giuaki.Request.NhanVienRequest;
+import com.example.giuaki.Api.PhongBan;
 import com.example.giuaki.Entities.Rows;
 import com.example.giuaki.R;
-import com.example.giuaki.Statistics.CapphatVPPLayout;
+import com.example.giuaki.Mainv2.CapphatVPPLayout;
 import com.example.giuaki.XinchoLayout;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BaocaoVPPLayout extends AppCompatActivity {
+    // MainLayout
     Button backBtn,
            printBtn;
     TableLayout table;
@@ -35,10 +39,13 @@ public class BaocaoVPPLayout extends AppCompatActivity {
          countVPPView,
        totalMoneyView,
              dateView;
-    PhongBan pb = com.example.giuaki.Statistics.CapphatVPPLayout.selectedPB;
-    CapPhatDatabase capPhatDatabase;
-    NhanVienDatabase nhanVienDatabase;
+    // Request
+    CapPhatRequest capPhatDatabase;
+    NhanVienRequest nhanVienDatabase;
+    // Other
+    PhongBan pb = CapphatVPPLayout.selectedPB;
     float scale;
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,59 @@ public class BaocaoVPPLayout extends AppCompatActivity {
 
         printBtn = findViewById(R.id.BC_index_printBtn);
     }
+
+    //  //----------------------------------{{}}------------------------------------------//   //
+    //    ------------------------------ RETURNER -----------------------------------
+    public List<Object> returnListfromJSON( String resultfromQuery , String objectClass){
+        List<Object> list = null ;
+        String response = resultfromQuery;
+        if( !JSONHelper.verifyJSON(response).equalsIgnoreCase("pass") ) return null;
+        try{
+            list = JSONHelper.parseJSON(response,objectClass);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return list;
+        }
+    }
+    public List<String> returnListfromJSON( String resultfromQuery){
+        String raw = null ;
+        String response = resultfromQuery;
+        if( !JSONHelper.verifyJSON(response).equalsIgnoreCase("pass") ) return null;
+        try{
+            raw = JSONHelper.rawParseJSON(response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return raw != null ? convertRawtoListString(raw,",") : null;
+        }
+    }
+    //    ----------------------------- CONVERTTER ----------------------------------
+    public List<String> convertRawtoListString( String raw , String regex){
+        if(raw == null || raw.length() == 0) return null;
+        List<String> list = new ArrayList<>();
+        for( String s : raw.split(regex+"")){
+            list.add(s);
+        }
+        return list;
+    }
+    public List<NhanVien> convertToNhanvienList(List<Object> list ){
+        if( list == null ) return null;
+        List<com.example.giuaki.Api.NhanVien> nhanvienlist = new ArrayList<>();
+        for( Object li : list ){
+            nhanvienlist.add( (com.example.giuaki.Api.NhanVien) li);
+        }
+        return nhanvienlist;
+    }
+    public List<PhongBan> convertToPhongBanList(List<Object> list ){
+        if( list == null ) return null;
+        List<PhongBan> phongbanlist = new ArrayList<>();
+        for( Object li : list ){
+            phongbanlist.add( (PhongBan) li);
+        }
+        return phongbanlist;
+    }
+    //  //----------------------------------{{}}------------------------------------------//   //
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -104,20 +164,33 @@ public class BaocaoVPPLayout extends AppCompatActivity {
     }
 
     private void setTotal() {
-        List<String> countVPP = capPhatDatabase.countVPPfromPB(pb);
+        List<String> countVPP =
+                returnListfromJSON(
+                            capPhatDatabase.doGet(
+                                    String.format("countVPPfromPB?mapb=%s"
+                                    , pb.getMapb())
+                        )
+                );
         countVPPView.setText( countVPP.get(1).trim() );
         totalMoneyView.setText( MoneyFormat( CapphatVPPLayout.totalMoney ) );
     }
 
     public void setTableLayout(){
         //        <!-- 40 / 80 p0 / 50 / 90 p0 / 67 p0 / 63 p0 -->
-        capPhatDatabase = new CapPhatDatabase(this);
+        capPhatDatabase = new CapPhatRequest();
         Rows rowGenarator = new Rows(this );
         int[] sizeOfCell = {40,80,50,90,67,63};
         boolean[] isPaddingZero = {false, false, true, true ,true, true};
         rowGenarator.setSizeOfCell(sizeOfCell);
         rowGenarator.setIsCellPaddingZero(isPaddingZero);
-        rowGenarator.setData( rowGenarator.enhanceRowData( capPhatDatabase.BaocaoQuery( pb ), 6 ) );
+        rowGenarator.enhanceRowData(
+                returnListfromJSON(
+                        capPhatDatabase.doGet(
+                                String.format("baocaoQuery?mapb=%s"
+                                        , pb.getMapb())
+                        )
+                )
+                , 6 );
         rowGenarator.setSizeOfCell(sizeOfCell);
         rowGenarator.setIsCellPaddingZero(isPaddingZero);
         List<TableRow> rows = rowGenarator.generateArrayofRows();
@@ -129,9 +202,16 @@ public class BaocaoVPPLayout extends AppCompatActivity {
     private void setPhongBanView() {
         if( pb != null ) {
             tenPBView.setText( pb.getTenpb());
-            nhanVienDatabase = new NhanVienDatabase(this);
-            List<String> list = nhanVienDatabase.CountNVfromPB( pb );
-            countNVView.setText( list.get(1) );
+            nhanVienDatabase = new NhanVienRequest();
+            List<NhanVien> list = convertToNhanvienList(
+                    returnListfromJSON(
+                            nhanVienDatabase.doGet(
+                                    String.format("show?mapb=%s"
+                                            , pb.getMapb())
+                            )
+                    ,"NhanVien")
+            );
+            countNVView.setText( list.size() + "" );
         }
     }
 

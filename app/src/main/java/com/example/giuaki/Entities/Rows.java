@@ -168,7 +168,10 @@ public class Rows {
 
     // 5. Test Data
     public void testData(){
-        if(data == null) return;
+        if(data == null) {
+            Log.d("data",data+"");
+            return;
+        }
         for( int i = 0 ; i < data.size(); i++){
                 Log.d("data", data.get(i) +"\n");
         }
