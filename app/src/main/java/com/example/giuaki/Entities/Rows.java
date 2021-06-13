@@ -111,6 +111,7 @@ public class Rows {
       -- Name of Function :  enhanceRowData( List<String> raw );
     */
     public List<String> enhanceRowData( List<String> raw , int numberOfCells) {
+        if(raw == null) return null;
         this.data = new ArrayList<>();
         this.numberOfCells = numberOfCells;
         String row = "";
@@ -118,7 +119,6 @@ public class Rows {
             row += raw.get(i).trim() + ",";
             if ( (i + 1) % numberOfCells == 0) {
                 row = row.substring(0, row.length() - 1);
-                Log.d("Rows_toString()", row + "\n");
                 this.data.add(row);
                 row = "";
             }
@@ -127,7 +127,7 @@ public class Rows {
     }
 
     // Đổi từ DPs sang Pixels
-    public int DPtoPix(int dps) {
+    public static int DPtoPix(int dps) {
         return (int) (dps * scale + 0.5f);
     }
 
@@ -168,7 +168,7 @@ public class Rows {
 
     // 5. Test Data
     public void testData(){
-        String row = "";
+        if(data == null) return;
         for( int i = 0 ; i < data.size(); i++){
                 Log.d("data", data.get(i) +"\n");
         }

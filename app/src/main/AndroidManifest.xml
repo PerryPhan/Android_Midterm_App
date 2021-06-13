@@ -27,22 +27,24 @@
         <activity android:name=".Tables.ThongkeTable03" />
         <activity android:name=".Tables.ThongkeTable02" />
         <activity android:name=".Tables.ThongkeTable01" />
-        <activity android:name=".Main.ThongkeLayout" />
-        <activity android:name=".Statistics.CapphatVPPLayout" />
         <activity android:name=".Main.VanphongphamLayout" />
         <activity android:name=".Main.NhanvienLayout" />
         <activity android:name=".Main.PhongbanLayout" />
         <activity android:name=".MainActivity" />
         <!-- Version cuoiki : Version 2 -->
+
+        <activity android:name=".Mainv2.ThongkeLayout" />
         <activity android:name=".Mainv2.VanphongphamLayout" />
         <activity android:name=".Mainv2.NhanvienLayout" />
-        <activity android:name=".Mainv2.PhongbanLayout" >
+        <activity android:name=".Mainv2.PhongbanLayout" />
+        <activity android:name=".Mainv2.CapphatVPPLayout" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".Welcome">
 
         </activity>

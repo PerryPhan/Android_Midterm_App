@@ -126,7 +126,7 @@ public class JSONHelper {
      * @param json - json string được gửi về từ server
      * @return - 1 cái string chứa tất cả dữ liệu trong đó, nhưng để chỉ show ra để test kết quả
      */
-    public String rawParseJSON(String json) {
+    public static String rawParseJSON(String json) {
         String parse = "";
 
         try {
@@ -141,7 +141,7 @@ public class JSONHelper {
                 while (keys.hasNext()) {
                     String key = keys.next();
                     Object data = jsonData.get(key);
-                    if (data != null) parse += String.format("%s\n", data.toString());
+                    if (data != null) parse += String.format("%s,", data.toString());
                 }
             }
         }

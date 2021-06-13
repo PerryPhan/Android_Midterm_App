@@ -218,9 +218,9 @@
 
                         <ImageView
                             android:id="@+id/VPP_inputHinh"
-                            android:layout_width="100dp"
+                            android:layout_width="130dp"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="60dp"
+                            android:layout_marginLeft="30dp"
                             android:adjustViewBounds="true"
                             android:scaleType="fitCenter"
                             android:src="@drawable/_xdlogo" />

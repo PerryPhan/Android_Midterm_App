@@ -18,8 +18,9 @@
     <ImageView
         android:id="@+id/VPP_IP_Hinh"
         android:layout_marginVertical="20dp"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:layout_marginHorizontal="20dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:src="@drawable/_xdlogo"
