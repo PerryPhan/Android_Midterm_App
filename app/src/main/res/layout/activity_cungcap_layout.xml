@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Main.CungcapLayout"
+    tools:context=".Mainv2.CungcapLayout"
     >
     <LinearLayout
         android:layout_marginTop="10dp"
@@ -79,7 +79,7 @@
                    android:layout_gravity="center"
                    android:id="@+id/CC_NCCSpinner"
                    android:layout_width="240dp"
-                   android:layout_height="40dp"
+                   android:layout_height="45dp"
                    android:background="@android:drawable/btn_dropdown"
                    android:spinnerMode="dropdown"/>
            </LinearLayout>
@@ -100,7 +100,7 @@
                     android:layout_gravity="center"
                     android:id="@+id/CC_TTSpinner"
                     android:layout_width="240dp"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:background="@android:drawable/btn_dropdown"
                     android:spinnerMode="dropdown"/>
             </LinearLayout>
@@ -115,7 +115,7 @@
             <TableRow>
                 <TextView
                     style="@style/tableHeader"
-                    android:text="@string/ma_pb"
+                    android:text="@string/so_phieu"
                     android:layout_width="80dp"
                     android:padding="0dp"/>
 
@@ -141,7 +141,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+            <!--   80 p0 / 120 / 85 p0 / <= 100 p0     -->
             <TableLayout
                 android:id="@+id/CC_table_list"
                 style="@style/tableLayoutStyle"
@@ -150,55 +150,11 @@
                 <!-- This Row called Example Row,
                         other Rows will follow this Row Format-->
                 <TableRow
-                    android:background="#F89393"
+                    android:background="@color/delivered_color"
+
                     >
                     <TextView
-                        style="@style/tableRow"
-                        android:text="P001"
-                        android:layout_width="80dp"
-                        android:padding="0dp"/>
-                    <TextView
-                        style="@style/tableRow"
-                        android:layout_width="120dp"
-                        android:text="02/06/2021" />
-                    <TextView
-                        style="@style/tableRow"
-                        android:text="Kim biên"
-                        android:padding="0dp"
-                        android:layout_width="85dp"/>
-                    <TextView
-                        style="@style/tableRow"
-                        android:maxWidth="100dp"
-                        android:padding="0dp"
-                        android:text="100.000đ" />
-                </TableRow>
-                <TableRow
-                    android:background="#FAC099"
-                    >
-                    <TextView
-                        style="@style/tableRow"
-                        android:text="P001"
-                        android:layout_width="80dp"
-                        android:padding="0dp"/>
-                    <TextView
-                        style="@style/tableRow"
-                        android:layout_width="120dp"
-                        android:text="02/06/2021" />
-                    <TextView
-                        style="@style/tableRow"
-                        android:text="Kim biên"
-                        android:padding="0dp"
-                        android:layout_width="85dp"/>
-                    <TextView
-                        style="@style/tableRow"
-                        android:maxWidth="100dp"
-                        android:padding="0dp"
-                        android:text="100.000đ" />
-                </TableRow>
-                <TableRow
-                    android:background="#9CFA98"
-                    >
-                    <TextView
+                        android:layout_height="0dp"
                         style="@style/tableRow"
                         android:text="P001"
                         android:layout_width="80dp"
@@ -290,7 +246,7 @@
         <Button
             style="@style/Btn"
             android:id="@+id/CC_navbar_phongban"
-            android:backgroundTint="@color/active_color"
+            android:backgroundTint="@color/disable_color"
             android:textColor="@color/black"
             android:text="@string/phong_ban"/>
 

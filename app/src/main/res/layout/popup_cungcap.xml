@@ -80,7 +80,7 @@
                     android:padding="10dp"
                     />
                 <Spinner
-                    android:id="@+id/CC_NCCSpinner"
+                    android:id="@+id/CC_NCCSpinner_mini"
                     android:layout_width="match_parent"
                     android:layout_marginHorizontal="10dp"
                     android:layout_height="wrap_content"
@@ -109,7 +109,15 @@
                     android:layout_marginTop="16dp"
                     android:calendarViewShown="false"
                     android:datePickerMode="spinner" />
-
+                <TextView
+                    android:id="@+id/CC_showNGError"
+                    style="@style/textRed"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:text="@string/error_of_this_line"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
@@ -123,7 +131,7 @@
                     android:padding="10dp"
                     />
                 <Spinner
-                    android:id="@+id/CC_inputTT"
+                    android:id="@+id/CC_TTSpinner_mini"
                     android:layout_width="match_parent"
                     android:layout_marginHorizontal="10dp"
                     android:layout_height="wrap_content"

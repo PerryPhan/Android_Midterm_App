@@ -71,6 +71,7 @@ public class VanphongphamLayout extends AppCompatActivity {
     Button navNV;
     Button navVPP;
     Button navCP;
+    Button navCC;
 
     EditText search;
 
@@ -148,6 +149,7 @@ public class VanphongphamLayout extends AppCompatActivity {
         navNV = findViewById(R.id.VPP_navbar_nhanvien);
         navVPP = findViewById(R.id.VPP_navbar_VPP);
         navCP = findViewById(R.id.VPP_navbar_capphat);
+        navCC = findViewById(R.id.VPP_navbar_cungcap);
 
         search = findViewById(R.id.VPP_searchEdit);
         NCCSpinner = findViewById(R.id.VPP_NCCSpinner);
@@ -251,6 +253,16 @@ public class VanphongphamLayout extends AppCompatActivity {
             }
 
         });
+        // navCC
+        navCC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VanphongphamLayout.this, CungcapLayout.class);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                startActivity( intent );
+            }
+        });
+
         exitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

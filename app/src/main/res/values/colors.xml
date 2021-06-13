@@ -18,5 +18,13 @@
     <color name="selectedColor">#AD8FBCEF</color>
     <color name="yes_color">#40870D</color>
     <color name="custom_dropdown_item_color">#6187E6</color>
+    <color name="openning_color">#F89393</color>
+    <color name="confirmed_color">#FAC099</color>
+    <color name="delivered_color">#9CFA98</color>
+    <color name="focus_delivered_color">#62D15E</color>
+    <color name="focus_confirmed_color">#E89C68</color>
+    <color name="focus_openning_color">#E47777</color>
+    <color name="cancel_color">#CACACA</color>
+    <color name="focus_cancel_color">#A3A3A3</color>
 
 </resources>

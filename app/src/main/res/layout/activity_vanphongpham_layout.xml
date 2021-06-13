@@ -75,20 +75,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_horizontal">
+            android:gravity="center|center">
             <Spinner
                 android:layout_gravity="center"
                 android:id="@+id/VPP_NCCSpinner"
                 android:layout_width="240dp"
-                android:layout_height="40dp"
+                android:layout_height="45dp"
                 android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown"
+                android:gravity="center_vertical"
+                />
             <Button
+                style="@style/Btn"
                 android:id="@+id/VPP_navbar_cungcap"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:backgroundTint="#F89E4E"
+                android:layout_width="70dp"
+                android:layout_height="45dp"
                 android:drawableLeft="@drawable/outline_local_shipping_black_36"
-                android:background="@color/transparent"
                 />
         </LinearLayout>
         <!--    Header of the table -->

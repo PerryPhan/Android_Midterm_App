@@ -5,15 +5,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
-        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Giuaki">
-        <activity android:name=".Statistics.CapphatVPPcrud"></activity>
+        <activity android:name=".Webform"></activity>
+        <activity android:name=".Statistics.CapphatVPPcrud" />
         <activity android:name=".Main.ThongbaoLayout" />
         <activity android:name=".XinchoLayout" />
         <activity android:name=".Tables.BaocaoTable02" />
@@ -22,14 +24,17 @@
         <activity android:name=".Tables.ThongkeTable03" />
         <activity android:name=".Tables.ThongkeTable02" />
         <activity android:name=".Tables.ThongkeTable01" />
-        <activity android:name=".MainActivity" />
+
+        <activity android:name=".Mainv2.CTCungcapLayout"/>
         <!-- Version cuoiki : Version 2 -->
+        <activity android:name=".MainActivity" />
         <activity android:name=".Chart.ThongkeChart" />
         <activity android:name=".Mainv2.ThongkeLayout" />
         <activity android:name=".Mainv2.VanphongphamLayout" />
         <activity android:name=".Mainv2.NhanvienLayout" />
         <activity android:name=".Mainv2.PhongbanLayout" />
-        <activity android:name=".Mainv2.CapphatVPPLayout" >
+        <activity android:name=".Mainv2.CapphatVPPLayout"/>
+        <activity android:name=".Mainv2.CungcapLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,9 +43,7 @@
         </activity>
         <activity android:name=".Mainv2.BaocaoVPPAllLayout" />
         <activity android:name=".Mainv2.BaocaoVPPLayout" />
-        <activity android:name=".Welcome">
-
-        </activity>
+        <activity android:name=".Welcome"></activity>
     </application>
 
 </manifest>
