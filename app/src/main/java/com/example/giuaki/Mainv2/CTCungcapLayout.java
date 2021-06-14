@@ -18,6 +18,10 @@ public class CTCungcapLayout extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         // Fetch data Số phiếu
         String sp = b.getString("sp");
+        String ng = b.getString("ng");
+        String ncc = b.getString("ncc");
+        String ttien = b.getString("ttien");
+        String tt  = b.getString("tt");
         Toast.makeText(this,sp+"",Toast.LENGTH_LONG).show();
     }
 }
