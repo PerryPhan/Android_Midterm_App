@@ -1,4 +1,4 @@
-package com.example.giuaki.Mainv2;
+    package com.example.giuaki.Mainv2;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -257,10 +257,12 @@ public class CungcapLayout extends AppCompatActivity {
 
         for( String tentt : tt){
             if( mode.equals("OPENNING")) {
-                if ( tentt.equals("OPENNING"))
+                if ( tentt.equals("OPENNING") || tentt.equals("CONFIRMED"))
                     TTList.add(tentt);
-            }else
-                TTList.add(tentt);
+            }else if( mode.equals("CONFIRMED")) {
+                if (tentt.equals("CANCELED") || tentt.equals("DELIVERED"))
+                    TTList.add(tentt);
+            }else TTList.add(tentt);
         }
 
         return TTList;
@@ -459,6 +461,7 @@ public class CungcapLayout extends AppCompatActivity {
             TableRow tr = (TableRow) cc_table_list.getChildAt(i);
             setEventTableRows( tr , cc_table_list );
         }
+        hideButton();
     }
 
     // ---------------------------- EVENT ON BUTTON -----------------------
@@ -485,6 +488,7 @@ public class CungcapLayout extends AppCompatActivity {
             default:
                 break;
         }
+        setEventButton();
     }
     public String getDate( String mode){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -508,7 +512,7 @@ public class CungcapLayout extends AppCompatActivity {
 
         });
     }
-    private void setEventButton() {
+    public void setEventButton() {
         detailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -532,7 +536,22 @@ public class CungcapLayout extends AppCompatActivity {
                 setControlDialog();
                 // Access Control
                 // none
-                setEventDialog();
+                // Chỉ trả trạng thái lúc mà nó đc focus
+                tenTTList_mini = TrangThaiList( trangthai, false, "");
+                tenNCCList_mini = NhaCungCapList( NCCList, false);
+                maNCCList_mini = maNhaCungCapList( NCCList, false);
+                // Load Database vào Spinner
+                NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
+                TTSpinner_mini.setAdapter(
+                        new TTAdapter(CungcapLayout.this, tenTTList_mini)
+                );
+                int index = -1;
+                for( int i = 0 ; i < tenTTList_mini.size() ; i++)
+                    if( tenTTList_mini.get(i).equals("OPENNING") )
+                    {index = i; break;}
+                TTSpinner_mini.setSelection(index);
+                TTSpinner_mini.setEnabled(false);
+                setEventDialog( v );
             }
         });
         editBtn.setOnClickListener(new View.OnClickListener() {
@@ -540,7 +559,8 @@ public class CungcapLayout extends AppCompatActivity {
             public void onClick(View v) {
                 createDialog(layout);
                 setControlDialog();
-                // Access Control
+//                // Access Control
+                inputSP.setText(focusSoPhieu.getText());
                 inputSP.setEnabled(false);
                 switch ( focusTT ){
                     case "OPENNING":
@@ -549,29 +569,41 @@ public class CungcapLayout extends AppCompatActivity {
                         int tongtien = Integer.parseInt(
                                 (String) temp.subSequence(0, temp.length()-1 )
                         );
-                        // Đã có detail
+                        // Đã có detail thì không được thay đổi nhà cung cấp
                         if ( tongtien != 0 ){
                             NCCSpinner_mini.setEnabled(false);
+                        }else{
+                            tenNCCList_mini = NhaCungCapList( NCCList, false);
+                            maNCCList_mini = maNhaCungCapList( NCCList, false);
+                            NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
                         }
+                        // Ngày giao mặc định là ngày mai
                         setEventDatePicker( getDate("tomorrow") );
+                        // Lấy tên TT là OPENNING và CONFIRMED
                         tenTTList_mini = TrangThaiList( trangthai, false, focusTT);
-                        tenNCCList_mini = NhaCungCapList( NCCList, false);
-                        maNCCList_mini = maNhaCungCapList( NCCList, false);
-                        NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenTTList_mini) );
                         TTSpinner_mini.setAdapter(
                                 new TTAdapter(CungcapLayout.this, tenTTList_mini)
                         );
                     }
                     break;
                     case "CONFIRMED":
+                        // Khi đã confirmed tức send mail rồi thì chỉ được sửa trạng thái thành CANCELED và DELIVERED
                         NCCSpinner_mini.setEnabled(false);
-                        setEventDatePicker( (String) focusNgaygiao.getText() );
+                        // Chỉ được phép thay đổi ngày giao nếu ngày giao là ngày hôm nay
+                        if( !focusNgaygiao.getText().toString().equalsIgnoreCase( getDate("now") )  )
+                            inputND.setEnabled(false);
+                        else
+                            setEventDatePicker( (String) focusNgaygiao.getText() );
+                        tenTTList_mini = TrangThaiList( trangthai, false, focusTT);
+                        TTSpinner_mini.setAdapter(
+                            new TTAdapter(CungcapLayout.this, tenTTList_mini)
+                        );
                         break;
                     default: break;
                 }
                 showLabel.setText("Sửa phiếu cung cấp");
                 showConfirm.setText("Bạn có muốn sửa hàng này không?");
-                setEventDialog();
+                setEventDialog( v );
             }
         });
         delBtn.setOnClickListener(new View.OnClickListener() {
@@ -580,9 +612,47 @@ public class CungcapLayout extends AppCompatActivity {
                 createDialog(layout);
                 setControlDialog();
                 // Access Control
+                // Chỉ xóa được khi trạng thái là OPENNING và tổng tiền = 0đ
+                inputSP.setText(focusSoPhieu.getText());
+                int[] date = StringtoIntDateReverse((String) focusNgaygiao.getText());
+                inputND.updateDate( date[0]+0,date[1]-1, date[2]+0);
+                // Chỉ trả trạng thái lúc mà nó đc focus
+                tenTTList_mini = TrangThaiList( trangthai, false, "");
+                tenNCCList_mini = NhaCungCapList( NCCList, false);
+                maNCCList_mini = maNhaCungCapList( NCCList, false);
+                // Load Database vào Spinner
+                NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
+                TTSpinner_mini.setAdapter(
+                        new TTAdapter(CungcapLayout.this, tenTTList_mini)
+                );
+                int index = -1;
+                // Đã có sẵn mã NCC rồi thì chỉ cần tìm vị trí và cho Selection của Spinner
+                for( int i = 0 ; i < maNCCList_mini.size() ; i++)
+                    if( maNCCList_mini.get(i).equals( focusNCC.getText()+"" ) )
+                    {index = i; break;}
+                NCCSpinner_mini.setSelection(index);
+                index = -1;
+                for( int i = 0 ; i < tenTTList_mini.size() ; i++)
+                    if( tenTTList_mini.get(i).equals( focusTT+"" ) )
+                    {index = i; break;}
+                NCCSpinner_mini.setSelection(index);
+                // Xóa thì tất cả field đều không được động
+                inputSP.setEnabled(false);
+                inputND.setEnabled(false);
+                NCCSpinner_mini.setEnabled(false);
+                TTSpinner_mini.setEnabled(false);
+                String temp = (String) focusTongtien.getText();
+                int tongtien = Integer.parseInt(
+                        (String) temp.subSequence(0, temp.length()-1 )
+                );
+                // Đã có detail thì không được xóa
+                if ( tongtien != 0 ){
+                    yesBtn.setVisibility(View.INVISIBLE);
+                }
+
                 showLabel.setText("Xóa phiếu cung cấp");
                 showConfirm.setText("Bạn có muốn sửa hàng này không?");
-                setEventDialog();
+                setEventDialog( v );
             }
         });
     }
@@ -612,12 +682,12 @@ public class CungcapLayout extends AppCompatActivity {
         showSPError = dialog.findViewById(R.id.CC_showSPError);
         showNGError = dialog.findViewById(R.id.CC_showNGError);
 
-        showResult = dialog.findViewById(R.id.VPP_showResult);
-        showConfirm = dialog.findViewById(R.id.VPP_showConfirm);
-        showLabel = dialog.findViewById(R.id.VPP_showLabel);
+        showResult = dialog.findViewById(R.id.CC_showResult);
+        showConfirm = dialog.findViewById(R.id.CC_showConfirm);
+        showLabel = dialog.findViewById(R.id.CC_showLabel);
     }
 
-    public void setEventDialog(){
+    public void setEventDialog(View view){
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -634,7 +704,7 @@ public class CungcapLayout extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean success = false;
-                switch (v.getId()) {
+                switch (view.getId()) {
                     case R.id.CC_insertBtn:
 
                         break;
@@ -774,6 +844,15 @@ public class CungcapLayout extends AppCompatActivity {
         return date; // 30/08/1999 -> [30,08,1999]
     }
 
+    public int[] StringtoIntDateReverse(String str) {
+        int[] date = new int[3];
+        String[] arr = str.split("-");
+        date[0] = Integer.parseInt(arr[0]);
+        date[1] = Integer.parseInt(arr[1]);
+        date[2] = Integer.parseInt(arr[2]);
+        return date; // 30/08/1999 -> [30,08,1999]
+    }
+
     public String InttoStringDate(int[] date) {
         String day = (date[0] < 10) ? '0' + date[0] + "" : date[0] + "";
         String month = (date[1] < 10) ? '0' + date[1] + "" : date[1] + "";
@@ -782,7 +861,7 @@ public class CungcapLayout extends AppCompatActivity {
     }
 
     public String InttoStringDate(int date_day, int date_month, int date_year) {
-        Log.d("day",date_day+"");
+//        Log.d("day",date_day+"");
         String day = (date_day < 10) ? "0" + date_day + "" : date_day + "";
         String month = (date_month < 10) ? "0" + date_month + "" : date_month + "";
         String year = date_year + "";
@@ -819,5 +898,43 @@ public class CungcapLayout extends AppCompatActivity {
         }
         return new StringBuilder(moneyFormat).reverse().toString() +" đ";
     }
+    public boolean isSafeDialog( boolean allowSameID ) {
+        String  sophieu, ngaygiao ;
+        sophieu = inputSP.getText().toString().trim();
+        boolean noError = true;
+        if ( sophieu.equals("")) {
+            showSPError.setText("Số phiếu không được trống ");
+            showSPError.setVisibility(View.VISIBLE);
+            noError = false;
+        }else{
+            showSPError.setVisibility(View.INVISIBLE);
+            noError = true;
+        }
 
+        ngaygiao = inputND_data;
+        if (  ngaygiao.compareTo( getDate("now") ) < 0 ) {
+            showNGError.setText("Ngày giao không hợp lệ ");
+            showNGError.setVisibility(View.VISIBLE);
+            noError = false;
+        }else{
+            showNGError.setVisibility(View.VISIBLE);
+            noError = true;
+        }
+
+        if( noError ) {
+            for (int i = 1; i < cc_table_list.getChildCount(); i++) {
+                TableRow tr = (TableRow) cc_table_list.getChildAt(i);
+                TextView sophieuview = (TextView) tr.getChildAt(0);
+                if (!allowSameID)
+                    if (sophieu.equalsIgnoreCase(sophieuview.getText().toString())) {
+                        showSPError.setText("Mã NV không được trùng ");
+                        showSPError.setVisibility(View.VISIBLE);
+                        return noError = false;
+                    }
+            }
+            showSPError.setVisibility(View.INVISIBLE);
+            showNGError.setVisibility(View.INVISIBLE);
+        }
+        return noError;
+    }
 }
