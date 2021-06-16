@@ -35,7 +35,7 @@ import com.example.giuaki.Api.VanPhongPham;
 import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.VanPhongPhamRequest;
-import com.example.giuaki.Statistics.CapphatVPPLayout;
+import com.example.giuaki.Mainv2.*;
 import com.example.giuaki.WebService;
 import com.squareup.picasso.Picasso;
 
@@ -359,6 +359,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                 VPP_IP_DVT.setText(focusDVT.getText().toString().trim());
                 VPP_IP_Gia.setText(focusGia.getText().toString().trim());
                 VPP_IP_Soluong.setText(focusSL.getText().toString().trim());
+                VPP_IP_nhaCC.setText((String) focusRow.getTag());
             }
         });
 
@@ -810,7 +811,7 @@ public class VanphongphamLayout extends AppCompatActivity {
         }
         // Số lượng không được để trống và không chữ cái
         sl = inputSL.getText().toString().trim();
-            if (sl.length()!= 0 && sl.charAt(0) == '0') if (sl.length() > 1) sl = sl.substring(1, gia.length() - 1);
+            if (sl.length()!= 0 && sl.charAt(0) == '0') if (sl.length() > 1) sl = sl.substring(1, sl.length() - 1);
             if (sl.equals("")) {
                 showSLError.setText("Số lượng không được trống ");
                 showSLError.setVisibility(View.VISIBLE);
@@ -905,6 +906,7 @@ public class VanphongphamLayout extends AppCompatActivity {
 
         image_list.add(vpp.getHinh());
 
+        tr.setTag( vpp.getMaNcc() );
         tr.setBackgroundColor(getResources().getColor(R.color.white));
         tr.addView(maVPP);
         tr.addView(tenVPP);

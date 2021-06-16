@@ -154,6 +154,10 @@ public class BaocaoVPPLayout extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BaocaoVPPLayout.this, XinchoLayout.class);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                Bundle b = new Bundle();
+                b.putString("loai","Phongban");
+                b.putString("ma",pb.getMapb()+"");
+                intent.putExtras(b);
                 startActivityForResult( intent, 1 );
             }
         });
@@ -235,7 +239,7 @@ public class BaocaoVPPLayout extends AppCompatActivity {
             int count = 0;
             while (temp_money != 0) {
                 moneyFormat += (temp_money % 10) + "";
-                if ((count + 1) % 3 == 0 && temp_money > 10) moneyFormat += ".";
+                if ((count + 1) % 3 == 0 && temp_money >= 10) moneyFormat += ".";
                 count++;
                 temp_money /= 10;
             }

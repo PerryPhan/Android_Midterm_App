@@ -433,7 +433,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
             int count = 0;
             while (temp_money != 0) {
                 moneyFormat += (temp_money % 10) + "";
-                if ((count + 1) % 3 == 0 && temp_money > 10) moneyFormat += ".";
+                if ((count + 1) % 3 == 0 && temp_money >= 10) moneyFormat += ".";
                 count++;
                 temp_money /= 10;
             }

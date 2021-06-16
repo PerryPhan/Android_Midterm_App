@@ -33,7 +33,7 @@
             android:layout_weight="1"
             />
         <Button
-            android:id="@+id/VPP_insertBtn"
+            android:id="@+id/CT_insertBtn"
             style="@style/Btn"
             android:layout_width="50dp"
             app:icon="@drawable/outline_add_black_24"
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
             android:paddingHorizontal="30dp">
             <TextView
                 style="@style/textBlack"
@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
             android:paddingHorizontal="30dp">
             <TextView
                 style="@style/textBlack"
@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
             android:paddingHorizontal="30dp">
             <TextView
                 style="@style/textBlack"
@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
             android:paddingHorizontal="30dp">
             <TextView
                 style="@style/textBlack"
@@ -113,7 +113,6 @@
                 android:id="@+id/CT_TTview"
                 android:layout_marginLeft="20dp"
                 style="@style/textBlack"
-                android:textSize="22dp"
                 android:textStyle="bold"
                 android:text="OPENING"
                 android:textColor="@color/thoatbtn_bgcolor"
@@ -169,7 +168,7 @@
             </TableRow>
             <!--    Content of the table -->
         </TableLayout>
-        <!--    70 p0 / 140 / 55 p0 / 85 p0 / <= 55 p0-->
+        <!--    70 / 70 p0 / 85 p0 / 55 p0 / <= 110 p0  -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -184,6 +183,7 @@
                         style="@style/tableRow"
                         android:text="1"
                         android:layout_width="70dp"
+                        android:layout_height="0dp"
                         />
                     <TextView
                         style="@style/tableRow"
@@ -212,6 +212,25 @@
     </LinearLayout>
     <!--///////////////////////////////////////////////////////-->
     <!-- + @+id/subToolbar + -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="5dp">
+        <TextView
+            style="@style/textBlack"
+            android:text="@string/tong_tien"
+            android:textColor="@color/yes_color"
+            />
+        <TextView
+            android:id="@+id/CT_totalMoney"
+            android:layout_marginLeft="110dp"
+            style="@style/textBlack"
+            android:textSize="22dp"
+            android:text="100.000.000đ"
+            />
+    </LinearLayout>
     <LinearLayout
         android:layout_marginHorizontal="10dp"
         android:layout_below="@+id/table_container"
@@ -249,7 +268,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:gravity="right">
+            android:gravity="right"
+            android:layout_marginBottom="30dp">
             <Button
                 android:id="@+id/CT_previewBtn"
                 android:drawableLeft="@drawable/baseline_visibility_black_24"
@@ -259,46 +279,9 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#50E363"
                 android:layout_marginRight="5dp"/>
-            <Button
-                style="@style/Btn"
-                android:id="@+id/CT_navbar_capphat"
-                android:text="@string/cap_phat_VPP"
-                android:backgroundTint="@color/disable_color"
-                android:textColor="@color/black"
-                />
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-
-        android:id="@+id/navbar"
-        android:layout_below="@+id/subtoolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <Button
-            style="@style/Btn"
-            android:id="@+id/CT_navbar_phongban"
-            android:backgroundTint="@color/disable_color"
-            android:textColor="@color/black"
-            android:text="@string/phong_ban"/>
-
-        <Button
-            style="@style/Btn"
-            android:id="@+id/CT_navbar_nhanvien"
-            android:backgroundTint="@color/disable_color"
-            android:textColor="@color/black"
-            android:text="@string/nhan_vien"/>
-
-        <Button
-            style="@style/Btn"
-            android:id="@+id/CT_navbar_VPP"
-            android:backgroundTint="@color/active_color"
-            android:textColor="@color/black"
-            android:text="@string/vpp"/>
-
-    </LinearLayout>
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

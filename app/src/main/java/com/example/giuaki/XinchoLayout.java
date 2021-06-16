@@ -37,9 +37,18 @@ public class XinchoLayout extends AppCompatActivity {
 //                    setResult(Activity.RESULT_OK, resultIntent);
 //                    finish();
                     // WebView
+                    Bundle b = getIntent().getExtras();
                     Intent intent = new Intent(XinchoLayout.this, Webform.class);
+//                    Bundle c = new Bundle();
+//                    c.putString("loai",b.getString("loai"));
+//                    c.putString("loai",b.getString("loai"));
+                    intent.putExtras(b);
                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    startActivity( intent );
+                    startActivityForResult( intent ,1);
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("result", 1);
+                    setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 }
             }, 2000);

@@ -1,5 +1,7 @@
 package com.example.giuaki.Helper;
 
+import android.util.Log;
+
 import com.example.giuaki.Api.*;
 
 import org.json.*;
@@ -103,19 +105,17 @@ public class JSONHelper {
             }
         }
 
-        if (objectName.trim().equals("NhaCungCap")) {
-
-        }
-
         if (objectName.trim().equals("PhieuCungCap")) {
             for(int i = 0; i < viewData.length(); i++) {
                 PhieuCungCap phieuCungCap = new PhieuCungCap(
                         viewData.getJSONObject(i).get("SOPHIEU").toString(),
                         viewData.getJSONObject(i).get("TRANGTHAI").toString(),
-                        viewData.getJSONObject(i).get("MANCC").toString()
+                        viewData.getJSONObject(i).get("MANCC").toString(),
+                        viewData.getJSONObject(i).get("NGAYGIAO").toString()
                 );
                 entitiesList.add(phieuCungCap);
             }
+            Log.d("data",viewData.length()+"");
         }
 
         return entitiesList;

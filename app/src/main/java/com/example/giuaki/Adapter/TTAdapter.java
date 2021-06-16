@@ -20,7 +20,6 @@ public class TTAdapter extends BaseAdapter {
     private List<String> list;
     LayoutInflater inflater;
 
-
     public TTAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
@@ -54,9 +53,9 @@ public class TTAdapter extends BaseAdapter {
 
         // setDecorate
         switch (trangthai){
-            case "OPENNING":
+            case "OPENING":
                 ttview.setBackgroundColor(
-                        context.getResources().getColor(R.color.openning_color)
+                        context.getResources().getColor(R.color.opening_color)
                 );
                 break;
             case "CONFIRMED":
@@ -64,7 +63,7 @@ public class TTAdapter extends BaseAdapter {
                         context.getResources().getColor(R.color.confirmed_color)
                 );
                 break;
-            case "DELIVERED":
+            case "DELIVERIED":
                 ttview.setBackgroundColor(
                         context.getResources().getColor(R.color.delivered_color)
                 );

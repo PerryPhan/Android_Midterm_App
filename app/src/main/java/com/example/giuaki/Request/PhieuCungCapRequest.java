@@ -1,5 +1,7 @@
 package com.example.giuaki.Request;
 
+import android.util.Log;
+
 import com.example.giuaki.WebService;
 import com.example.giuaki.Api.ChiTietCungCap;
 import com.example.giuaki.Api.PhieuCungCap;
@@ -37,8 +39,10 @@ public class PhieuCungCapRequest {
             hashMap.put("sophieu", phieuCungCap.getSoPhieu());
             hashMap.put("trangthai", phieuCungCap.getTrangThai());
             hashMap.put("mancc", phieuCungCap.getMaNcc());
+            hashMap.put("ngaydat", phieuCungCap.getMaNcc());
+            hashMap.put("ngaygiao", phieuCungCap.getNgaygiao());
         }
-        else if (chiTietCungCap != null) {
+        if (chiTietCungCap != null) {
             hashMap.put("sophieu", chiTietCungCap.getSoPhieu());
             hashMap.put("mavpp", chiTietCungCap.getMaVpp());
             hashMap.put("soluong", chiTietCungCap.getSoLuong());
@@ -52,6 +56,7 @@ public class PhieuCungCapRequest {
         String response = "";
         try {
             response = requestHelper.execute(request).get();
+            Log.d("data",response+"");
         }
         catch(ExecutionException e){
             response = e.getMessage();

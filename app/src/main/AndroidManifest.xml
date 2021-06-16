@@ -25,7 +25,6 @@
         <activity android:name=".Tables.ThongkeTable02" />
         <activity android:name=".Tables.ThongkeTable01" />
 
-        <activity android:name=".Mainv2.CTCungcapLayout"/>
         <!-- Version cuoiki : Version 2 -->
         <activity android:name=".MainActivity" />
         <activity android:name=".Chart.ThongkeChart" />
@@ -36,12 +35,16 @@
         </activity>
         <activity android:name=".Mainv2.PhongbanLayout" />
         <activity android:name=".Mainv2.CapphatVPPLayout"/>
-        <activity android:name=".Mainv2.CungcapLayout">
+        <activity android:name=".Mainv2.CungcapLayout"/>
+        <activity android:name=".Mainv2.CapPhatCRUDLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".Mainv2.CTCungcapLayout">
+
         </activity>
         <activity android:name=".Mainv2.BaocaoVPPAllLayout" >
 

@@ -14,6 +14,16 @@ public class ChiTietCungCap {
         this.thanhTien = thanhTien;
     }
 
+    @Override
+    public String toString() {
+        return "ChiTietCungCap{" +
+                "soPhieu='" + soPhieu + '\'' +
+                ", maVpp='" + maVpp + '\'' +
+                ", soLuong='" + soLuong + '\'' +
+                ", thanhTien='" + thanhTien + '\'' +
+                '}';
+    }
+
     public String getSoPhieu() {
         return soPhieu;
     }

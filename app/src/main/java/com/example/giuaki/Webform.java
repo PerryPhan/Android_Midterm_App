@@ -18,11 +18,15 @@ public class Webform extends AppCompatActivity {
         // SetControl
         html = findViewById(R.id.HTMLView);
         //
-        displayHtml();
+        Bundle b = getIntent().getExtras();
+        String loai = b.getString("loai");
+        String ma = b.getString("ma");
+        displayHtml(loai, ma);
     }
-    public void displayHtml() {
+    public void displayHtml( String loai, String ma) {
         RequestHelper requestHelper = new RequestHelper();
-        String[] request = {"get", String.format("http://%s/PrinterController-printDocs", WebService.host())};
+        if( loai.trim().equals("PhongBan") ) return;
+        String[] request = {"get", String.format("http://%s/PrinterController-printDocs?manv=%s", WebService.host(), ma)};
         String response = "";
         try {
             response = requestHelper.execute(request).get();

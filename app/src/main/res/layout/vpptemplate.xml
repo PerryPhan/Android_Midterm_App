@@ -2,13 +2,15 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="60dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    >
 
     <ImageView
-        android:id="@+id/VPP_inputHinh"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:id="@+id/hinhVPP"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:src="@drawable/_xdlogo"
@@ -26,19 +28,35 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/idVPP"
                 style="@style/textBlack"
-                android:textSize="14dp"
-                android:text="VPP1 : "/>
+                android:textSize="12dp"
+                android:text="VPP1"/>
             <TextView
                 android:layout_marginLeft="5dp"
                 style="@style/textBlack"
-                android:textSize="14dp"
+                android:textSize="12dp"
+                android:text=":"/>
+            <TextView
+                android:id="@+id/tenVPP"
+                android:layout_marginLeft="5dp"
+                style="@style/textBlack"
+                android:textSize="12dp"
                 android:text="Giấy A4"/>
             <TextView
                 android:layout_marginLeft="5dp"
                 style="@style/textBlack"
-                android:textSize="14dp"
-                android:text="(Gram)"/>
+                android:textSize="12dp"
+                android:text="("/>
+            <TextView
+                android:id="@+id/dvtVPP"
+                style="@style/textBlack"
+                android:textSize="12dp"
+                android:text="Gram"/>
+            <TextView
+                style="@style/textBlack"
+                android:textSize="12dp"
+                android:text=")"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -46,12 +64,13 @@
             android:orientation="horizontal">
             <TextView
                 style="@style/textBlack"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 android:text="Giá:"/>
             <TextView
+                android:id="@+id/giaVPP"
                 android:layout_marginLeft="5dp"
                 style="@style/textBlack"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 android:text="200.000đ"/>
         </LinearLayout>
         <LinearLayout
@@ -60,12 +79,13 @@
             android:orientation="horizontal">
             <TextView
                 style="@style/textBlack"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 android:text="Còn lại:"/>
             <TextView
+                android:id="@+id/slVPP"
                 android:layout_marginLeft="5dp"
                 style="@style/textBlack"
-                android:textSize="14dp"
+                android:textSize="12dp"
                 android:text="100"/>
         </LinearLayout>
 

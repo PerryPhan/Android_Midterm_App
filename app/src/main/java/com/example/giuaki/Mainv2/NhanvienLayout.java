@@ -24,13 +24,11 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.giuaki.Api.*;
-import com.example.giuaki.Mainv2.PhongbanLayout;
-import com.example.giuaki.Mainv2.VanphongphamLayout;
+import com.example.giuaki.Mainv2.*;
 import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.NhanVienRequest;
 import com.example.giuaki.Request.PhongBanRequest;
-import com.example.giuaki.Statistics.CapphatVPPLayout;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

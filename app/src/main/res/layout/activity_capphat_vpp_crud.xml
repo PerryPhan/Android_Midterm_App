@@ -53,25 +53,26 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="5dp"
-            android:paddingHorizontal="30dp">
+            android:paddingHorizontal="5dp">
             <TextView
                 style="@style/textBlack"
                 android:text="@string/ten_pb"
                 android:layout_marginRight="21dp"/>
+
             <Spinner
-                android:layout_gravity="center"
                 android:id="@+id/CPcrud_PBSpinner"
-                android:layout_width="240dp"
+                android:layout_width="280dp"
                 android:layout_height="40dp"
+                android:layout_gravity="center"
                 android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="5dp"
-            android:paddingHorizontal="30dp">
+            android:paddingHorizontal="5dp">
             <TextView
                 style="@style/textBlack"
                 android:text="@string/chon_nv"
@@ -79,7 +80,7 @@
             <Spinner
                 android:layout_gravity="center"
                 android:id="@+id/CPcrud_NVSpinner"
-                android:layout_width="240dp"
+                android:layout_width="280dp"
                 android:layout_height="40dp"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"/>
@@ -89,17 +90,18 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_margin="5dp"
-            android:paddingHorizontal="30dp">
+            android:paddingHorizontal="5dp">
             <TextView
                 style="@style/textBlack"
                 android:text="@string/chon_vpp" />
+
             <Spinner
-                android:layout_gravity="center"
                 android:id="@+id/CPcrud_VPPSpinner"
-                android:layout_width="240dp"
-                android:layout_height="40dp"
+                android:layout_width="280dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
                 android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"/>
+                android:spinnerMode="dropdown" />
         </LinearLayout>
 
     </LinearLayout>
@@ -167,6 +169,7 @@
                         style="@style/tableRow"
                         android:text="P001"
                         android:layout_width="70dp"
+                        android:layout_height="0dp"
                         />
                     <TextView
                         style="@style/tableRow"
@@ -280,6 +283,16 @@
             android:backgroundTint="@color/active_color"
             android:textColor="@color/black"
             android:text="@string/vpp"/>
+
+        <ImageView
+            android:id="@+id/VPP_inputHinh"
+            android:layout_marginLeft="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/notiicon"
+            />
 
     </LinearLayout>
     <include

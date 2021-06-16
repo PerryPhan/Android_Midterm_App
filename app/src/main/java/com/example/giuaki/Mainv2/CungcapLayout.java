@@ -1,4 +1,4 @@
-    package com.example.giuaki.Mainv2;
+package com.example.giuaki.Mainv2;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -22,18 +22,20 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.giuaki.Adapter.TTAdapter;
 import com.example.giuaki.Api.NhaCungCap;
+import com.example.giuaki.Api.NhanVien;
 import com.example.giuaki.Api.PhieuCungCap;
 import com.example.giuaki.Api.VanPhongPham;
 import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.PhieuCungCapRequest;
 import com.example.giuaki.Request.VanPhongPhamRequest;
-import com.example.giuaki.Statistics.CapphatVPPLayout;
+import com.example.giuaki.Mainv2.*;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -61,7 +63,7 @@ public class CungcapLayout extends AppCompatActivity {
     VanPhongPhamRequest vanphongphamDB;
 
     // List
-    String[] trangthai = {"OPENNING","CONFIRMED","DELIVERED","CANCELED"};
+    String[] trangthai = {"OPENING","CONFIRMED","DELIVERIED","CANCELED"};
     List<NhaCungCap> NCCList = null;
     List<PhieuCungCap> PCCList = null;
     List<PhieuCungCap> sortPCCList = null;
@@ -156,13 +158,16 @@ public class CungcapLayout extends AppCompatActivity {
                         , "NhaCungCap"
                 )
         );
-//        sortPCCList = PCCList = convertToPhieuCungCapList( // Tạo 1 bản copy của PCCList để dễ sort
-//                returnListfromJSON(
-//                        phieucungcapDB.doGet("show")
-//                        , "PhieuCungCap"
-//                )
-//        );
-        sortPCCList = PCCList = exampleList();
+        Log.d("NCCList",NCCList+"");
+         PCCList = convertToPhieuCungCapList( // Tạo 1 bản copy của PCCList để dễ sort
+                returnListfromJSON(
+                        phieucungcapDB.doGet("show")
+                        , "PhieuCungCap"
+                )
+        );
+        sortPCCList = PCCList;
+
+//        sortPCCList = PCCList = exampleList();
         tenTTList = TrangThaiList( trangthai, true, "");
         tenNCCList = NhaCungCapList( NCCList, true);
         maNCCList = maNhaCungCapList( NCCList, true);
@@ -175,25 +180,27 @@ public class CungcapLayout extends AppCompatActivity {
         if( PCCList == null ) {
             Log.d("data",
                 "CuncapLayout/PCCList in LoadDatabase() is null");
-            return;
+            sortPCCList = PCCList = new ArrayList<>();
+            // return;
         }
         renderTablefromList(sortPCCList);
-
     }
+
+
     public List<PhieuCungCap> exampleList(){
         List<PhieuCungCap> list = new ArrayList<>();
-        // OPENNING
-        list.add( new PhieuCungCap("SP01","OPENNING","VPPKBTC"));
-        list.add( new PhieuCungCap("SP02","OPENNING","VPPSH"));
+        // OPENING
+        list.add( new PhieuCungCap("SP01","OPENING","VPPKBTC","2021-06-15"));
+        list.add( new PhieuCungCap("SP02","OPENING","VPPSH","2021-06-15"));
         // CONFIRMED
-        list.add( new PhieuCungCap("SP03","CONFIRMED","VPPVNC"));
-        list.add( new PhieuCungCap("SP04","CONFIRMED","VPPVNC"));
-        // DELIVERED
-        list.add( new PhieuCungCap("SP05","DELIVERED","VPPSH"));
-        list.add( new PhieuCungCap("SP06","DELIVERED","VPPSH"));
+        list.add( new PhieuCungCap("SP03","CONFIRMED","VPPVNC","2021-06-15"));
+        list.add( new PhieuCungCap("SP04","CONFIRMED","VPPVNC","2021-06-15"));
+        // DELIVERIED
+        list.add( new PhieuCungCap("SP05","DELIVERIED","VPPSH","2021-06-15"));
+        list.add( new PhieuCungCap("SP06","DELIVERIED","VPPSH","2021-06-15"));
         // CANCELED
-        list.add( new PhieuCungCap("SP07","CANCELED","VPPKBTC"));
-        list.add( new PhieuCungCap("SP08","CANCELED","VPPKBTC"));
+        list.add( new PhieuCungCap("SP07","CANCELED","VPPKBTC","2021-06-15"));
+        list.add( new PhieuCungCap("SP08","CANCELED","VPPKBTC","2021-06-15"));
 
         return list;
     }
@@ -215,6 +222,7 @@ public class CungcapLayout extends AppCompatActivity {
     }
     public List<Object> returnListfromJSON( String resultfromQuery , String objectClass){
         List<Object> list = null ;
+//        Log.d("data",resultfromQuery);
         String response = resultfromQuery;
         if( !JSONHelper.verifyJSON(response).equalsIgnoreCase("pass") ) return null;
         try{
@@ -256,11 +264,11 @@ public class CungcapLayout extends AppCompatActivity {
         if( isAll ) TTList.add("Tất cả trạng thái");
 
         for( String tentt : tt){
-            if( mode.equals("OPENNING")) {
-                if ( tentt.equals("OPENNING") || tentt.equals("CONFIRMED"))
+            if( mode.equals("OPENING")) {
+                if ( tentt.equals("OPENING") || tentt.equals("CONFIRMED"))
                     TTList.add(tentt);
             }else if( mode.equals("CONFIRMED")) {
-                if (tentt.equals("CANCELED") || tentt.equals("DELIVERED"))
+                if (tentt.equals("CANCELED") || tentt.equals("DELIVERIED"))
                     TTList.add(tentt);
             }else TTList.add(tentt);
         }
@@ -286,6 +294,7 @@ public class CungcapLayout extends AppCompatActivity {
     // ---------------------------- EVENT ON SPINNER -----------------------
     public void renderTablefromList( List<PhieuCungCap> list ){
 //        Clear from 1 to n-1
+//        Log.d("data",list.size()+"");
         if( list == null || list.size() == 0 ) {
             cc_table_list.removeViews(1, cc_table_list.getChildCount()-1 );
             return;
@@ -414,11 +423,11 @@ public class CungcapLayout extends AppCompatActivity {
     }
     public int chooseColorFocus( String tag ){
         switch (tag){
-            case "OPENNING": // Cho phép tất cả
-                return R.color.focus_openning_color;
+            case "OPENING": // Cho phép tất cả
+                return R.color.focus_opening_color;
             case "CONFIRMED":
                 return R.color.focus_confirmed_color;
-            case "DELIVERED":
+            case "DELIVERIED":
                 return R.color.focus_delivered_color;
             case "CANCELED":
                 return R.color.focus_cancel_color;
@@ -428,11 +437,11 @@ public class CungcapLayout extends AppCompatActivity {
     }
     public int chooseColor( String tag ){
         switch (tag){
-            case "OPENNING": // Cho phép tất cả
-                return R.color.openning_color;
+            case "OPENING": // Cho phép tất cả
+                return R.color.opening_color;
             case "CONFIRMED":
                 return R.color.confirmed_color;
-            case "DELIVERED":
+            case "DELIVERIED":
                 return R.color.delivered_color;
             case "CANCELED":
                 return R.color.cancel_color;
@@ -477,14 +486,14 @@ public class CungcapLayout extends AppCompatActivity {
         hideButton();
         detailBtn.setVisibility(View.VISIBLE);
         switch (mode){
-            case "OPENNING": // Cho phép tất cả
+            case "OPENING": // Cho phép tất cả
                 delBtn.setVisibility(View.VISIBLE);
                 editBtn.setVisibility(View.VISIBLE);
                 break;
             case "CONFIRMED":
                 editBtn.setVisibility(View.VISIBLE);
                 break;
-            case "DELIVERED":
+            case "DELIVERIED":
                 break;
             case "CANCELED":
                 break;
@@ -505,9 +514,9 @@ public class CungcapLayout extends AppCompatActivity {
     }
     public void setEventDatePicker( String init ){
         inputND_data = init;
-                Log.d("date",init);
+//                Log.d("date",init);
         int[] date = StringtoIntDate( formatDate( init, false));
-            Log.d("date",date[2]+date[1]-1+date[0]+"");
+//            Log.d("date",date[2]+date[1]-1+date[0]+"");
         inputND.init(date[2],date[1]-1,date[0],new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -544,7 +553,34 @@ public class CungcapLayout extends AppCompatActivity {
             }
         });
     }
+    public NhaCungCap findNCCinList( String maNCC){
+        if( maNCC == null || maNCC.trim().equalsIgnoreCase("") ) return null;
+        for(NhaCungCap ncc : NCCList){
+            if(ncc.getMaNCC().equals(maNCC) ){
+                return ncc;
+            }
+        }
+        return null;
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == 1){
+            if( resultCode == RESULT_OK ) {
+                String tongtien = data.getStringExtra("tongtien");
+                Toast.makeText(CungcapLayout.this, "Có thay đổi "+tongtien, Toast.LENGTH_LONG).show();
+//                edit( pcc.set );
+            }
+        }
+    }
+    public boolean isOpeningExsited( ){
+        for( PhieuCungCap pcc : PCCList ){
+            if( pcc.getTrangThai().equals("OPENING") )
+                return true;
+        }
+        return false;
+    }
     public void setEventButton() {
         detailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -554,17 +590,27 @@ public class CungcapLayout extends AppCompatActivity {
                     b.putString("sp",focusSoPhieu.getText().toString().trim()+"");
                     b.putString("ng",focusNgaygiao.getText().toString().trim()+"");
                     b.putString("ncc",focusNCC.getText().toString().trim()+"");
+                    b.putString("tenNCC",
+                            findNCCinList(
+                                    focusNCC.getText().toString().trim()+""
+                            ).getTenNCC()
+                    );
                     b.putString("ttien",focusTongtien.getText().toString().trim()+"");
                     b.putString("tt",focusTT);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
                 intent.putExtras(b);
-                startActivity( intent );
+                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                startActivityForResult( intent, 1 );
+//                finish();
             }
         });
         int layout = R.layout.popup_cungcap ;
         insertBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if( isOpeningExsited() ) {
+                    Toast.makeText(CungcapLayout.this,"Đang có 1 Phiếu cung cấp OPENNING!! Hãy sử dụng nó ",Toast.LENGTH_LONG).show();
+                    return;
+                }
                 createDialog(layout);
                 setControlDialog();
                 // Access Control
@@ -580,7 +626,7 @@ public class CungcapLayout extends AppCompatActivity {
                 );
                 int index = -1;
                 for( int i = 0 ; i < tenTTList_mini.size() ; i++)
-                    if( tenTTList_mini.get(i).equals("OPENNING") )
+                    if( tenTTList_mini.get(i).equals("OPENING") )
                     {index = i; break;}
                 TTSpinner_mini.setSelection(index);
                 TTSpinner_mini.setEnabled(false);
@@ -597,12 +643,13 @@ public class CungcapLayout extends AppCompatActivity {
                 inputSP.setText(focusSoPhieu.getText());
                 inputSP.setEnabled(false);
                 switch ( focusTT ){
-                    case "OPENNING":
+                    case "OPENING":
                     {
                         String temp = (String) focusTongtien.getText();
                         int tongtien = Integer.parseInt(
                                 (String) temp.subSequence(0, temp.length()-1 )
                         );
+                        String ngaygiao = formatDate(focusNgaygiao.getText().toString(),true);
                         // Đã có detail thì không được thay đổi nhà cung cấp
                         tenNCCList_mini = NhaCungCapList( NCCList, false);
                         maNCCList_mini = maNhaCungCapList( NCCList, false);
@@ -614,20 +661,22 @@ public class CungcapLayout extends AppCompatActivity {
                             if( maNCCList_mini.get(i).equals( focusNCC.getText()+"" ) )
                             {index = i; break;}
                         NCCSpinner_mini.setSelection(index);
-                        if ( tongtien != 0 ){
-                            NCCSpinner_mini.setEnabled(false);
-                        }
                         // Ngày giao mặc định là ngày mai
-                        setEventDatePicker( getDate("tomorrow") );
-                        // Lấy tên TT là OPENNING và CONFIRMED
+                        setEventDatePicker( ngaygiao );
+                        // Lấy tên TT là OPENING và CONFIRMED
                         tenTTList_mini = TrangThaiList( trangthai, false, focusTT);
                         TTSpinner_mini.setAdapter(
                                 new TTAdapter(CungcapLayout.this, tenTTList_mini)
                         );
+
+                        if ( tongtien != 0 ){
+                            NCCSpinner_mini.setEnabled(false);
+                        }
+                        else TTSpinner_mini.setEnabled(false);
                     }
                     break;
                     case "CONFIRMED":
-                        // Khi đã confirmed tức send mail rồi thì chỉ được sửa trạng thái thành CANCELED và DELIVERED
+                        // Khi đã confirmed tức send mail rồi thì chỉ được sửa trạng thái thành CANCELED và DELIVERIED
                         NCCSpinner_mini.setEnabled(false);
                         // Chỉ được phép thay đổi ngày giao nếu ngày giao là ngày hôm nay
                         String ngaygiao = formatDate(focusNgaygiao.getText().toString(),true);
@@ -636,7 +685,7 @@ public class CungcapLayout extends AppCompatActivity {
                             inputND.setEnabled(false);
                         else {
                             inputND.setEnabled(true);
-                            setEventDatePicker((String) focusNgaygiao.getText());
+                            setEventDatePicker(ngaygiao);
                         }
                         tenNCCList_mini = NhaCungCapList( NCCList, false);
                         maNCCList_mini = maNhaCungCapList( NCCList, false);
@@ -666,7 +715,7 @@ public class CungcapLayout extends AppCompatActivity {
                 createDialog(layout);
                 setControlDialog();
                 // Access Control
-                // Chỉ xóa được khi trạng thái là OPENNING và tổng tiền = 0đ
+                // Chỉ xóa được khi trạng thái là OPENING và tổng tiền = 0đ
                 inputSP.setText(focusSoPhieu.getText());
                 int[] date = StringtoIntDate((String) focusNgaygiao.getText());
                 inputND.updateDate( date[2]+0,date[1]-1, date[0]+0);
@@ -743,6 +792,8 @@ public class CungcapLayout extends AppCompatActivity {
 
     public void insert(PhieuCungCap pcc){
         //    API
+        phieucungcapDB.doPost(pcc,null,"insert");
+        //
         int n =  cc_table_list.getChildCount() ;
         TableRow tr = createRow(this, pcc);
         tr.setId( n );
@@ -777,17 +828,15 @@ public class CungcapLayout extends AppCompatActivity {
         setEventTableList();
     }
     public void edit(PhieuCungCap pcc){
+        Log.d("data", pcc.toString());
         //    API
-        //  Log.d("data",pcc.getSoPhieu()+"/"+inputND_data+"/"+pcc.getMaNcc()+"/"+pcc.getTrangThai());
-        //  Log.d("data",""+ (pcc.getSoPhieu().equalsIgnoreCase("") ));
+        phieucungcapDB.doPost(pcc,null,"update");
+        //    List
         String trangthai = TTSpinner_data;
         String trangthaimoi = pcc.getTrangThai();
 
         String nhaCC = NCCSpinner_data;
         String nhaCCmoi = pcc.getMaNcc();
-
-//        String ngaygiao = formatDate(focusNgaygiao.getText().toString(),true);
-
 //        Log.d("index",indexofRow+"");
         // Trường hợp 2 dữ liệu Spinner đều trùng với thằng input
         int index = -1;
@@ -797,17 +846,22 @@ public class CungcapLayout extends AppCompatActivity {
             }
         }
         TableRow tr = (TableRow) createRow(this, pcc);
-//        TextView textView = (TextView) tr.getChildAt(0);
-//        Log.d("data",textView.getText()+"");
         // ALL +
         // 2 Trường hợp cần đổi vị trí là khác TT và khác NCC
         PCCList.set(index, pcc);
         if( PCCList.size() == sortPCCList.size() ){
             // Nếu cùng 1 List Chính
             sortPCCList = PCCList;
-            cc_table_list.removeViewAt(index);
-            cc_table_list.addView(tr,index);
-            for (int i = index; i < cc_table_list.getChildCount(); i++) {
+            if( nhaCC.equals(nhaCCmoi) || nhaCC.equals("All") ) {
+                if (trangthai.equals(trangthaimoi) || trangthai.equals("All")) {
+                    cc_table_list.removeViewAt(indexofRow);
+                    cc_table_list.addView(tr, indexofRow);
+                }else
+                    cc_table_list.removeViewAt(indexofRow);
+            }else
+                cc_table_list.removeViewAt(indexofRow);
+
+            for (int i = indexofRow; i < cc_table_list.getChildCount(); i++) {
                 cc_table_list.getChildAt(i).setId((int) i);
             }
         }else{
@@ -816,14 +870,15 @@ public class CungcapLayout extends AppCompatActivity {
 //            Log.d("index",indexofRow+"");
             // Mếu khác NCC nhưng NCC không phải tất cả thì sẽ remove
             if( !nhaCC.equals(nhaCCmoi) &&  !nhaCC.equals("All")){
+//                Log.d("data","doit");
                 cc_table_list.removeViewAt(indexofRow);
-
                 // Nếu giống NCC nhưng khác trạng thái, và trạng thái không phải là tất cả và trạng thái đó khác thì
             }else if( !trangthai.equals(trangthaimoi) &&  !trangthai.equals("All")){
+//                Log.d("data","doit2");
                 cc_table_list.removeViewAt(indexofRow);
-
                 // Chuyển trạng thái => Gửi Mail
             }else{
+//                Log.d("data","doit3");
                 cc_table_list.removeViewAt(indexofRow);
                 cc_table_list.addView(tr,indexofRow);
             }
@@ -836,6 +891,9 @@ public class CungcapLayout extends AppCompatActivity {
         setEventTableList();
     }
     public void delete(PhieuCungCap pcc) {
+        // API
+        phieucungcapDB.doPost(pcc,null,"remove");
+        // Tìm vị trí cần xóa trong PCCList
         int index = -1;
         for (int i = 0; i < PCCList.size(); i++) {
             if (pcc.getSoPhieu().equals(PCCList.get(i).getSoPhieu())) {
@@ -850,7 +908,7 @@ public class CungcapLayout extends AppCompatActivity {
             if (PCCList.size() == sortPCCList.size()) {
                 cc_table_list.removeViewAt(index + 1); // + thêm
                 sortPCCList = PCCList;
-                for (int i = index; i < cc_table_list.getChildCount(); i++) {
+                for (int i = index+1; i < cc_table_list.getChildCount(); i++) {
                     cc_table_list.getChildAt(i).setId((int) i);
                 }
             } else { // Nghĩa là đang ở sort table
@@ -893,8 +951,10 @@ public class CungcapLayout extends AppCompatActivity {
                         PhieuCungCap pcc = new PhieuCungCap(
                                 inputSP.getText().toString().trim()+"",
                                 TTSpinner_mini_data+"",
-                                NCCSpinner_mini_data+""
+                                NCCSpinner_mini_data+"",
+                                inputND_data+""
                         );
+                        Log.d("tt",TTSpinner_mini_data+"");
                         insert( pcc );
                         success = true;}
                         break;
@@ -903,16 +963,24 @@ public class CungcapLayout extends AppCompatActivity {
                         PhieuCungCap pcc = new PhieuCungCap(
                                 inputSP.getText().toString().trim()+"",
                                 TTSpinner_mini_data+"",
-                                NCCSpinner_mini_data+""
+                                NCCSpinner_mini_data+"",
+                                inputND_data+""
                         );
                         edit( pcc );
+                        if(TTSpinner_mini_data.equals("CONFIRMED")) {
+                            // Gửi mail
+                            Toast.makeText(CungcapLayout.this, "Làm gửi email ở CungcapLayout dòng này 968 trong yesBtn/edit", Toast.LENGTH_LONG).show();
+                        }else if(TTSpinner_mini_data.equals("DELIVERIED")){
+                            Toast.makeText(CungcapLayout.this, "Làm thông báo ở CungcapLayout dòng này 970 trong yesBtn/edit", Toast.LENGTH_LONG).show();
+                        }
                         success = true;}
                         break;
                     case R.id.CC_delBtn:
                         PhieuCungCap pcc = new PhieuCungCap(
                                 inputSP.getText().toString().trim()+"",
                                 TTSpinner_mini_data+"",
-                                NCCSpinner_mini_data+""
+                                NCCSpinner_mini_data+"",
+                                inputND_data+""
                         );
                         delete( pcc );
                         success = true;
@@ -1010,7 +1078,7 @@ public class CungcapLayout extends AppCompatActivity {
         // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
         NgayGiaoview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
         NgayGiaoview.setMaxWidth(DPtoPix(120));
-        NgayGiaoview.setText(formatDate("2021-06-02",false));
+        NgayGiaoview.setText(formatDate(pcc.getNgaygiao(),false));
 
         TextView NhaCungCapview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
         // Cần cái này để khi mà NhaCungCapview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
@@ -1024,7 +1092,12 @@ public class CungcapLayout extends AppCompatActivity {
         // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
         TongTienview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
         TongTienview.setMaxWidth(DPtoPix(120));
-        TongTienview.setText(MoneyFormat(0));
+        TongTienview.setText(
+                MoneyFormat(
+                        0
+//                        Integer.parseInt( pcc.getTongtien() == null || pcc.getTongtien().trim().equalsIgnoreCase("") ? "0" : pcc.getTongtien()  )
+                )
+        );
 
         int color = R.color.white;
         String tag = pcc.getTrangThai();
@@ -1094,7 +1167,7 @@ public class CungcapLayout extends AppCompatActivity {
             int count = 0;
             while (temp_money != 0) {
                 moneyFormat += (temp_money % 10) + "";
-                if ((count + 1) % 3 == 0 && temp_money > 10) moneyFormat += ".";
+                if ((count + 1) % 3 == 0 && temp_money >= 10) moneyFormat += ".";
                 count++;
                 temp_money /= 10;
             }

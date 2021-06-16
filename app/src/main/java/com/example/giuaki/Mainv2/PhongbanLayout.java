@@ -25,7 +25,6 @@ import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.Mainv2.*;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.PhongBanRequest;
-import com.example.giuaki.Statistics.CapphatVPPLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;

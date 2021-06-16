@@ -205,6 +205,10 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(BaocaoVPPAllLayout.this, XinchoLayout.class);
+                Bundle b = new Bundle();
+                b.putString("loai","Nhanvien");
+                b.putString("ma",selectedNhanVien.getMaNv()+"");
+                intent.putExtras(b);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 startActivityForResult( intent, 1 );
             }
@@ -320,7 +324,7 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
             int count = 0;
             while (temp_money != 0) {
                 moneyFormat += (temp_money % 10) + "";
-                if ((count + 1) % 3 == 0 && temp_money > 10) moneyFormat += ".";
+                if ((count + 1) % 3 == 0 && temp_money >= 10) moneyFormat += ".";
                 count++;
                 temp_money /= 10;
             }
