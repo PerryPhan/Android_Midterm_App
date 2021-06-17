@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@drawable/round_corner"
+    android:backgroundTint="#F1F8E9"
+    android:padding="10dp"
+    >
+
+    <ImageView
+        android:id="@+id/hinhVPP"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:src="@drawable/_xdlogo"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/idVPP"
+                style="@style/textBlack"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:text="VPP1"/>
+            <TextView
+                android:layout_marginLeft="5dp"
+                style="@style/textBlack"
+                android:textSize="16dp"
+                android:text="-"/>
+            <TextView
+                android:layout_width="140dp"
+                android:maxWidth="140dp"
+                android:id="@+id/tenVPP"
+                android:layout_marginLeft="5dp"
+                style="@style/textBlack"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:text="Giấy A4"/>
+            <TextView
+                android:gravity="right"
+                android:layout_width="35dp"
+                android:maxWidth="35dp"
+                android:id="@+id/slVPP"
+                style="@style/textBlack"
+                android:textSize="14dp"
+                android:text="100"/>
+            <TextView
+                android:id="@+id/dvtVPP"
+                android:layout_marginLeft="5dp"
+                style="@style/textBlack"
+                android:textSize="14dp"
+                android:text="Gram"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/textBlack"
+                android:layout_marginLeft="0dp"
+                android:padding="0dp"
+                android:textSize="26dp"
+                android:textStyle="bold"
+                android:textColor="@color/yes_color"
+                android:text=" Đã giao thành công "/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

@@ -1126,7 +1126,7 @@ public class CungcapLayout extends AppCompatActivity {
         date[0] = Integer.parseInt(arr[0]);
         date[1] = Integer.parseInt(arr[1]);
         date[2] = Integer.parseInt(arr[2]);
-        return date; // 30/08/1999 -> [30,08,1999]
+        return date; // 1999-08-30 -> [1999,08,30]
     }
 
     public String InttoStringDate(int[] date) {

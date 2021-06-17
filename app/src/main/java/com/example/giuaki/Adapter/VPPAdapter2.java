@@ -1,6 +1,5 @@
 package com.example.giuaki.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +16,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class VPPAdapter extends BaseAdapter {
+public class VPPAdapter2 extends BaseAdapter {
     private List<VanPhongPham> list;
     private Context context;
     LayoutInflater inflater;
 
-    public VPPAdapter(Context context, List<VanPhongPham> list) {
+    public VPPAdapter2(Context context, List<VanPhongPham> list) {
         this.context = context;
         this.list = list;
         inflater = (LayoutInflater.from(context));
@@ -69,23 +68,20 @@ public class VPPAdapter extends BaseAdapter {
         String dvt = vpp.getDvt();
         String hinh = vpp.getHinh();
         String sl = vpp.getSoLuong();
-        String gia = vpp.getGiaNhap();
 
-        view = inflater.inflate(R.layout.vpptemplate, null);
+        view = inflater.inflate(R.layout.vpptemplate2, null);
         // getControl.
         ImageView hinhVPP = view.findViewById(R.id.hinhVPP);
         setDataImageView(hinhVPP, hinh );
         TextView  idVPP   = view.findViewById(R.id.idVPP);
         TextView  tenVPP   = view.findViewById(R.id.tenVPP);
         TextView  dvtVPP   = view.findViewById(R.id.dvtVPP);
-        TextView  giaVPP   = view.findViewById(R.id.giaVPP);
         TextView  slVPP   = view.findViewById(R.id.slVPP);
 
         // Fetch data
         idVPP.setText(checkStr(id));
         tenVPP.setText(checkStr(ten));
         dvtVPP.setText(checkStr(dvt));
-        giaVPP.setText(checkStr(gia));
         slVPP.setText(checkStr(sl));
 
         // Trả về view kết quả.

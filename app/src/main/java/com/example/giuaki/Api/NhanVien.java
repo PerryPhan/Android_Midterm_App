@@ -20,6 +20,9 @@ public class NhanVien {
     }
 
     public String toSpinnerString() {
+        if(maNv.equals("empty")){
+            return hoTen;
+        }
         return maNv+", "+hoTen+", "+formatDate(ngaySinh, false);
     }
 

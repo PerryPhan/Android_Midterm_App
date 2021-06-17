@@ -12,9 +12,10 @@
         android:orientation="horizontal"
         android:layout_marginTop="20dp"
         android:gravity="center_vertical"
+        android:background="#A3CCF8"
         >
         <Button
-            android:id="@+id/NV_backBtn2"
+            android:id="@+id/TB_backBtn"
             android:layout_width="50dp"
             android:layout_height="fill_parent"
             android:background="@color/transparent"
@@ -29,7 +30,6 @@
             android:layout_marginLeft="50dp"/>
 
             <ImageView
-                android:id="@+id/VPP_inputHinh"
                 android:layout_marginLeft="10dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -43,19 +43,34 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:layout_marginVertical="10dp"
         >
         <TextView
+            android:id="@+id/TB_dateView"
             style="@style/textBlack"
             android:textSize="16dp"
-            android:layout_marginLeft="100dp"
-            android:layout_width="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ngày 02 tháng 06 năm 2021"
             android:textColor="@color/disable_color" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
         <TextView
+            android:layout_marginLeft="30dp"
             style="@style/textBlack"
             android:textSize="16dp"
-            android:layout_marginLeft="70dp"
+            android:text=" Số lượng VPP mới : "/>
+        <TextView
+            android:id="@+id/TB_countView"
+            style="@style/textBlack"
+            android:layout_marginLeft="180dp"
+            android:textSize="16dp"
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:text="2"
@@ -65,8 +80,22 @@
             />
     </LinearLayout>
     <ListView
+        android:background="@drawable/round_corner"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/TB_mainList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:backgroundTint="#FEFFF1"
+        android:dividerHeight="8dp">
+    </ListView>
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
-    </ListView>
+        android:layout_marginBottom="30dp"
+        layout="@layout/_created_by_3xdteam"/>
 </LinearLayout>

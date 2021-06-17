@@ -52,6 +52,7 @@
     <string name="so_phieu">Số phiếu</string>
     <string name="nha_cung_cap">Nhà cung cấp</string>
     <string name="thong_bao">Thông báo</string>
+    <string name="so_luong_hien_tai">Số lượng hiện tại</string>
     <array name="phongban">
         <item>PB01</item>
         <item>PB02</item>

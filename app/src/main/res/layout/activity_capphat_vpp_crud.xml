@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/CP_backBtn"
+            android:id="@+id/CPcrud_backBtn"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
@@ -33,7 +33,7 @@
             android:layout_weight="1"
             />
         <Button
-            android:id="@+id/CP_insertBtn"
+            android:id="@+id/CPcrud_insertBtn"
             style="@style/Btn"
             android:layout_width="50dp"
             app:icon="@drawable/outline_add_black_24"
@@ -84,24 +84,6 @@
                 android:layout_height="40dp"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="5dp"
-            android:paddingHorizontal="5dp">
-            <TextView
-                style="@style/textBlack"
-                android:text="@string/chon_vpp" />
-
-            <Spinner
-                android:id="@+id/CPcrud_VPPSpinner"
-                android:layout_width="280dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown" />
         </LinearLayout>
 
     </LinearLayout>
@@ -205,31 +187,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button
-            android:id="@+id/CPcrud_delBtn"
-            style="@style/Btn"
-            android:text="@string/xoa"
-            android:backgroundTint="#DD4545"
-            app:icon="@drawable/outline_delete_24"
-            app:iconGravity="textStart"
-            app:iconPadding="5dp"
-            app:iconTint="#000"
-            android:textColor="@color/black"
-            />
-        <Button
-            android:layout_marginLeft="10dp"
-            android:id="@+id/CPcrud_editBtn"
-            style="@style/Btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sua"
-            android:textColor="#000"
-            android:backgroundTint="#3C7AD8"
-            app:icon="@drawable/outline_settings_24"
-            app:iconGravity="textStart"
-            app:iconPadding="5dp"
-            app:iconTint="#000"
-            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -237,6 +195,7 @@
             android:orientation="horizontal"
             android:gravity="right">
             <Button
+                android:visibility="invisible"
                 android:id="@+id/CPcrud_previewBtn"
                 android:drawableLeft="@drawable/baseline_visibility_black_24"
                 style="@style/Btn"
@@ -245,13 +204,6 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#50E363"
                 android:layout_marginRight="5dp"/>
-            <Button
-                style="@style/Btn"
-                android:id="@+id/CPcrud_navbar_capphat"
-                android:text="@string/cap_phat_VPP"
-                android:backgroundTint="@color/disable_color"
-                android:textColor="@color/black"
-                />
         </LinearLayout>
     </LinearLayout>
 
@@ -263,29 +215,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center">
-        <Button
-            style="@style/Btn"
-            android:id="@+id/CPcrud_navbar_phongban"
-            android:backgroundTint="@color/disable_color"
-            android:textColor="@color/black"
-            android:text="@string/phong_ban"/>
-
-        <Button
-            style="@style/Btn"
-            android:id="@+id/CPcrud_navbar_nhanvien"
-            android:backgroundTint="@color/disable_color"
-            android:textColor="@color/black"
-            android:text="@string/nhan_vien"/>
-
-        <Button
-            style="@style/Btn"
-            android:id="@+id/CPcrud_navbar_VPP"
-            android:backgroundTint="@color/active_color"
-            android:textColor="@color/black"
-            android:text="@string/vpp"/>
 
         <ImageView
-            android:id="@+id/VPP_inputHinh"
+            android:id="@+id/CPcrud_bell"
             android:layout_marginLeft="10dp"
             android:layout_width="50dp"
             android:layout_height="50dp"

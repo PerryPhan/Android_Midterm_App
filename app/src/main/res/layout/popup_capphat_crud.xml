@@ -149,7 +149,15 @@
                     android:layout_marginTop="16dp"
                     android:calendarViewShown="false"
                     android:datePickerMode="spinner" />
-
+                <TextView
+                    style="@style/textRed"
+                    android:id="@+id/CPcrud_showNCError"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:text="@string/error_of_this_line"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
@@ -171,7 +179,7 @@
                     />
                 <TextView
                     style="@style/textRed"
-                    android:id="@+id/VPP_showGiaError"
+                    android:id="@+id/CPcrud_showSLError"
                     android:visibility="invisible"
                     android:layout_width="match_parent"
                     android:text="@string/error_of_this_line"

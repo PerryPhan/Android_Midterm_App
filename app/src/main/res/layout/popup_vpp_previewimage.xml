@@ -157,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="@string/so_luong" />
+            android:text="@string/so_luong_hien_tai" />
         <TextView
             android:id="@+id/VPP_IP_Soluong"
             style="@style/textBlack"

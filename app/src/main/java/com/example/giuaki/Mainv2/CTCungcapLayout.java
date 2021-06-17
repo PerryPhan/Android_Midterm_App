@@ -217,6 +217,7 @@ public class CTCungcapLayout extends AppCompatActivity {
     public VanPhongPham getVPPfromList( String mavpp){
 //        Log.d("data",mavpp.trim());
         if( mavpp == null || mavpp.trim().equalsIgnoreCase("") ) return null;
+        if( VPPList == null || VPPList.size() == 0 ) return  null;
         for( VanPhongPham vpp : VPPList){
             if( vpp.getMaVpp().equals(mavpp)){
                 return vpp;
