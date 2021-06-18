@@ -1,8 +1,12 @@
 package com.example.giuaki.Mainv2;
 
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -25,6 +29,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.example.giuaki.Adapter.TTAdapter;
 import com.example.giuaki.Api.NhaCungCap;
@@ -36,6 +42,9 @@ import com.example.giuaki.R;
 import com.example.giuaki.Request.PhieuCungCapRequest;
 import com.example.giuaki.Request.VanPhongPhamRequest;
 import com.example.giuaki.Mainv2.*;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -125,1093 +134,1120 @@ public class CungcapLayout extends AppCompatActivity {
         loadDatabase();
         setEvent();
         setNavigation();
+        thongbao(null,true);
     }
-
-    private void setControl() {
-        // Spinner
-        NCCSpinner = findViewById(R.id.CC_NCCSpinner);
-        TTSpinner = findViewById(R.id.CC_TTSpinner);
-        // Table
-        cc_table_list = findViewById(R.id.CC_table_list);
-        // Btn
-        detailBtn = findViewById(R.id.CC_detailBtn);
-        insertBtn = findViewById(R.id.CC_insertBtn);
-        editBtn  = findViewById(R.id.CC_editBtn);
-        delBtn = findViewById(R.id.CC_delBtn);
-        exit = findViewById(R.id.CC_editBtn);
-        // Navigation
-        navPB = findViewById(R.id.CC_navbar_phongban);
-        navNV = findViewById(R.id.CC_navbar_nhanvien);
-        navVPP= findViewById(R.id.CC_navbar_VPP);
-        navCP= findViewById(R.id.CC_navbar_capphat);
-    }
-    // --------------------------------- {{}} ----------------------------------
-    // --------------------------------- LOADER ----------------------------------
-    private void loadDatabase() {
-        // Khai báo
-        vanphongphamDB = new VanPhongPhamRequest();
-        phieucungcapDB = new PhieuCungCapRequest();
-        // Đổ Database ra List
-        NCCList = convertToNhaCungCapList(
-                returnListfromJSON(
-                        vanphongphamDB.getNCCList()
-                        , "NhaCungCap"
-                )
-        );
-        Log.d("NCCList",NCCList+"");
-         PCCList = convertToPhieuCungCapList( // Tạo 1 bản copy của PCCList để dễ sort
-                returnListfromJSON(
-                        phieucungcapDB.doGet("show")
-                        , "PhieuCungCap"
-                )
-        );
-        sortPCCList = PCCList;
-
-//        sortPCCList = PCCList = exampleList();
-        tenTTList = TrangThaiList( trangthai, true, "");
-        tenNCCList = NhaCungCapList( NCCList, true);
-        maNCCList = maNhaCungCapList( NCCList, true);
-        // Load list vào Spinner
-        NCCSpinner.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList) );
-        TTSpinner.setAdapter(
-                new TTAdapter(this, tenTTList)
-        );
-        // Load List vào TableList
-        if( PCCList == null ) {
-            Log.d("data",
-                "CuncapLayout/PCCList in LoadDatabase() is null");
-            sortPCCList = PCCList = new ArrayList<>();
-            // return;
+    // --------------------------------- MAIN ----------------------------------
+        private void setControl() {
+            // Spinner
+            NCCSpinner = findViewById(R.id.CC_NCCSpinner);
+            TTSpinner = findViewById(R.id.CC_TTSpinner);
+            // Table
+            cc_table_list = findViewById(R.id.CC_table_list);
+            // Btn
+            detailBtn = findViewById(R.id.CC_detailBtn);
+            insertBtn = findViewById(R.id.CC_insertBtn);
+            editBtn  = findViewById(R.id.CC_editBtn);
+            delBtn = findViewById(R.id.CC_delBtn);
+            exit = findViewById(R.id.CC_editBtn);
+            // Navigation
+            navPB = findViewById(R.id.CC_navbar_phongban);
+            navNV = findViewById(R.id.CC_navbar_nhanvien);
+            navVPP= findViewById(R.id.CC_navbar_VPP);
+            navCP= findViewById(R.id.CC_navbar_capphat);
         }
-        renderTablefromList(sortPCCList);
-    }
+        private void loadDatabase() {
+            // Khai báo
+            vanphongphamDB = new VanPhongPhamRequest();
+            phieucungcapDB = new PhieuCungCapRequest();
+            // Đổ Database ra List
+            NCCList = convertToNhaCungCapList(
+                    returnListfromJSON(
+                            vanphongphamDB.getNCCList()
+                            , "NhaCungCap"
+                    )
+            );
+            Log.d("NCCList",NCCList+"");
+             PCCList = convertToPhieuCungCapList( // Tạo 1 bản copy của PCCList để dễ sort
+                    returnListfromJSON(
+                            phieucungcapDB.doGet("show")
+                            , "PhieuCungCap"
+                    )
+            );
+            sortPCCList = PCCList;
 
-
-    public List<PhieuCungCap> exampleList(){
-        List<PhieuCungCap> list = new ArrayList<>();
-        // OPENING
-        list.add( new PhieuCungCap("SP01","OPENING","VPPKBTC","2021-06-15"));
-        list.add( new PhieuCungCap("SP02","OPENING","VPPSH","2021-06-15"));
-        // CONFIRMED
-        list.add( new PhieuCungCap("SP03","CONFIRMED","VPPVNC","2021-06-15"));
-        list.add( new PhieuCungCap("SP04","CONFIRMED","VPPVNC","2021-06-15"));
-        // DELIVERIED
-        list.add( new PhieuCungCap("SP05","DELIVERIED","VPPSH","2021-06-15"));
-        list.add( new PhieuCungCap("SP06","DELIVERIED","VPPSH","2021-06-15"));
-        // CANCELED
-        list.add( new PhieuCungCap("SP07","CANCELED","VPPKBTC","2021-06-15"));
-        list.add( new PhieuCungCap("SP08","CANCELED","VPPKBTC","2021-06-15"));
-
-        return list;
-    }
-    public List<NhaCungCap> convertToNhaCungCapList(List<Object> list ){
-        if( list == null ) return null;
-        List<NhaCungCap> nhacuncaplist = new ArrayList<>();
-        for( Object li : list ){
-            nhacuncaplist.add( (NhaCungCap) li);
+    //        sortPCCList = PCCList = exampleList();
+            tenTTList = TrangThaiList( trangthai, true, "");
+            tenNCCList = NhaCungCapList( NCCList, true);
+            maNCCList = maNhaCungCapList( NCCList, true);
+            // Load list vào Spinner
+            NCCSpinner.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList) );
+            TTSpinner.setAdapter(
+                    new TTAdapter(this, tenTTList)
+            );
+            // Load List vào TableList
+            if( PCCList == null ) {
+                Log.d("data",
+                    "CuncapLayout/PCCList in LoadDatabase() is null");
+                sortPCCList = PCCList = new ArrayList<>();
+                // return;
+            }
+            renderTablefromList(sortPCCList);
         }
-        return nhacuncaplist;
-    }
-    public List<PhieuCungCap> convertToPhieuCungCapList(List<Object> list ){
-        if( list == null ) return null;
-        List<PhieuCungCap> phieucuncaplist = new ArrayList<>();
-        for( Object li : list ){
-            phieucuncaplist.add( (PhieuCungCap) li);
+        private void setEvent() {
+            //        Event cho các nút
+            setEventButton();
+            //        Event cho Spinner
+            setEventNCCSpinner();
+            setEventTTSpinner();
         }
-        return phieucuncaplist;
-    }
-    public List<Object> returnListfromJSON( String resultfromQuery , String objectClass){
-        List<Object> list = null ;
-//        Log.d("data",resultfromQuery);
-        String response = resultfromQuery;
-        if( !JSONHelper.verifyJSON(response).equalsIgnoreCase("pass") ) return null;
-        try{
-            list = JSONHelper.parseJSON(response,objectClass);
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            return list;
-        }
-    }
+        private void setNavigation() {
+            // navVPP onclick none
+            // navPB
+            navPB.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                    Intent intent = new Intent(CungcapLayout.this, PhongbanLayout.class);
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                    startActivity( intent );
+                }
+            });
+            // navNV
+            navNV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                    Intent intent = new Intent(CungcapLayout.this, NhanvienLayout.class);
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                    startActivity( intent );
 
-    private void testData(ArrayList<PhieuCungCap> data){
+                }
+            });
+            // navVPP
+            navVPP.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CungcapLayout.this, VanphongphamLayout.class);
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                    startActivity( intent );
+                }
+            });
+            // navCP
+            navCP.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CungcapLayout.this, CapphatVPPLayout.class);
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                    startActivity( intent );
+                }
+
+            });
+            exit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+
+    // --------------------------------- CHECKER ----------------------------------
+        private void testData(ArrayList<PhieuCungCap> data){
         for( PhieuCungCap d : data){
             Log.d("data",d.getSoPhieu());
         }
     }
 
-    private List<String> NhaCungCapList( List<NhaCungCap> ncc, boolean isAll ){
-        if( ncc == null ) return null;
-        List<String> nccList = new ArrayList<>();
-        if( isAll ) nccList.add(0, "Tất cả nhà cung cấp");
-        for( NhaCungCap n : ncc){
-            nccList.add(n.getTenNCC());
+    // --------------------------------- LOADER ----------------------------------
+        public List<VanPhongPham> convertToVanPhongPhamList(List<Object> list ){
+            if( list == null ) return null;
+            List<VanPhongPham> vanphongphamlist = new ArrayList<>();
+            for( Object li : list ){
+                vanphongphamlist.add( (VanPhongPham) li);
+            }
+            return vanphongphamlist;
+        } // OK
+        public List<NhaCungCap> convertToNhaCungCapList(List<Object> list ){
+            if( list == null ) return null;
+            List<NhaCungCap> nhacuncaplist = new ArrayList<>();
+            for( Object li : list ){
+                nhacuncaplist.add( (NhaCungCap) li);
+            }
+            return nhacuncaplist;
         }
-        return nccList;
-    }
-    private List<String> maNhaCungCapList( List<NhaCungCap> ncc, boolean isAll ){
-        if( ncc == null ) return null;
-        List<String> nccList = new ArrayList<>();
-        if( isAll ) nccList.add(0, "Tất cả nhà cung cấp");
-        for( NhaCungCap n : ncc){
-            nccList.add(n.getMaNCC());
+        public List<PhieuCungCap> convertToPhieuCungCapList(List<Object> list ){
+            if( list == null ) return null;
+            List<PhieuCungCap> phieucuncaplist = new ArrayList<>();
+            for( Object li : list ){
+                phieucuncaplist.add( (PhieuCungCap) li);
+            }
+            return phieucuncaplist;
         }
-        return nccList;
-    }
-    private List<String> TrangThaiList( String[] tt , boolean isAll, String mode) {
-        if(tt == null) return null;
-        List<String> TTList = new ArrayList<>();
-        if( isAll ) TTList.add("Tất cả trạng thái");
-
-        for( String tentt : tt){
-            if( mode.equals("OPENING")) {
-                if ( tentt.equals("OPENING") || tentt.equals("CONFIRMED"))
-                    TTList.add(tentt);
-            }else if( mode.equals("CONFIRMED")) {
-                if (tentt.equals("CANCELED") || tentt.equals("DELIVERIED"))
-                    TTList.add(tentt);
-            }else TTList.add(tentt);
+        public List<Object> returnListfromJSON( String resultfromQuery , String objectClass){
+            List<Object> list = null ;
+    //        Log.d("data",resultfromQuery);
+            String response = resultfromQuery;
+            if( !JSONHelper.verifyJSON(response).equalsIgnoreCase("pass") ) return null;
+            try{
+                list = JSONHelper.parseJSON(response,objectClass);
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                return list;
+            }
         }
 
-        return TTList;
-    }
-    public ArrayAdapter<String> loadSpinnerAdapter(ArrayList<String> tenNCClist) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tenNCClist);
-        return adapter;
-    }
-    // --------------------------------- {{}} ----------------------------------
 
-    // ----------------------------------{{}} ----------------------------------
-    // -------------------------------- EVENTER --------------------------------
-    private void setEvent() {
-        //        Event cho các nút
-        setEventButton();
-        //        Event cho Spinner
-        setEventNCCSpinner();
-        setEventTTSpinner();
-    }
+        private List<String> NhaCungCapList( List<NhaCungCap> ncc, boolean isAll ){
+            if( ncc == null ) return null;
+            List<String> nccList = new ArrayList<>();
+            if( isAll ) nccList.add(0, "Tất cả nhà cung cấp");
+            for( NhaCungCap n : ncc){
+                nccList.add(n.getTenNCC());
+            }
+            return nccList;
+        }
+        private List<String> maNhaCungCapList( List<NhaCungCap> ncc, boolean isAll ){
+            if( ncc == null ) return null;
+            List<String> nccList = new ArrayList<>();
+            if( isAll ) nccList.add(0, "Tất cả nhà cung cấp");
+            for( NhaCungCap n : ncc){
+                nccList.add(n.getMaNCC());
+            }
+            return nccList;
+        }
+        private List<String> TrangThaiList( String[] tt , boolean isAll, String mode) {
+            if(tt == null) return null;
+            List<String> TTList = new ArrayList<>();
+            if( isAll ) TTList.add("Tất cả trạng thái");
+
+            for( String tentt : tt){
+                if( mode.equals("OPENING")) {
+                    if ( tentt.equals("OPENING") || tentt.equals("CONFIRMED"))
+                        TTList.add(tentt);
+                }else if( mode.equals("CONFIRMED")) {
+                    if (tentt.equals("CANCELED") || tentt.equals("DELIVERIED"))
+                        TTList.add(tentt);
+                }else TTList.add(tentt);
+            }
+
+            return TTList;
+        }
+        public ArrayAdapter<String> loadSpinnerAdapter(ArrayList<String> tenNCClist) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tenNCClist);
+            return adapter;
+        }
 
     // ---------------------------- EVENT ON SPINNER -----------------------
-    public void renderTablefromList( List<PhieuCungCap> list ){
-//        Clear from 1 to n-1
-//        Log.d("data",list.size()+"");
-        if( list == null || list.size() == 0 ) {
-            cc_table_list.removeViews(1, cc_table_list.getChildCount()-1 );
-            return;
+        public void renderTablefromList( List<PhieuCungCap> list ){
+    //        Clear from 1 to n-1
+    //        Log.d("data",list.size()+"");
+            if( list == null || list.size() == 0 ) {
+                cc_table_list.removeViews(1, cc_table_list.getChildCount()-1 );
+                return;
+            }
+            int n = cc_table_list.getChildCount();
+            if(n > 1)
+                cc_table_list.removeViews(1, n-1 );
+            int dem = 0;
+            for( PhieuCungCap pcc: list ){
+                TableRow tr = createRow(this, pcc);
+                tr.setId( ++dem );
+                cc_table_list.addView(tr);
+            }
+            setEventTableList();
         }
-        int n = cc_table_list.getChildCount();
-        if(n > 1)
-            cc_table_list.removeViews(1, n-1 );
-        int dem = 0;
-        for( PhieuCungCap pcc: list ){
-            TableRow tr = createRow(this, pcc);
-            tr.setId( ++dem );
-            cc_table_list.addView(tr);
-        }
-        setEventTableList();
-    }
-    public List<PhieuCungCap> filterTableListwith( String tentt, String field, List<PhieuCungCap> list ) {
-        if (list == null || list.size() == 0) {
-            Log.d("data", "Table has no data in filterTableListwith");
-            return null;
-        }
-        if (tentt == null || tentt.trim().equalsIgnoreCase("")) return null;
-        if (field == null || field.trim().equalsIgnoreCase("")) return null;
-        List<PhieuCungCap> filtered_list = new ArrayList<>();
-        if (field.equalsIgnoreCase("tt")){
-            for (PhieuCungCap pcc : list) {
-                if (pcc.getTrangThai().equals(tentt)) {
-                    filtered_list.add(pcc);
+        public List<PhieuCungCap> filterTableListwith( String tentt, String field, List<PhieuCungCap> list ) {
+            if (list == null || list.size() == 0) {
+                Log.d("data", "Table has no data in filterTableListwith");
+                return null;
+            }
+            if (tentt == null || tentt.trim().equalsIgnoreCase("")) return null;
+            if (field == null || field.trim().equalsIgnoreCase("")) return null;
+            List<PhieuCungCap> filtered_list = new ArrayList<>();
+            if (field.equalsIgnoreCase("tt")){
+                for (PhieuCungCap pcc : list) {
+                    if (pcc.getTrangThai().equals(tentt)) {
+                        filtered_list.add(pcc);
+                    }
                 }
             }
-        }
-        if( field.equalsIgnoreCase("ncc")) {
-            for (PhieuCungCap pcc : list) {
-                if (pcc.getMaNcc().equals(tentt)) {
-                    filtered_list.add(pcc);
+            if( field.equalsIgnoreCase("ncc")) {
+                for (PhieuCungCap pcc : list) {
+                    if (pcc.getMaNcc().equals(tentt)) {
+                        filtered_list.add(pcc);
+                    }
                 }
             }
+            return filtered_list;
         }
-        return filtered_list;
-    }
-    private void setEventTTSpinner() {
-        // Khi chọn TT, bảng sẽ lọc theo TT
-        // VD: có dữ liệu là như thế
-        TTSpinner_data = "All";
-        TTSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(  position == 0 ){
-                    if( NCCSpinner_data.equals("All"))
-                        sortPCCList = PCCList;
-                    else
-                        sortPCCList = filterTableListwith(
-                                NCCSpinner_data,
-                                "ncc",
-                                PCCList
-                        );
+        private void setEventTTSpinner() {
+            // Khi chọn TT, bảng sẽ lọc theo TT
+            // VD: có dữ liệu là như thế
+            TTSpinner_data = "All";
+            TTSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(  position == 0 ){
+                        if( NCCSpinner_data.equals("All"))
+                            sortPCCList = PCCList;
+                        else
+                            sortPCCList = filterTableListwith(
+                                    NCCSpinner_data,
+                                    "ncc",
+                                    PCCList
+                            );
+                        TTSpinner_data = "All";
+                        renderTablefromList(sortPCCList);
+                    }else{
+                        // Nghĩa là filter này sẽ là filter dựa trên bảng đã filter bên NCC
+                        if( NCCSpinner_data.equals("All"))
+                            sortPCCList = PCCList;
+                        else
+                            sortPCCList = filterTableListwith(
+                                    NCCSpinner_data,
+                                    "ncc",
+                                    PCCList
+                            );
+                        TTSpinner_data = tenTTList.get(position);
+                        sortPCCList = filterTableListwith(TTSpinner_data , "tt", sortPCCList);
+                        renderTablefromList(sortPCCList);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
                     TTSpinner_data = "All";
-                    renderTablefromList(sortPCCList);
-                }else{
-                    // Nghĩa là filter này sẽ là filter dựa trên bảng đã filter bên NCC
-                    if( NCCSpinner_data.equals("All"))
-                        sortPCCList = PCCList;
-                    else
-                        sortPCCList = filterTableListwith(
-                                NCCSpinner_data,
-                                "ncc",
-                                PCCList
-                        );
-                    TTSpinner_data = tenTTList.get(position);
-                    sortPCCList = filterTableListwith(TTSpinner_data , "tt", sortPCCList);
-                    renderTablefromList(sortPCCList);
                 }
-            }
+            });
+        }
+        private void setEventNCCSpinner() {
+            // Khi chọn NCC, bảng sẽ lọc theo NCC
+            NCCSpinner_data = "All";
+            NCCSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if( position == 0 ){
+                        if( TTSpinner_data.equals("All"))
+                            sortPCCList = PCCList;
+                        else
+                            sortPCCList = filterTableListwith(
+                                    TTSpinner_data,
+                                    "tt",
+                                    PCCList
+                            );
+                        NCCSpinner_data = "All";
+                        renderTablefromList(sortPCCList);
+                    }else{
+                        // Nghĩa là filter này sẽ là filter dựa trên bảng đã filter bên TT
+                        if( TTSpinner_data.equals("All"))
+                            sortPCCList = PCCList;
+                        else
+                            sortPCCList = filterTableListwith(
+                                    TTSpinner_data,
+                                    "tt",
+                                    PCCList
+                            );
+                        NCCSpinner_data = maNCCList.get(position);
+                        sortPCCList = filterTableListwith(NCCSpinner_data,"ncc",sortPCCList);
+                        renderTablefromList(sortPCCList);
+                    }
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                TTSpinner_data = "All";
-            }
-        });
-    }
-    private void setEventNCCSpinner() {
-        // Khi chọn NCC, bảng sẽ lọc theo NCC
-        NCCSpinner_data = "All";
-        NCCSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if( position == 0 ){
-                    if( TTSpinner_data.equals("All"))
-                        sortPCCList = PCCList;
-                    else
-                        sortPCCList = filterTableListwith(
-                                TTSpinner_data,
-                                "tt",
-                                PCCList
-                        );
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
                     NCCSpinner_data = "All";
-                    renderTablefromList(sortPCCList);
-                }else{
-                    // Nghĩa là filter này sẽ là filter dựa trên bảng đã filter bên TT
-                    if( TTSpinner_data.equals("All"))
-                        sortPCCList = PCCList;
-                    else
-                        sortPCCList = filterTableListwith(
-                                TTSpinner_data,
-                                "tt",
-                                PCCList
-                        );
-                    NCCSpinner_data = maNCCList.get(position);
-                    sortPCCList = filterTableListwith(NCCSpinner_data,"ncc",sortPCCList);
-                    renderTablefromList(sortPCCList);
                 }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                NCCSpinner_data = "All";
-            }
-        });
-    }
+            });
+        }
     // ---------------------------- EVENT ON TABLE -----------------------
-    public void setNormalBGTableRows(TableLayout list) {
-        for (int i = 1; i < list.getChildCount(); i++) {
-            TableRow row = (TableRow) list.getChildAt((int) i);
-            if (indexofRow != (int) row.getId())
-                row.setBackgroundColor(getResources().getColor( chooseColor( (String) row.getTag() ) ));
-        }
-    }
-    public int chooseColorFocus( String tag ){
-        switch (tag){
-            case "OPENING": // Cho phép tất cả
-                return R.color.focus_opening_color;
-            case "CONFIRMED":
-                return R.color.focus_confirmed_color;
-            case "DELIVERIED":
-                return R.color.focus_delivered_color;
-            case "CANCELED":
-                return R.color.focus_cancel_color;
-            default:
-                return R.color.white;
-        }
-    }
-    public int chooseColor( String tag ){
-        switch (tag){
-            case "OPENING": // Cho phép tất cả
-                return R.color.opening_color;
-            case "CONFIRMED":
-                return R.color.confirmed_color;
-            case "DELIVERIED":
-                return R.color.delivered_color;
-            case "CANCELED":
-                return R.color.cancel_color;
-            default:
-                return R.color.white;
-        }
-    }
-    public void setEventTableRows(TableRow tr, TableLayout list) {
-        tr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                focusTT = (String) v.getTag();
-                showButton( focusTT );
-                // v means TableRow
-                v.setBackgroundColor( getResources().getColor( chooseColorFocus(focusTT) ) );
-                indexofRow = (int) v.getId();
-                focusRow = (TableRow) list.getChildAt(indexofRow);
-                focusSoPhieu = (TextView) focusRow.getChildAt(0);
-                focusNgaygiao = (TextView) focusRow.getChildAt(1);
-                focusNCC = (TextView) focusRow.getChildAt(2);
-                focusTongtien = (TextView) focusRow.getChildAt(3);
-                setNormalBGTableRows( list );
+        public void setNormalBGTableRows(TableLayout list) {
+            for (int i = 1; i < list.getChildCount(); i++) {
+                TableRow row = (TableRow) list.getChildAt((int) i);
+                if (indexofRow != (int) row.getId())
+                    row.setBackgroundColor(getResources().getColor( chooseColor( (String) row.getTag() ) ));
             }
-        });
-    }
-    private void setEventTableList() {
-        int n = cc_table_list.getChildCount();
-        for( int i = 1; i < n; i++){
-            TableRow tr = (TableRow) cc_table_list.getChildAt(i);
-            setEventTableRows( tr , cc_table_list );
         }
-        hideButton();
-    }
+        public int chooseColorFocus( String tag ){
+            switch (tag){
+                case "OPENING": // Cho phép tất cả
+                    return R.color.focus_opening_color;
+                case "CONFIRMED":
+                    return R.color.focus_confirmed_color;
+                case "DELIVERIED":
+                    return R.color.focus_delivered_color;
+                case "CANCELED":
+                    return R.color.focus_cancel_color;
+                default:
+                    return R.color.white;
+            }
+        }
+        public int chooseColor( String tag ){
+            switch (tag){
+                case "OPENING": // Cho phép tất cả
+                    return R.color.opening_color;
+                case "CONFIRMED":
+                    return R.color.confirmed_color;
+                case "DELIVERIED":
+                    return R.color.delivered_color;
+                case "CANCELED":
+                    return R.color.cancel_color;
+                default:
+                    return R.color.white;
+            }
+        }
+        public void setEventTableRows(TableRow tr, TableLayout list) {
+            tr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    focusTT = (String) v.getTag();
+                    showButton( focusTT );
+                    // v means TableRow
+                    v.setBackgroundColor( getResources().getColor( chooseColorFocus(focusTT) ) );
+                    indexofRow = (int) v.getId();
+                    focusRow = (TableRow) list.getChildAt(indexofRow);
+                    focusSoPhieu = (TextView) focusRow.getChildAt(0);
+                    focusNgaygiao = (TextView) focusRow.getChildAt(1);
+                    focusNCC = (TextView) focusRow.getChildAt(2);
+                    focusTongtien = (TextView) focusRow.getChildAt(3);
+                    setNormalBGTableRows( list );
+                }
+            });
+        }
+        private void setEventTableList() {
+            int n = cc_table_list.getChildCount();
+            for( int i = 1; i < n; i++){
+                TableRow tr = (TableRow) cc_table_list.getChildAt(i);
+                setEventTableRows( tr , cc_table_list );
+            }
+            hideButton();
+        }
 
     // ---------------------------- EVENT ON BUTTON -----------------------
-    private void hideButton() {
-        delBtn.setVisibility(View.INVISIBLE);
-        editBtn.setVisibility(View.INVISIBLE);
-        detailBtn.setVisibility(View.INVISIBLE);
-    }
-    private void showButton( String mode ) {
-        hideButton();
-        detailBtn.setVisibility(View.VISIBLE);
-        switch (mode){
-            case "OPENING": // Cho phép tất cả
-                delBtn.setVisibility(View.VISIBLE);
-                editBtn.setVisibility(View.VISIBLE);
-                break;
-            case "CONFIRMED":
-                editBtn.setVisibility(View.VISIBLE);
-                break;
-            case "DELIVERIED":
-                break;
-            case "CANCELED":
-                break;
-            default:
-                break;
+        private void hideButton() {
+            delBtn.setVisibility(View.INVISIBLE);
+            editBtn.setVisibility(View.INVISIBLE);
+            detailBtn.setVisibility(View.INVISIBLE);
         }
-        setEventButton();
-    }
-    public String getDate( String mode){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        if( !mode.equalsIgnoreCase("tommorrow")) return formatter.format(date);
-        Calendar c = Calendar.getInstance();
+        private void showButton( String mode ) {
+            hideButton();
+            detailBtn.setVisibility(View.VISIBLE);
+            switch (mode){
+                case "OPENING": // Cho phép tất cả
+                    delBtn.setVisibility(View.VISIBLE);
+                    editBtn.setVisibility(View.VISIBLE);
+                    break;
+                case "CONFIRMED":
+                    editBtn.setVisibility(View.VISIBLE);
+                    break;
+                case "DELIVERIED":
+                    break;
+                case "CANCELED":
+                    break;
+                default:
+                    break;
+            }
+            setEventButton();
+        }
+        public void setEventDatePicker( String init ){
+            inputND_data = init;
+    //                Log.d("date",init);
+            int[] date = StringtoIntDate( formatDate( init, false));
+    //            Log.d("date",date[2]+date[1]-1+date[0]+"");
+            inputND.init(date[2],date[1]-1,date[0],new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    inputND_data = formatDate(InttoStringDate(dayOfMonth,monthOfYear+1,year), true);
+    //                 Toast.makeText( NhanvienLayout.this, strDate+"", Toast.LENGTH_LONG).show();
+                }
+
+            });
+        }
+
+        public void setEventSpinnerMini(){
+            NCCSpinner_mini_data = maNCCList_mini.get(0);
+            NCCSpinner_mini.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    NCCSpinner_mini_data = maNCCList_mini.get(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    NCCSpinner_mini_data = maNCCList_mini.get(0);
+                }
+            });
+            TTSpinner_mini_data = tenTTList_mini.get(0);
+            TTSpinner_mini.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    TTSpinner_mini_data = tenTTList_mini.get(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    TTSpinner_mini_data = tenTTList_mini.get(0);
+                }
+            });
+        }
+        public NhaCungCap findNCCinList( String maNCC){
+            if( maNCC == null || maNCC.trim().equalsIgnoreCase("") ) return null;
+            for(NhaCungCap ncc : NCCList){
+                if(ncc.getMaNCC().equals(maNCC) ){
+                    return ncc;
+                }
+            }
+            return null;
+        }
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if(requestCode == 1){
+                if( resultCode == RESULT_OK ) {
+                    String tongtien = data.getStringExtra("tongtien");
+                    PhieuCungCap pcc = sortPCCList.get(indexofRow-1);
+                    Toast.makeText(CungcapLayout.this,
+                            "Thay đổi tổng tiền của "+pcc.getSoPhieu()
+                                    +" : "
+                                    +MoneyFormat(Integer.parseInt(tongtien))
+                            , Toast.LENGTH_LONG).show();
+                    Log.d("data",tongtien);
+                    pcc.setTongtien(tongtien);
+                    edit( pcc , true );
+                }
+            }
+        }
+        public boolean isOpeningExsited( ){
+            for( PhieuCungCap pcc : PCCList ){
+                if( pcc.getTrangThai().equals("OPENING") )
+                    return true;
+            }
+            return false;
+        }
+        public void setEventButton() {
+            detailBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CungcapLayout.this, CTCungcapLayout.class);
+                    Bundle b = new Bundle();
+                        b.putString("sp",focusSoPhieu.getText().toString().trim()+"");
+                        b.putString("ng",focusNgaygiao.getText().toString().trim()+"");
+                        b.putString("ncc",focusNCC.getText().toString().trim()+"");
+                        b.putString("tenNCC",
+                                findNCCinList(
+                                        focusNCC.getText().toString().trim()+""
+                                ).getTenNCC()
+                        );
+                        b.putString("ttien",focusTongtien.getText().toString().trim()+"");
+                        b.putString("tt",focusTT);
+                    intent.putExtras(b);
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
+                    startActivityForResult( intent, 1 );
+//                    finish();
+                }
+            });
+            int layout = R.layout.popup_cungcap ;
+            insertBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if( isOpeningExsited() ) {
+                        Toast.makeText(CungcapLayout.this,"Đang có 1 Phiếu cung cấp OPENNING!! Hãy sử dụng nó ",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    createDialog(layout);
+                    setControlDialog();
+                    // Access Control
+                    // none
+                    // Chỉ trả trạng thái lúc mà nó đc focus
+                    tenTTList_mini = TrangThaiList( trangthai, false, "");
+                    tenNCCList_mini = NhaCungCapList( NCCList, false);
+                    maNCCList_mini = maNhaCungCapList( NCCList, false);
+                    // Load Database vào Spinner
+                    NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
+                    TTSpinner_mini.setAdapter(
+                            new TTAdapter(CungcapLayout.this, tenTTList_mini)
+                    );
+                    int index = -1;
+                    for( int i = 0 ; i < tenTTList_mini.size() ; i++)
+                        if( tenTTList_mini.get(i).equals("OPENING") )
+                        {index = i; break;}
+                    TTSpinner_mini.setSelection(index);
+                    TTSpinner_mini.setEnabled(false);
+                    setEventDatePicker( getDate("tomorrow") );
+                    setEventDialog( v );
+                }
+            });
+            editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createDialog(layout);
+                    setControlDialog();
+    //                // Access Control
+                    inputSP.setText(focusSoPhieu.getText());
+                    inputSP.setEnabled(false);
+                    switch ( focusTT ){
+                        case "OPENING":
+                        {
+                            String temp = (String) focusTongtien.getText();
+                            Log.d("data",temp);
+                            int tongtien = Integer.parseInt( reverseMoneyFormat(temp) );
+                            String ngaygiao = formatDate(focusNgaygiao.getText().toString(),true);
+                            // Đã có detail thì không được thay đổi nhà cung cấp
+                            tenNCCList_mini = NhaCungCapList( NCCList, false);
+                            maNCCList_mini = maNhaCungCapList( NCCList, false);
+                            NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
+
+                            int index = -1;
+                            // Đã có sẵn mã NCC rồi thì chỉ cần tìm vị trí và cho Selection của Spinner
+                            for( int i = 0 ; i < maNCCList_mini.size() ; i++)
+                                if( maNCCList_mini.get(i).equals( focusNCC.getText()+"" ) )
+                                {index = i; break;}
+                            NCCSpinner_mini.setSelection(index);
+                            // Ngày giao mặc định là ngày mai
+                            setEventDatePicker( ngaygiao );
+                            // Lấy tên TT là OPENING và CONFIRMED
+                            tenTTList_mini = TrangThaiList( trangthai, false, focusTT);
+                            TTSpinner_mini.setAdapter(
+                                    new TTAdapter(CungcapLayout.this, tenTTList_mini)
+                            );
+
+                            if ( tongtien != 0 ){
+                                NCCSpinner_mini.setEnabled(false);
+                            }
+                            else TTSpinner_mini.setEnabled(false);
+                        }
+                        break;
+                        case "CONFIRMED":
+                            // Khi đã confirmed tức send mail rồi thì chỉ được sửa trạng thái thành CANCELED và DELIVERIED
+                            NCCSpinner_mini.setEnabled(false);
+                            // Chỉ được phép thay đổi ngày giao nếu ngày giao chưa qua ngày hôm nay
+                            String ngaygiao = formatDate(focusNgaygiao.getText().toString(),true);
+                            Log.d("data",ngaygiao+" == "+getDate("now") +"");
+                            if( ngaygiao.compareTo( getDate("now") ) > 0  )
+                                inputND.setEnabled(false);
+                            else {
+                                inputND.setEnabled(true);
+                                setEventDatePicker(ngaygiao);
+                            }
+                            tenNCCList_mini = NhaCungCapList( NCCList, false);
+                            maNCCList_mini = maNhaCungCapList( NCCList, false);
+                            NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
+                            int index = -1;
+                            // Đã có sẵn mã NCC rồi thì chỉ cần tìm vị trí và cho Selection của Spinner
+                            for( int i = 0 ; i < maNCCList_mini.size() ; i++)
+                                if( maNCCList_mini.get(i).equals( focusNCC.getText()+"" ) )
+                                {index = i; break;}
+                            NCCSpinner_mini.setSelection(index);
+
+                            tenTTList_mini = TrangThaiList( trangthai, false, focusTT);
+                            TTSpinner_mini.setAdapter(
+                                new TTAdapter(CungcapLayout.this, tenTTList_mini)
+                            );
+                            break;
+                        default: break;
+                    }
+                    showLabel.setText("Sửa phiếu cung cấp");
+                    showConfirm.setText("Bạn có muốn sửa hàng này không?");
+                    setEventDialog( v );
+                }
+            });
+            delBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createDialog(layout);
+                    setControlDialog();
+                    // Access Control
+                    // Chỉ xóa được khi trạng thái là OPENING và tổng tiền = 0đ
+                    inputSP.setText(focusSoPhieu.getText());
+                    int[] date = StringtoIntDate((String) focusNgaygiao.getText());
+                    inputND.updateDate( date[2]+0,date[1]-1, date[0]+0);
+                    // Chỉ trả trạng thái lúc mà nó đc focus
+                    tenTTList_mini = TrangThaiList( trangthai, false, "");
+                    tenNCCList_mini = NhaCungCapList( NCCList, false);
+                    maNCCList_mini = maNhaCungCapList( NCCList, false);
+                    // Load Database vào Spinner
+                    NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
+                    TTSpinner_mini.setAdapter(
+                            new TTAdapter(CungcapLayout.this, tenTTList_mini)
+                    );
+                    int index = -1;
+                    // Đã có sẵn mã NCC rồi thì chỉ cần tìm vị trí và cho Selection của Spinner
+                    for( int i = 0 ; i < maNCCList_mini.size() ; i++)
+                        if( maNCCList_mini.get(i).equals( focusNCC.getText()+"" ) )
+                        {index = i; break;}
+                    NCCSpinner_mini.setSelection(index);
+                    index = -1;
+                    for( int i = 0 ; i < tenTTList_mini.size() ; i++)
+                        if( tenTTList_mini.get(i).equals( focusTT+"" ) )
+                        {index = i; break;}
+                    NCCSpinner_mini.setSelection(index);
+                    // Xóa thì tất cả field đều không được động
+                    inputSP.setEnabled(false);
+                    inputND.setEnabled(false);
+                    NCCSpinner_mini.setEnabled(false);
+                    TTSpinner_mini.setEnabled(false);
+                    String temp = (String) focusTongtien.getText();
+                    int tongtien = Integer.parseInt(
+                            (String) temp.subSequence(0, temp.length()-1 )
+                    );
+                    // Đã có detail thì không được xóa
+                    if ( tongtien != 0 ){
+                        yesBtn.setVisibility(View.INVISIBLE);
+                    }
+
+                    showLabel.setText("Xóa phiếu cung cấp");
+                    showConfirm.setText("Bạn có muốn sửa hàng này không?");
+                    setEventDialog( v );
+                }
+            });
+        }
+
+    // ---------------------------- DATE -----------------------
+        public String getDate( String mode){
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+            if( !mode.equalsIgnoreCase("tommorrow")) return formatter.format(date);
+            Calendar c = Calendar.getInstance();
             c.setTime(date);
             c.add(Calendar.DATE, 1);
             date = c.getTime();
-        return formatter.format(date);
-    }
-    public void setEventDatePicker( String init ){
-        inputND_data = init;
-//                Log.d("date",init);
-        int[] date = StringtoIntDate( formatDate( init, false));
-//            Log.d("date",date[2]+date[1]-1+date[0]+"");
-        inputND.init(date[2],date[1]-1,date[0],new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                inputND_data = formatDate(InttoStringDate(dayOfMonth,monthOfYear+1,year), true);
-//                 Toast.makeText( NhanvienLayout.this, strDate+"", Toast.LENGTH_LONG).show();
-            }
-
-        });
-    }
-
-    public void setEventSpinnerMini(){
-        NCCSpinner_mini_data = maNCCList_mini.get(0);
-        NCCSpinner_mini.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                NCCSpinner_mini_data = maNCCList_mini.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                NCCSpinner_mini_data = maNCCList_mini.get(0);
-            }
-        });
-        TTSpinner_mini_data = tenTTList_mini.get(0);
-        TTSpinner_mini.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TTSpinner_mini_data = tenTTList_mini.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                TTSpinner_mini_data = tenTTList_mini.get(0);
-            }
-        });
-    }
-    public NhaCungCap findNCCinList( String maNCC){
-        if( maNCC == null || maNCC.trim().equalsIgnoreCase("") ) return null;
-        for(NhaCungCap ncc : NCCList){
-            if(ncc.getMaNCC().equals(maNCC) ){
-                return ncc;
-            }
+            return formatter.format(date);
         }
-        return null;
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1){
-            if( resultCode == RESULT_OK ) {
-                String tongtien = data.getStringExtra("tongtien");
-                Toast.makeText(CungcapLayout.this, "Có thay đổi "+tongtien, Toast.LENGTH_LONG).show();
-//                edit( pcc.set );
-            }
-        }
-    }
-    public boolean isOpeningExsited( ){
-        for( PhieuCungCap pcc : PCCList ){
-            if( pcc.getTrangThai().equals("OPENING") )
-                return true;
-        }
-        return false;
-    }
-    public void setEventButton() {
-        detailBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CungcapLayout.this, CTCungcapLayout.class);
-                Bundle b = new Bundle();
-                    b.putString("sp",focusSoPhieu.getText().toString().trim()+"");
-                    b.putString("ng",focusNgaygiao.getText().toString().trim()+"");
-                    b.putString("ncc",focusNCC.getText().toString().trim()+"");
-                    b.putString("tenNCC",
-                            findNCCinList(
-                                    focusNCC.getText().toString().trim()+""
-                            ).getTenNCC()
-                    );
-                    b.putString("ttien",focusTongtien.getText().toString().trim()+"");
-                    b.putString("tt",focusTT);
-                intent.putExtras(b);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-                startActivityForResult( intent, 1 );
-//                finish();
-            }
-        });
-        int layout = R.layout.popup_cungcap ;
-        insertBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( isOpeningExsited() ) {
-                    Toast.makeText(CungcapLayout.this,"Đang có 1 Phiếu cung cấp OPENNING!! Hãy sử dụng nó ",Toast.LENGTH_LONG).show();
-                    return;
-                }
-                createDialog(layout);
-                setControlDialog();
-                // Access Control
-                // none
-                // Chỉ trả trạng thái lúc mà nó đc focus
-                tenTTList_mini = TrangThaiList( trangthai, false, "");
-                tenNCCList_mini = NhaCungCapList( NCCList, false);
-                maNCCList_mini = maNhaCungCapList( NCCList, false);
-                // Load Database vào Spinner
-                NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
-                TTSpinner_mini.setAdapter(
-                        new TTAdapter(CungcapLayout.this, tenTTList_mini)
-                );
-                int index = -1;
-                for( int i = 0 ; i < tenTTList_mini.size() ; i++)
-                    if( tenTTList_mini.get(i).equals("OPENING") )
-                    {index = i; break;}
-                TTSpinner_mini.setSelection(index);
-                TTSpinner_mini.setEnabled(false);
-                setEventDatePicker( getDate("tomorrow") );
-                setEventDialog( v );
-            }
-        });
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createDialog(layout);
-                setControlDialog();
-//                // Access Control
-                inputSP.setText(focusSoPhieu.getText());
-                inputSP.setEnabled(false);
-                switch ( focusTT ){
-                    case "OPENING":
-                    {
-                        String temp = (String) focusTongtien.getText();
-                        int tongtien = Integer.parseInt(
-                                (String) temp.subSequence(0, temp.length()-1 )
-                        );
-                        String ngaygiao = formatDate(focusNgaygiao.getText().toString(),true);
-                        // Đã có detail thì không được thay đổi nhà cung cấp
-                        tenNCCList_mini = NhaCungCapList( NCCList, false);
-                        maNCCList_mini = maNhaCungCapList( NCCList, false);
-                        NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
-
-                        int index = -1;
-                        // Đã có sẵn mã NCC rồi thì chỉ cần tìm vị trí và cho Selection của Spinner
-                        for( int i = 0 ; i < maNCCList_mini.size() ; i++)
-                            if( maNCCList_mini.get(i).equals( focusNCC.getText()+"" ) )
-                            {index = i; break;}
-                        NCCSpinner_mini.setSelection(index);
-                        // Ngày giao mặc định là ngày mai
-                        setEventDatePicker( ngaygiao );
-                        // Lấy tên TT là OPENING và CONFIRMED
-                        tenTTList_mini = TrangThaiList( trangthai, false, focusTT);
-                        TTSpinner_mini.setAdapter(
-                                new TTAdapter(CungcapLayout.this, tenTTList_mini)
-                        );
-
-                        if ( tongtien != 0 ){
-                            NCCSpinner_mini.setEnabled(false);
-                        }
-                        else TTSpinner_mini.setEnabled(false);
-                    }
-                    break;
-                    case "CONFIRMED":
-                        // Khi đã confirmed tức send mail rồi thì chỉ được sửa trạng thái thành CANCELED và DELIVERIED
-                        NCCSpinner_mini.setEnabled(false);
-                        // Chỉ được phép thay đổi ngày giao nếu ngày giao là ngày hôm nay
-                        String ngaygiao = formatDate(focusNgaygiao.getText().toString(),true);
-                        Log.d("data",ngaygiao+" == "+getDate("now") +"");
-                        if( !ngaygiao.equalsIgnoreCase( getDate("now") )  )
-                            inputND.setEnabled(false);
-                        else {
-                            inputND.setEnabled(true);
-                            setEventDatePicker(ngaygiao);
-                        }
-                        tenNCCList_mini = NhaCungCapList( NCCList, false);
-                        maNCCList_mini = maNhaCungCapList( NCCList, false);
-                        NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
-                        int index = -1;
-                        // Đã có sẵn mã NCC rồi thì chỉ cần tìm vị trí và cho Selection của Spinner
-                        for( int i = 0 ; i < maNCCList_mini.size() ; i++)
-                            if( maNCCList_mini.get(i).equals( focusNCC.getText()+"" ) )
-                            {index = i; break;}
-                        NCCSpinner_mini.setSelection(index);
-
-                        tenTTList_mini = TrangThaiList( trangthai, false, focusTT);
-                        TTSpinner_mini.setAdapter(
-                            new TTAdapter(CungcapLayout.this, tenTTList_mini)
-                        );
-                        break;
-                    default: break;
-                }
-                showLabel.setText("Sửa phiếu cung cấp");
-                showConfirm.setText("Bạn có muốn sửa hàng này không?");
-                setEventDialog( v );
-            }
-        });
-        delBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createDialog(layout);
-                setControlDialog();
-                // Access Control
-                // Chỉ xóa được khi trạng thái là OPENING và tổng tiền = 0đ
-                inputSP.setText(focusSoPhieu.getText());
-                int[] date = StringtoIntDate((String) focusNgaygiao.getText());
-                inputND.updateDate( date[2]+0,date[1]-1, date[0]+0);
-                // Chỉ trả trạng thái lúc mà nó đc focus
-                tenTTList_mini = TrangThaiList( trangthai, false, "");
-                tenNCCList_mini = NhaCungCapList( NCCList, false);
-                maNCCList_mini = maNhaCungCapList( NCCList, false);
-                // Load Database vào Spinner
-                NCCSpinner_mini.setAdapter( loadSpinnerAdapter((ArrayList<String>) tenNCCList_mini) );
-                TTSpinner_mini.setAdapter(
-                        new TTAdapter(CungcapLayout.this, tenTTList_mini)
-                );
-                int index = -1;
-                // Đã có sẵn mã NCC rồi thì chỉ cần tìm vị trí và cho Selection của Spinner
-                for( int i = 0 ; i < maNCCList_mini.size() ; i++)
-                    if( maNCCList_mini.get(i).equals( focusNCC.getText()+"" ) )
-                    {index = i; break;}
-                NCCSpinner_mini.setSelection(index);
-                index = -1;
-                for( int i = 0 ; i < tenTTList_mini.size() ; i++)
-                    if( tenTTList_mini.get(i).equals( focusTT+"" ) )
-                    {index = i; break;}
-                NCCSpinner_mini.setSelection(index);
-                // Xóa thì tất cả field đều không được động
-                inputSP.setEnabled(false);
-                inputND.setEnabled(false);
-                NCCSpinner_mini.setEnabled(false);
-                TTSpinner_mini.setEnabled(false);
-                String temp = (String) focusTongtien.getText();
-                int tongtien = Integer.parseInt(
-                        (String) temp.subSequence(0, temp.length()-1 )
-                );
-                // Đã có detail thì không được xóa
-                if ( tongtien != 0 ){
-                    yesBtn.setVisibility(View.INVISIBLE);
-                }
-
-                showLabel.setText("Xóa phiếu cung cấp");
-                showConfirm.setText("Bạn có muốn sửa hàng này không?");
-                setEventDialog( v );
-            }
-        });
-    }
-    // ----------------------------------{{}} ----------------------------------
-
     // ---------------------------- DIALOG -----------------------------------
-    // --------------- DIALOG HELPER -----------------------------------------------------------------
-    public void createDialog(int layout) {
-        dialog = new Dialog(CungcapLayout.this);
-        dialog.setContentView(layout);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-    }
-
-    public void setControlDialog() {
-        backBtn = dialog.findViewById(R.id.CC_backBtn);
-        yesBtn = dialog.findViewById(R.id.CC_yesInsertBtn);
-        noBtn = dialog.findViewById(R.id.CC_noInsertBtn);
-
-        NCCSpinner_mini = dialog.findViewById(R.id.CC_NCCSpinner_mini);
-
-        TTSpinner_mini = dialog.findViewById(R.id.CC_TTSpinner_mini);
-
-        inputSP = dialog.findViewById(R.id.CC_inputSP);
-        inputND = dialog.findViewById(R.id.CC_inputNG);
-
-        showSPError = dialog.findViewById(R.id.CC_showSPError);
-        showNGError = dialog.findViewById(R.id.CC_showNGError);
-
-        showResult = dialog.findViewById(R.id.CC_showResult);
-        showConfirm = dialog.findViewById(R.id.CC_showConfirm);
-        showLabel = dialog.findViewById(R.id.CC_showLabel);
-    }
-
-    public void insert(PhieuCungCap pcc){
-        //    API
-        phieucungcapDB.doPost(pcc,null,"insert");
-        //
-        int n =  cc_table_list.getChildCount() ;
-        TableRow tr = createRow(this, pcc);
-        tr.setId( n );
-        //   Process
-        if( NCCSpinner_data.equals("All")  ){
-            if( TTSpinner_data.equals("All")){
-                // Add vào List chính vì đang ở List chính
-                cc_table_list.addView(tr);
-            }else if( TTSpinner_data.equals(pcc.getTrangThai()) ){
-                // Nếu tất cả nhà cung cấp và cùng trạng thái thì thêm vào list
-                sortPCCList.add(pcc);
-                cc_table_list.addView(tr);
-            }else {
-                // Nếu tất cả nhà cung cấp nhưng không cùng trạng thái thì không làm gì
-            }
-        }else if(NCCSpinner_data.equals( pcc.getMaNcc() ) ){
-            if( TTSpinner_data.equals("All")){
-                // Nếu cùng nhà cung cấp, tất cả trạng thái
-                cc_table_list.addView(tr);
-            }else if( TTSpinner_data.equals(pcc.getTrangThai()) ){
-                // Nếu cùng chung nhà cung cấp và cùng trạng thái thì thêm vào list
-                sortPCCList.add(pcc);
-                cc_table_list.addView(tr);
-            }else {
-                // Nếu cùng chung nhà cung cấp nhưng không cùng trạng thái thì không làm gì
-            }
-        }else if(!NCCSpinner_data.equals( pcc.getMaNcc() ) ){
-                // Nếu khác nhà cung cấp thì không làm gì
+        public void createDialog(int layout) {
+            dialog = new Dialog(CungcapLayout.this);
+            dialog.setContentView(layout);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
         }
-        // Cả 3 trường hợp thì phải thêm vào List chính
-        PCCList.add(pcc);
-        setEventTableList();
-    }
-    public void edit(PhieuCungCap pcc){
-        Log.d("data", pcc.toString());
-        //    API
-        phieucungcapDB.doPost(pcc,null,"update");
-        //    List
-        String trangthai = TTSpinner_data;
-        String trangthaimoi = pcc.getTrangThai();
 
-        String nhaCC = NCCSpinner_data;
-        String nhaCCmoi = pcc.getMaNcc();
-//        Log.d("index",indexofRow+"");
-        // Trường hợp 2 dữ liệu Spinner đều trùng với thằng input
-        int index = -1;
-        for( int i = 0; i < PCCList.size(); i++){
-            if( pcc.getSoPhieu().equals( PCCList.get(i).getSoPhieu() ) ){
-                index = i; break;
-            }
+        public void setControlDialog() {
+            backBtn = dialog.findViewById(R.id.CC_backBtn);
+            yesBtn = dialog.findViewById(R.id.CC_yesInsertBtn);
+            noBtn = dialog.findViewById(R.id.CC_noInsertBtn);
+
+            NCCSpinner_mini = dialog.findViewById(R.id.CC_NCCSpinner_mini);
+
+            TTSpinner_mini = dialog.findViewById(R.id.CC_TTSpinner_mini);
+
+            inputSP = dialog.findViewById(R.id.CC_inputSP);
+            inputND = dialog.findViewById(R.id.CC_inputNG);
+
+            showSPError = dialog.findViewById(R.id.CC_showSPError);
+            showNGError = dialog.findViewById(R.id.CC_showNGError);
+
+            showResult = dialog.findViewById(R.id.CC_showResult);
+            showConfirm = dialog.findViewById(R.id.CC_showConfirm);
+            showLabel = dialog.findViewById(R.id.CC_showLabel);
         }
-        TableRow tr = (TableRow) createRow(this, pcc);
-        // ALL +
-        // 2 Trường hợp cần đổi vị trí là khác TT và khác NCC
-        PCCList.set(index, pcc);
-        if( PCCList.size() == sortPCCList.size() ){
-            // Nếu cùng 1 List Chính
-            sortPCCList = PCCList;
-            if( nhaCC.equals(nhaCCmoi) || nhaCC.equals("All") ) {
-                if (trangthai.equals(trangthaimoi) || trangthai.equals("All")) {
-                    cc_table_list.removeViewAt(indexofRow);
-                    cc_table_list.addView(tr, indexofRow);
+        public void insert(PhieuCungCap pcc){
+            //    API
+            phieucungcapDB.doPost(pcc,null,"insert");
+            //
+            int n =  cc_table_list.getChildCount() ;
+            TableRow tr = createRow(this, pcc);
+            tr.setId( n );
+            //   Process
+            if( NCCSpinner_data.equals("All")  ){
+                if( TTSpinner_data.equals("All")){
+                    // Add vào List chính vì đang ở List chính
+                    cc_table_list.addView(tr);
+                }else if( TTSpinner_data.equals(pcc.getTrangThai()) ){
+                    // Nếu tất cả nhà cung cấp và cùng trạng thái thì thêm vào list
+                    sortPCCList.add(pcc);
+                    cc_table_list.addView(tr);
+                }else {
+                    // Nếu tất cả nhà cung cấp nhưng không cùng trạng thái thì không làm gì
+                }
+            }else if(NCCSpinner_data.equals( pcc.getMaNcc() ) ){
+                if( TTSpinner_data.equals("All")){
+                    // Nếu cùng nhà cung cấp, tất cả trạng thái
+                    cc_table_list.addView(tr);
+                }else if( TTSpinner_data.equals(pcc.getTrangThai()) ){
+                    // Nếu cùng chung nhà cung cấp và cùng trạng thái thì thêm vào list
+                    sortPCCList.add(pcc);
+                    cc_table_list.addView(tr);
+                }else {
+                    // Nếu cùng chung nhà cung cấp nhưng không cùng trạng thái thì không làm gì
+                }
+            }else if(!NCCSpinner_data.equals( pcc.getMaNcc() ) ){
+                    // Nếu khác nhà cung cấp thì không làm gì
+            }
+            // Cả 3 trường hợp thì phải thêm vào List chính
+            PCCList.add(pcc);
+            setEventTableList();
+        }
+        public void edit(PhieuCungCap pcc, boolean withoutAPI){
+            //    API
+            if(!withoutAPI){
+                String reponse = phieucungcapDB.doPost(pcc,null,"update");
+                if( reponse == null ) return;
+                if( pcc.getTrangThai().equals("DELIVERIED") || pcc.getTrangThai().equals("CANCELED")) {
+                    Log.d("data", reponse);
+                    List<VanPhongPham> list = convertToVanPhongPhamList(
+                            returnListfromJSON(
+                                    reponse, "VanPhongPham"
+                            )
+                    );
+//                    thongbao(list,true);
+                }
+            }
+            //    List
+            String trangthai = TTSpinner_data;
+            String trangthaimoi = pcc.getTrangThai();
+
+            String nhaCC = NCCSpinner_data;
+            String nhaCCmoi = pcc.getMaNcc();
+
+            // Trường hợp 2 dữ liệu Spinner đều trùng với thằng input
+            int index = -1;
+            for( int i = 0; i < PCCList.size(); i++){
+                if( pcc.getSoPhieu().equals( PCCList.get(i).getSoPhieu() ) ){
+                    index = i; break;
+                }
+            }
+            TableRow tr = (TableRow) createRow(this, pcc);
+            // ALL +
+            // 2 Trường hợp cần đổi vị trí là khác TT và khác NCC
+            PCCList.set(index, pcc);
+            if( PCCList.size() == sortPCCList.size() ){
+                // Nếu cùng 1 List Chính
+                sortPCCList = PCCList;
+                if( nhaCC.equals(nhaCCmoi) || nhaCC.equals("All") ) {
+                    if (trangthai.equals(trangthaimoi) || trangthai.equals("All")) {
+                        cc_table_list.removeViewAt(indexofRow);
+                        cc_table_list.addView(tr, indexofRow);
+                    }else
+                        cc_table_list.removeViewAt(indexofRow);
                 }else
                     cc_table_list.removeViewAt(indexofRow);
-            }else
-                cc_table_list.removeViewAt(indexofRow);
 
-            for (int i = indexofRow; i < cc_table_list.getChildCount(); i++) {
-                cc_table_list.getChildAt(i).setId((int) i);
-            }
-        }else{
-            // Nếu sortPCCList là 1 List cụ thể
-            sortPCCList.set(indexofRow-1, pcc);
-//            Log.d("index",indexofRow+"");
-            // Mếu khác NCC nhưng NCC không phải tất cả thì sẽ remove
-            if( !nhaCC.equals(nhaCCmoi) &&  !nhaCC.equals("All")){
-//                Log.d("data","doit");
-                cc_table_list.removeViewAt(indexofRow);
-                // Nếu giống NCC nhưng khác trạng thái, và trạng thái không phải là tất cả và trạng thái đó khác thì
-            }else if( !trangthai.equals(trangthaimoi) &&  !trangthai.equals("All")){
-//                Log.d("data","doit2");
-                cc_table_list.removeViewAt(indexofRow);
-                // Chuyển trạng thái => Gửi Mail
-            }else{
-//                Log.d("data","doit3");
-                cc_table_list.removeViewAt(indexofRow);
-                cc_table_list.addView(tr,indexofRow);
-            }
-            if( indexofRow != cc_table_list.getChildCount() )
-            for (int i = indexofRow; i < cc_table_list.getChildCount(); i++) {
-                cc_table_list.getChildAt(i).setId((int) i);
-            }
-        }
-
-        setEventTableList();
-    }
-    public void delete(PhieuCungCap pcc) {
-        // API
-        phieucungcapDB.doPost(pcc,null,"remove");
-        // Tìm vị trí cần xóa trong PCCList
-        int index = -1;
-        for (int i = 0; i < PCCList.size(); i++) {
-            if (pcc.getSoPhieu().equals(PCCList.get(i).getSoPhieu())) {
-                index = i;
-                break;
-            }
-        }
-        // Cả 3 trường hợp thì phải xóa ở List chính
-        PCCList.remove(index + 0);
-        if (indexofRow != -1) {
-            // Nghĩa là đang ở trang chính
-            if (PCCList.size() == sortPCCList.size()) {
-                cc_table_list.removeViewAt(index + 1); // + thêm
-                sortPCCList = PCCList;
-                for (int i = index+1; i < cc_table_list.getChildCount(); i++) {
+                for (int i = indexofRow; i < cc_table_list.getChildCount(); i++) {
                     cc_table_list.getChildAt(i).setId((int) i);
                 }
-            } else { // Nghĩa là đang ở sort table
-                sortPCCList.remove(indexofRow - 1);
-                if (indexofRow == cc_table_list.getChildCount() - 1) {
+            }else{
+                // Nếu sortPCCList là 1 List cụ thể
+                sortPCCList.set(indexofRow-1, pcc);
+    //            Log.d("index",indexofRow+"");
+                // Mếu khác NCC nhưng NCC không phải tất cả thì sẽ remove
+                if( !nhaCC.equals(nhaCCmoi) &&  !nhaCC.equals("All")){
+    //                Log.d("data","doit");
                     cc_table_list.removeViewAt(indexofRow);
-                } else {
+                    // Nếu giống NCC nhưng khác trạng thái, và trạng thái không phải là tất cả và trạng thái đó khác thì
+                }else if( !trangthai.equals(trangthaimoi) &&  !trangthai.equals("All")){
+    //                Log.d("data","doit2");
                     cc_table_list.removeViewAt(indexofRow);
-                    for (int i = indexofRow; i < cc_table_list.getChildCount(); i++) {
+                    // Chuyển trạng thái => Gửi Mail
+                }else{
+    //                Log.d("data","doit3");
+                    cc_table_list.removeViewAt(indexofRow);
+                    cc_table_list.addView(tr,indexofRow);
+                }
+                if( indexofRow != cc_table_list.getChildCount() )
+                for (int i = indexofRow; i < cc_table_list.getChildCount(); i++) {
+                    cc_table_list.getChildAt(i).setId((int) i);
+                }
+            }
+
+            setEventTableList();
+        }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("DAIds", "MYCHANNEL", importance);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+    private void thongbao(List<VanPhongPham> list, boolean success) {
+        createNotificationChannel();
+        int logo = R.drawable._xdlogo;
+        int notiiconID = R.drawable.notiicon_active;
+        String textTitle = "Những văn phòng phẩm mới về ";
+        String textContent = "Bao gồm : ";
+        Bitmap notiicon = BitmapFactory.decodeResource(getResources(), notiiconID);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "DAIds")
+                .setLargeIcon(notiicon)
+                .setSmallIcon(logo)
+                .setContentTitle(textTitle)
+                .setContentText(textContent)
+                .setPriority(NotificationCompat.PRIORITY_MAX);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CungcapLayout.this);
+        managerCompat.notify(0, mBuilder.build());
+    }
+
+    public void delete(PhieuCungCap pcc) {
+            // API
+            phieucungcapDB.doPost(pcc,null,"remove");
+            // Tìm vị trí cần xóa trong PCCList
+            int index = -1;
+            for (int i = 0; i < PCCList.size(); i++) {
+                if (pcc.getSoPhieu().equals(PCCList.get(i).getSoPhieu())) {
+                    index = i;
+                    break;
+                }
+            }
+            // Cả 3 trường hợp thì phải xóa ở List chính
+            PCCList.remove(index + 0);
+            if (indexofRow != -1) {
+                // Nghĩa là đang ở trang chính
+                if (PCCList.size() == sortPCCList.size()) {
+                    cc_table_list.removeViewAt(index + 1); // + thêm
+                    sortPCCList = PCCList;
+                    for (int i = index+1; i < cc_table_list.getChildCount(); i++) {
                         cc_table_list.getChildAt(i).setId((int) i);
                     }
+                } else { // Nghĩa là đang ở sort table
+                    sortPCCList.remove(indexofRow - 1);
+                    if (indexofRow == cc_table_list.getChildCount() - 1) {
+                        cc_table_list.removeViewAt(indexofRow);
+                    } else {
+                        cc_table_list.removeViewAt(indexofRow);
+                        for (int i = indexofRow; i < cc_table_list.getChildCount(); i++) {
+                            cc_table_list.getChildAt(i).setId((int) i);
+                        }
+                    }
                 }
             }
+            Log.d("index",indexofRow+"");
+            setEventTableList();
         }
-        Log.d("index",indexofRow+"");
-        setEventTableList();
-    }
 
-    public void setEventDialog(View view){
-        setEventSpinnerMini();
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        noBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        yesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean success = false;
-                switch (view.getId()) {
-                    case R.id.CC_insertBtn:{
-                        if ( !isSafeDialog( false )) break;
-                        PhieuCungCap pcc = new PhieuCungCap(
-                                inputSP.getText().toString().trim()+"",
-                                TTSpinner_mini_data+"",
-                                NCCSpinner_mini_data+"",
-                                inputND_data+""
-                        );
-                        Log.d("tt",TTSpinner_mini_data+"");
-                        insert( pcc );
-                        success = true;}
-                        break;
-                    case R.id.CC_editBtn:{
-                        if ( !isSafeDialog( true )) break;
-                        PhieuCungCap pcc = new PhieuCungCap(
-                                inputSP.getText().toString().trim()+"",
-                                TTSpinner_mini_data+"",
-                                NCCSpinner_mini_data+"",
-                                inputND_data+""
-                        );
-                        edit( pcc );
-                        if(TTSpinner_mini_data.equals("CONFIRMED")) {
-                            // Gửi mail
-                            Toast.makeText(CungcapLayout.this, "Làm gửi email ở CungcapLayout dòng này 968 trong yesBtn/edit", Toast.LENGTH_LONG).show();
-                        }else if(TTSpinner_mini_data.equals("DELIVERIED")){
-                            Toast.makeText(CungcapLayout.this, "Làm thông báo ở CungcapLayout dòng này 970 trong yesBtn/edit", Toast.LENGTH_LONG).show();
-                        }
-                        success = true;}
-                        break;
-                    case R.id.CC_delBtn:
-                        PhieuCungCap pcc = new PhieuCungCap(
-                                inputSP.getText().toString().trim()+"",
-                                TTSpinner_mini_data+"",
-                                NCCSpinner_mini_data+"",
-                                inputND_data+""
-                        );
-                        delete( pcc );
-                        success = true;
-                        break;
+        public void setEventDialog(View view){
+            setEventSpinnerMini();
+            backBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
                 }
-                if (success) {
-                    showResult.setText(showLabel.getText() + " thành công !");
-                    showResult.setTextColor(getResources().getColor(R.color.yes_color));
-                    showResult.setVisibility(View.VISIBLE);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            showResult.setVisibility(View.INVISIBLE);
-                            dialog.dismiss();
-                        }
-                    }, 1000);
-                } else {
-                    showResult.setTextColor(getResources().getColor(R.color.thoatbtn_bgcolor));
-                    showResult.setText(showLabel.getText() + " thất bại !");
-                    showResult.setVisibility(View.VISIBLE);
+            });
+            noBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
                 }
-            }
-        });
-    }
+            });
+            yesBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    boolean success = false;
+                    switch (view.getId()) {
+                        case R.id.CC_insertBtn:{
+                            if ( !isSafeDialog( false )) break;
+                            PhieuCungCap pcc = new PhieuCungCap(
+                                    inputSP.getText().toString().trim()+"",
+                                    TTSpinner_mini_data+"",
+                                    NCCSpinner_mini_data+"",
+                                    inputND_data+"",
+                                    null
+                            );
+                            Log.d("tt",TTSpinner_mini_data+"");
+                            insert( pcc );
+                            success = true;}
+                            break;
+                        case R.id.CC_editBtn:{
+                            if ( !isSafeDialog( true )) break;
+                            PhieuCungCap pcc = new PhieuCungCap(
+                                    inputSP.getText().toString().trim()+"",
+                                    TTSpinner_mini_data+"",
+                                    NCCSpinner_mini_data+"",
+                                    inputND_data+"",
+                                    reverseMoneyFormat(focusTongtien.getText().toString().trim())+""
+                            );
+                            edit( pcc , true);
+                            if(TTSpinner_mini_data.equals("CONFIRMED")) {
+                                // Gửi mail
+                                Toast.makeText(CungcapLayout.this, "Đã gửi đơn hàng cho NCC "+pcc.getMaNcc(), Toast.LENGTH_LONG).show();
+                            }else if(TTSpinner_mini_data.equals("DELIVERIED")){
+                                Toast.makeText(CungcapLayout.this, "Giao hàng thành công", Toast.LENGTH_LONG).show();
+                            }else if(TTSpinner_mini_data.equals("CANCELED")){
+                                Toast.makeText(CungcapLayout.this, "Hủy giao hàng, giao hàng thất bại", Toast.LENGTH_LONG).show();
+                            }
+                            success = true;}
+                            break;
+                        case R.id.CC_delBtn:
+                            PhieuCungCap pcc = new PhieuCungCap(
+                                    inputSP.getText().toString().trim()+"",
+                                    TTSpinner_mini_data+"",
+                                    NCCSpinner_mini_data+"",
+                                    inputND_data+"",
+                                    reverseMoneyFormat(focusTongtien.getText().toString().trim())+""
+                            );
+                            delete( pcc );
+                            success = true;
+                            break;
+                    }
+                    if (success) {
+                        showResult.setText(showLabel.getText() + " thành công !");
+                        showResult.setTextColor(getResources().getColor(R.color.yes_color));
+                        showResult.setVisibility(View.VISIBLE);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showResult.setVisibility(View.INVISIBLE);
+                                dialog.dismiss();
+                            }
+                        }, 1000);
+                    } else {
+                        showResult.setTextColor(getResources().getColor(R.color.thoatbtn_bgcolor));
+                        showResult.setText(showLabel.getText() + " thất bại !");
+                        showResult.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        }
 
-    // ---------------------------- NAVIGATION  -----------------------
-    private void setNavigation() {
-        // navVPP onclick none
-        // navPB
-        navPB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(CungcapLayout.this, PhongbanLayout.class);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-                startActivity( intent );
-            }
-        });
-        // navNV
-        navNV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(CungcapLayout.this, NhanvienLayout.class);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-                startActivity( intent );
-
-            }
-        });
-        // navVPP
-        navVPP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CungcapLayout.this, VanphongphamLayout.class);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-                startActivity( intent );
-            }
-        });
-        // navCP
-        navCP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CungcapLayout.this, CapphatVPPLayout.class);
-                overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
-                startActivity( intent );
-            }
-
-        });
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
 
     // --------------- CUSTOM HELPER --------------------------------------------------------------------
-    public int DPtoPix(int dps) {
-        return (int) (dps * scale + 0.5f);
-    }
-    // This Custom Columns' Max Width : 80 p0 / 120 / 85 p0 / <= 100 p0
-    public TableRow createRow(Context context, PhieuCungCap pcc) {
-        TableRow tr = new TableRow(context);
-        //  SoPhieuview
-        TextView SoPhieuview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
-        // Cần cái này để khi mà SoPhieuview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
-        // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
-        SoPhieuview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
-        SoPhieuview.setMaxWidth(DPtoPix(80));
-        SoPhieuview.setPadding(0,0,0,0);
-        SoPhieuview.setText(pcc.getSoPhieu());
-
-        TextView NgayGiaoview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
-        // Cần cái này để khi mà NgayGiaoview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
-        // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
-        NgayGiaoview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
-        NgayGiaoview.setMaxWidth(DPtoPix(120));
-        NgayGiaoview.setText(formatDate(pcc.getNgaygiao(),false));
-
-        TextView NhaCungCapview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
-        // Cần cái này để khi mà NhaCungCapview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
-        // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
-        NhaCungCapview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
-        NhaCungCapview.setMaxWidth(DPtoPix(120));
-        NhaCungCapview.setText(pcc.getMaNcc());
-
-        TextView TongTienview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
-        // Cần cái này để khi mà TongTienview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
-        // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
-        TongTienview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
-        TongTienview.setMaxWidth(DPtoPix(120));
-        TongTienview.setText(
-                MoneyFormat(
-                        0
-//                        Integer.parseInt( pcc.getTongtien() == null || pcc.getTongtien().trim().equalsIgnoreCase("") ? "0" : pcc.getTongtien()  )
-                )
-        );
-
-        int color = R.color.white;
-        String tag = pcc.getTrangThai();
-
-        tr.setTag(tag);
-        tr.setBackgroundColor(getResources().getColor( chooseColor(tag) ));
-        tr.addView(SoPhieuview);
-        tr.addView(NgayGiaoview);
-        tr.addView(NhaCungCapview);
-        tr.addView(TongTienview);
-        return tr;
-    }
-
-    public int[] StringtoIntDate(String str) {
-        int[] date = new int[3];
-        String[] arr = str.split("/");
-        date[0] = Integer.parseInt(arr[0]);
-        date[1] = Integer.parseInt(arr[1]);
-        date[2] = Integer.parseInt(arr[2]);
-        return date; // 30/08/1999 -> [30,08,1999]
-    }
-
-    public int[] StringtoIntDateReverse(String str) {
-        int[] date = new int[3];
-        String[] arr = str.split("-");
-        date[0] = Integer.parseInt(arr[0]);
-        date[1] = Integer.parseInt(arr[1]);
-        date[2] = Integer.parseInt(arr[2]);
-        return date; // 1999-08-30 -> [1999,08,30]
-    }
-
-    public String InttoStringDate(int[] date) {
-        String day = (date[0] < 10) ? '0' + date[0] + "" : date[0] + "";
-        String month = (date[1] < 10) ? '0' + date[1] + "" : date[1] + "";
-        String year = date[2] + "";
-        return day + "/" + month + "/" + year; // [30,08,1999] -> 30/08/1999
-    }
-
-    public String InttoStringDate(int date_day, int date_month, int date_year) {
-//        Log.d("day",date_day+"");
-        String day = (date_day < 10) ? "0" + date_day + "" : date_day + "";
-        String month = (date_month < 10) ? "0" + date_month + "" : date_month + "";
-        String year = date_year + "";
-        return day + "/" + month + "/" + year; // [30,08,1999] -> 30/08/1999
-    }
-
-    public String formatDate(String str, boolean toSQL ){
-        String[] date ;
-        String result = "";
-        if( toSQL ){
-            date = str.split("/");
-            result = date[2] +"-"+ date[1] +"-"+ date[0];
-        }else{
-            date = str.split("-");
-            result = date[2] +"/"+ date[1] +"/"+ date[0];
+        public int DPtoPix(int dps) {
+            return (int) (dps * scale + 0.5f);
         }
+        // This Custom Columns' Max Width : 80 p0 / 120 / 85 p0 / <= 100 p0
+        public TableRow createRow(Context context, PhieuCungCap pcc) {
+            TableRow tr = new TableRow(context);
+            //  SoPhieuview
+            TextView SoPhieuview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
+            // Cần cái này để khi mà SoPhieuview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
+            // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
+            SoPhieuview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
+            SoPhieuview.setMaxWidth(DPtoPix(80));
+            SoPhieuview.setPadding(0,0,0,0);
+            SoPhieuview.setText(pcc.getSoPhieu());
 
-        return result;
-    }
+            TextView NgayGiaoview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
+            // Cần cái này để khi mà NgayGiaoview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
+            // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
+            NgayGiaoview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
+            NgayGiaoview.setMaxWidth(DPtoPix(120));
+            NgayGiaoview.setText(formatDate(pcc.getNgaygiao(),false));
 
-    public String MoneyFormat( int money ){
-        if( money == 0) return "0đ";
-        int temp_money = money;
-        String moneyFormat = "";
-        if( money < 1000) return String.valueOf(money) +"đ";
-        else {
-            int count = 0;
-            while (temp_money != 0) {
-                moneyFormat += (temp_money % 10) + "";
-                if ((count + 1) % 3 == 0 && temp_money >= 10) moneyFormat += ".";
-                count++;
-                temp_money /= 10;
+            TextView NhaCungCapview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
+            // Cần cái này để khi mà NhaCungCapview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
+            // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
+            NhaCungCapview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
+            NhaCungCapview.setMaxWidth(DPtoPix(120));
+            NhaCungCapview.setText(pcc.getMaNcc());
+
+            TextView TongTienview = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
+            // Cần cái này để khi mà TongTienview đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
+            // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
+            TongTienview.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
+            TongTienview.setMaxWidth(DPtoPix(120));
+            TongTienview.setText(
+                    MoneyFormat(
+                        Integer.parseInt( pcc.getTongtien() == null || pcc.getTongtien().equals("null") || pcc.getTongtien().trim().equalsIgnoreCase("")
+                                ? "0"
+                                : pcc.getTongtien() )
+                    )
+            );
+
+            int color = R.color.white;
+            String tag = pcc.getTrangThai();
+
+            tr.setTag(tag);
+            tr.setBackgroundColor(getResources().getColor( chooseColor(tag) ));
+            tr.addView(SoPhieuview);
+            tr.addView(NgayGiaoview);
+            tr.addView(NhaCungCapview);
+            tr.addView(TongTienview);
+            return tr;
+        }
+        public int[] StringtoIntDate(String str) {
+            int[] date = new int[3];
+            String[] arr = str.split("/");
+            date[0] = Integer.parseInt(arr[0]);
+            date[1] = Integer.parseInt(arr[1]);
+            date[2] = Integer.parseInt(arr[2]);
+            return date; // 30/08/1999 -> [30,08,1999]
+        }
+        public String InttoStringDate(int date_day, int date_month, int date_year) {
+    //        Log.d("day",date_day+"");
+            String day = (date_day < 10) ? "0" + date_day + "" : date_day + "";
+            String month = (date_month < 10) ? "0" + date_month + "" : date_month + "";
+            String year = date_year + "";
+            return day + "/" + month + "/" + year; // [30,08,1999] -> 30/08/1999
+        }
+        public String formatDate(String str, boolean toSQL ){
+            String[] date ;
+            String result = "";
+            if( toSQL ){
+                date = str.split("/");
+                result = date[2] +"-"+ date[1] +"-"+ date[0];
+            }else{
+                date = str.split("-");
+                result = date[2] +"/"+ date[1] +"/"+ date[0];
             }
-        }
-        return new StringBuilder(moneyFormat).reverse().toString() +"đ";
-    }
 
-    public boolean isSafeDialog( boolean allowSameID ) {
-        String  sophieu, ngaygiao ;
-        sophieu = inputSP.getText().toString().trim();
-        boolean noError = true;
-        if ( sophieu.equalsIgnoreCase("")) {
-            showSPError.setText("Số phiếu không được trống ");
-            showSPError.setVisibility(View.VISIBLE);
-            noError = false;
-        }else{
-            showSPError.setVisibility(View.INVISIBLE);
-            noError = true;
+            return result;
         }
-
-        ngaygiao = inputND_data;
-        if( !noError ) return noError;
-        if (  ngaygiao.compareTo( getDate("now") ) < 0 ) {
-            showNGError.setText("Ngày giao không hợp lệ ");
-            showNGError.setVisibility(View.VISIBLE);
-            noError = false;
-        }else{
-            showNGError.setVisibility(View.INVISIBLE);
-            noError = true;
-        }
-
-        if( noError ) {
-            for (int i = 1; i < PCCList.size(); i++) {
-                String sophieudata = PCCList.get(i).getSoPhieu();
-                if (!allowSameID)
-                    if (sophieu.equalsIgnoreCase(sophieudata)) {
-                        showSPError.setText("Mã NV không được trùng ");
-                        showSPError.setVisibility(View.VISIBLE);
-                        return noError = false;
-                    }
+        public String MoneyFormat( int money ){
+            if( money == 0) return "0đ";
+            int temp_money = money;
+            String moneyFormat = "";
+            if( money < 1000) return String.valueOf(money) +"đ";
+            else {
+                int count = 0;
+                while (temp_money != 0) {
+                    moneyFormat += (temp_money % 10) + "";
+                    if ((count + 1) % 3 == 0 && temp_money >= 10) moneyFormat += ".";
+                    count++;
+                    temp_money /= 10;
+                }
             }
-            showSPError.setVisibility(View.INVISIBLE);
-            showNGError.setVisibility(View.INVISIBLE);
+            return new StringBuilder(moneyFormat).reverse().toString() +"đ";
         }
-        return noError;
-    }
+        public String reverseMoneyFormat( String money ){
+            if(money == null ) return null;
+            if(money.trim().equalsIgnoreCase("") ) return "";
+            String str = "";
+            for( String m : money.split("\\.")){
+                str += m;
+            }
+            return str.equals("0") ? str : str.substring(0,str.length()-1) ;
+        }
+        public boolean isSafeDialog( boolean allowSameID ) {
+            String  sophieu, ngaygiao ;
+            sophieu = inputSP.getText().toString().trim();
+            boolean noError = true;
+            if ( sophieu.equalsIgnoreCase("")) {
+                showSPError.setText("Số phiếu không được trống ");
+                showSPError.setVisibility(View.VISIBLE);
+                noError = false;
+            }else{
+                showSPError.setVisibility(View.INVISIBLE);
+                noError = true;
+            }
+
+            ngaygiao = inputND_data;
+            if( !noError ) return noError;
+            if (  ngaygiao.compareTo( getDate("now") ) < 0 ) {
+                showNGError.setText("Ngày giao không hợp lệ ");
+                showNGError.setVisibility(View.VISIBLE);
+                noError = false;
+            }else{
+                showNGError.setVisibility(View.INVISIBLE);
+                noError = true;
+            }
+
+            if( noError ) {
+                for (int i = 1; i < PCCList.size(); i++) {
+                    String sophieudata = PCCList.get(i).getSoPhieu();
+                    if (!allowSameID)
+                        if (sophieu.equalsIgnoreCase(sophieudata)) {
+                            showSPError.setText("Mã NV không được trùng ");
+                            showSPError.setVisibility(View.VISIBLE);
+                            return noError = false;
+                        }
+                }
+                showSPError.setVisibility(View.INVISIBLE);
+                showNGError.setVisibility(View.INVISIBLE);
+            }
+            return noError;
+        }
 }

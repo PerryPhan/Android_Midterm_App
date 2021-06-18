@@ -36,6 +36,8 @@ import com.example.giuaki.Request.VanPhongPhamRequest;
 import com.example.giuaki.WebService;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -63,11 +65,14 @@ public class CTCungcapLayout extends AppCompatActivity {
     String[] trangthai = {"OPENING","CONFIRMED","DELIVERIED","CANCELED"};
     List<ChiTietCungCap> CTCCList = null;
     List<VanPhongPham> VPPList = null;
+    List<VanPhongPham> VPPListfromAPI = null;
+
     // Focus
     PhieuCungCap pcc = null;
     String tenNcc = null;
     boolean isChanged = false;
     int indexofRow = -1;
+    String focusID = null;
     TableRow focusRow = null;
     VanPhongPham focusVPP = null;
 
@@ -123,7 +128,7 @@ public class CTCungcapLayout extends AppCompatActivity {
             public void onClick(View v) {
                 if(isChanged) {
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("tongtien", ttmoneyView.getText().toString());
+                    resultIntent.putExtra("tongtien", reverseMoneyFormat(ttmoneyView.getText().toString()) );
                     setResult(Activity.RESULT_OK, resultIntent);
                 }
                 finish();
@@ -149,7 +154,7 @@ public class CTCungcapLayout extends AppCompatActivity {
     private void init() {
         Bundle b = getIntent().getExtras();
         if( b == null ) {
-            pcc = new PhieuCungCap("PB01","OPENING","VPPKBTC","02/06/2018");
+            pcc = new PhieuCungCap("PB01","OPENING","VPPKBTC","02/06/2018", "100000");
             tenNcc = "ABC";
             return;
         }
@@ -159,7 +164,7 @@ public class CTCungcapLayout extends AppCompatActivity {
         tenNcc = b.getString("tenNCC") == null ? "ABC" : b.getString("tenNCC");
         String ttien = b.getString("ttien") == null ? "" : b.getString("ttien");
         String tt  = b.getString("tt") == null ? "OPENING" : b.getString("tt");
-        pcc = new PhieuCungCap(sp,tt,ncc,ng);
+        pcc = new PhieuCungCap(sp,tt,ncc,ng,ttien);
         int color = chooseColor(tt);
             spView.setText(sp); spView.setTextColor( getResources().getColor(color));
             ngView.setText(ng); ngView.setTextColor( getResources().getColor(color));
@@ -184,16 +189,7 @@ public class CTCungcapLayout extends AppCompatActivity {
         // Table
         ct_table_list = findViewById(R.id.CT_table_list);
     }
-    public List<ChiTietCungCap> exampleList(){
-        List<ChiTietCungCap> list = new ArrayList<>();
-        // OPENING
-        list.add( new ChiTietCungCap("1","VPP01","20","400000"));
-        list.add( new ChiTietCungCap("2","VPP02","10","200000"));
-        list.add( new ChiTietCungCap("3","VPP02","10","200000"));
-        list.add( new ChiTietCungCap("4","VPP01","15","300000"));
-        list.add( new ChiTietCungCap("5","VPP01","20","400000"));
-        return list;
-    }
+
     public List<VanPhongPham> convertToVanPhongPhamList(List<Object> list ){
         if( list == null ) return null;
         List<VanPhongPham> vanphongphamlist = new ArrayList<>();
@@ -201,6 +197,14 @@ public class CTCungcapLayout extends AppCompatActivity {
             vanphongphamlist.add( (VanPhongPham) li);
         }
         return vanphongphamlist;
+    }
+    public List<ChiTietCungCap> convertToChiTietList(List<Object> list ){
+        if( list == null ) return null;
+        List<ChiTietCungCap> chitietlist = new ArrayList<>();
+        for( Object li : list ){
+            chitietlist.add( (ChiTietCungCap) li);
+        }
+        return chitietlist;
     }
     public List<Object> returnListfromJSON( String resultfromQuery , String objectClass){
         List<Object> list = null ;
@@ -226,16 +230,36 @@ public class CTCungcapLayout extends AppCompatActivity {
         return null;
     }
     private void LoadDatabase() {
-        // Api // get from pcc
-//        CTCCList = exampleList();
-        CTCCList = new ArrayList<>();
+
+
         // Get all VPP
         vanphongphamDB = new VanPhongPhamRequest();
         phieucungcapDB = new PhieuCungCapRequest();
-        VPPList = convertToVanPhongPhamList(
+        VPPListfromAPI = convertToVanPhongPhamList(
                 returnListfromJSON(
                         vanphongphamDB.doGet("show")
                         , "VanPhongPham"
+                )
+        );
+        if(VPPListfromAPI == null){
+            Toast.makeText(this,"Error: Return VPP JSON fail",Toast.LENGTH_LONG).show();
+            return;
+        }else if( VPPListfromAPI.size() == 0){
+            Toast.makeText(this,"Không có VPP nào để cấp phát",Toast.LENGTH_LONG).show();
+            return;
+        }else{
+            VPPList = new ArrayList<>();
+            for( VanPhongPham vpp : VPPListfromAPI ){
+                if( vpp.getMaNcc().trim().equalsIgnoreCase( pcc.getMaNcc() )) VPPList.add(vpp);
+            }
+        }
+
+        // Api // get from pcc
+        Log.d("SP",pcc.getSoPhieu());
+        CTCCList = convertToChiTietList(
+                returnListfromJSON(
+                        phieucungcapDB.doGet(String.format("showDetail?sophieu=%s",pcc.getSoPhieu() ))
+                        ,"ChiTiet"
                 )
         );
         if(pcc.getTrangThai().equals("OPENING")) isOpenning = true;
@@ -378,9 +402,7 @@ public class CTCungcapLayout extends AppCompatActivity {
         thanhtien = "0";
         switch (mode){
             case "insert": {
-                int max = findMaxinList(CTCCList);
-                if( max == -1 ) max = 1;
-                id = max+1+"";
+
             }
             break;
             case "edit":
@@ -399,7 +421,7 @@ public class CTCungcapLayout extends AppCompatActivity {
         if(tenNcc == null || tenNcc.trim().equalsIgnoreCase("")) tenNcc = "Empty";
         inputSL.setText(soluong+"");
         d_nccView.setText( tenNcc );
-        d_idView.setText(id);
+        if(!id.equalsIgnoreCase("0")) d_idView.setText(id);
         d_moneyView.setText( MoneyFormat( 0 ));
 
 
@@ -429,6 +451,7 @@ public class CTCungcapLayout extends AppCompatActivity {
                     soluong = convert.equals("") ? 0 : Integer.parseInt(convert);
                     int money = soluong * gia;
                     thanhtien = money + "";
+                    Log.d("data",soluong+"");
                     d_moneyView.setText(MoneyFormat(money));
                 }
             }
@@ -456,6 +479,10 @@ public class CTCungcapLayout extends AppCompatActivity {
         gia = checkStr(vpp.getGiaNhap()).trim().equalsIgnoreCase("") ?
                 1
                 : Integer.parseInt(vpp.getGiaNhap()) ;
+        thanhtien = (gia * soluong) +"";
+        d_moneyView.setText(MoneyFormat(
+                Integer.parseInt(thanhtien)
+        ));
         VPPSpinner_mini.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -464,6 +491,10 @@ public class CTCungcapLayout extends AppCompatActivity {
                 gia = checkStr(vpp.getGiaNhap()).trim().equalsIgnoreCase("") ?
                         1
                         : Integer.parseInt(vpp.getGiaNhap()) ;
+                thanhtien = (gia * soluong) +"";
+                d_moneyView.setText(MoneyFormat(
+                    Integer.parseInt(thanhtien)
+                ));
             }
 
             @Override
@@ -496,6 +527,8 @@ public class CTCungcapLayout extends AppCompatActivity {
                 focusRow = (TableRow) list.getChildAt(indexofRow);
                 TextView tv = (TextView) focusRow.getChildAt(1);
                 focusVPP = getVPPfromList((String) tv.getText());
+                tv = (TextView) focusRow.getChildAt(0);
+                focusID = tv.getText().toString().trim();
                 setNormalBGTableRows(list);
                 if( isOpenning ) {
                     editBtn.setVisibility(View.VISIBLE);
@@ -554,10 +587,10 @@ public class CTCungcapLayout extends AppCompatActivity {
                 boolean success = false;
                 switch (view.getId()) {
                     case R.id.CT_insertBtn:{
-                        Log.d("data",isSafeDialog()+"");
-                        if ( !isSafeDialog()) break;
+                        if ( !isSafeDialog( false) ) break;
                         ChiTietCungCap ctcc = new ChiTietCungCap(
-                            d_idView.getText().toString()+"",
+                                "0",
+                            pcc.getSoPhieu()+"",
                             maVPP+"",
                             soluong+"",
                             thanhtien+""
@@ -566,19 +599,23 @@ public class CTCungcapLayout extends AppCompatActivity {
                         success = true;}
                     break;
                     case R.id.CT_editBtn:{
-                        if ( !isSafeDialog()) break;
+                        if ( !isSafeDialog( true) ) break;
+
                         ChiTietCungCap ctcc = new ChiTietCungCap(
-                                d_idView.getText().toString()+"",
+                                focusID+""
+                                ,pcc.getSoPhieu()+"",
                                 maVPP+"",
                                 soluong+"",
                                 thanhtien+""
                         );
+                        Log.d("data",ctcc.toString());
                         edit( ctcc );
                         success = true;}
                     break;
                     case R.id.CT_delBtn:
                         ChiTietCungCap ctcc = new ChiTietCungCap(
-                                d_idView.getText().toString()+"",
+                                focusID+"",
+                                pcc.getSoPhieu()+"",
                                 maVPP+"",
                                 soluong+"",
                                 thanhtien+""
@@ -592,6 +629,9 @@ public class CTCungcapLayout extends AppCompatActivity {
                     showResult.setText(showLabel.getText() + " thành công !");
                     showResult.setTextColor(getResources().getColor(R.color.yes_color));
                     showResult.setVisibility(View.VISIBLE);
+                    editBtn.setVisibility(View.INVISIBLE);
+                    delBtn.setVisibility(View.INVISIBLE);
+                    previewBtn.setVisibility(View.INVISIBLE);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -611,7 +651,16 @@ public class CTCungcapLayout extends AppCompatActivity {
     private void insert(ChiTietCungCap ctcc) {
         // API
 //        Log.d("data","Insert: "+ctcc.toString());
-        phieucungcapDB.doPost(pcc,ctcc,"insertDetail");
+        String id = null;
+        try {
+            JSONObject json = new JSONObject(phieucungcapDB.doPost(pcc,ctcc,"insertDetail"));
+            id = json.get("ID").toString();
+        }catch (JSONException e){
+            e.printStackTrace();
+            return;
+        }
+        if( id == null ) return;
+        ctcc.setId(id);
         // List
         CTCCList.add(ctcc);
         // Table
@@ -624,6 +673,7 @@ public class CTCungcapLayout extends AppCompatActivity {
 
     private void delete(ChiTietCungCap ctcc) {
         // API
+        phieucungcapDB.doPost(pcc,ctcc,"removeDetail");
         // List
         CTCCList.remove(indexofRow-1);
         // Table
@@ -639,6 +689,7 @@ public class CTCungcapLayout extends AppCompatActivity {
 
     private void edit(ChiTietCungCap ctcc) {
         // API
+        phieucungcapDB.doPost(pcc,ctcc,"updateDetail");
         // List
         CTCCList.set(indexofRow-1, ctcc);
         // Table
@@ -667,7 +718,7 @@ public class CTCungcapLayout extends AppCompatActivity {
         // Lưu ý!! : khi đặt LayoutParams thì phải theo thằng cố nội và phải có weight
         idView.setLayoutParams(new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT, 10.0f));
         idView.setMaxWidth(DPtoPix(70));
-        idView.setText(ct.getSoPhieu());
+        idView.setText(ct.getId());
 
         TextView vppView = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
         // Cần cái này để khi mà vppView đạt tới max width thì nó sẽ tăng height cho bên tenVPP luôn
@@ -713,6 +764,15 @@ public class CTCungcapLayout extends AppCompatActivity {
         tr.addView(ttienView);
         return tr;
     }
+    public String reverseMoneyFormat( String money ){
+        if(money == null ) return null;
+        if(money.trim().equalsIgnoreCase("") ) return "";
+        String str = "";
+        for( String m : money.split("\\.")){
+            str += m;
+        }
+        return str.equals("0") ? str : str.substring(0,str.length()-1) ;
+    }
 
     public String MoneyFormat( int money ){
         if( money == 0) return "0đ";
@@ -731,9 +791,10 @@ public class CTCungcapLayout extends AppCompatActivity {
         return new StringBuilder(moneyFormat).reverse().toString() +"đ";
     }
 
-    public boolean isSafeDialog( ) {
+    public boolean isSafeDialog( boolean edit ) {
         String sl, maVpp;
         boolean noError = true;
+        if( edit == false )
         if(vpp != null && VPPList != null && VPPList.size() != 0 )
             for( ChiTietCungCap ct : CTCCList ){
                 if( ct.getMaVpp().equals(vpp.getMaVpp()) ){

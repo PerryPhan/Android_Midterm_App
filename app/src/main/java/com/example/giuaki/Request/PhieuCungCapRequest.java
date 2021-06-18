@@ -43,6 +43,7 @@ public class PhieuCungCapRequest {
             hashMap.put("ngaygiao", phieuCungCap.getNgaygiao());
         }
         if (chiTietCungCap != null) {
+            hashMap.put("id", chiTietCungCap.getId());
             hashMap.put("sophieu", chiTietCungCap.getSoPhieu());
             hashMap.put("mavpp", chiTietCungCap.getMaVpp());
             hashMap.put("soluong", chiTietCungCap.getSoLuong());

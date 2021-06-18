@@ -244,15 +244,7 @@ tools:context=".Main.PhongbanLayout"
         android:backgroundTint="@color/disable_color"
         android:textColor="@color/black"
         android:text="@string/vpp"/>
-    <ImageView
-        android:id="@+id/PB_bell"
-        android:layout_marginLeft="10dp"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
-        android:src="@drawable/notiicon"
-        />
+
 </LinearLayout>
 <include
     android:layout_width="match_parent"

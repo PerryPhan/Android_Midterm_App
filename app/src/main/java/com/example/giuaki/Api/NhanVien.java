@@ -8,10 +8,10 @@ public class NhanVien {
     private String maPb;
 
     public NhanVien( String maNv, String hoTen, String ngaySinh, String maPb) {
-        this.maNv = maNv;
-        this.hoTen = hoTen;
+        this.maNv = maNv.toUpperCase();
+        this.hoTen = hoTen.toUpperCase();
         this.ngaySinh = ngaySinh;
-        this.maPb = maPb;
+        this.maPb = maPb.toUpperCase();
     }
 
     @Override

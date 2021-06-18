@@ -55,7 +55,7 @@
                 <TextView
                     android:id="@+id/CT_IDview"
                     style="@style/textBlack"
-                    android:text="01"
+                    android:text="auto"
                     />
             </LinearLayout>
             <LinearLayout

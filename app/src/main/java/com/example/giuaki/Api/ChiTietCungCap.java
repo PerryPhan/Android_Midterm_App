@@ -1,17 +1,26 @@
 package com.example.giuaki.Api;
 
 public class ChiTietCungCap {
-
+    private String id;
     private String soPhieu;
     private String maVpp;
     private String soLuong;
     private String thanhTien;
 
-    public ChiTietCungCap(String soPhieu, String maVpp, String soLuong, String thanhTien) {
+    public ChiTietCungCap(String id ,String soPhieu, String maVpp, String soLuong, String thanhTien) {
+        this.id = id;
         this.soPhieu = soPhieu;
         this.maVpp = maVpp;
         this.soLuong = soLuong;
         this.thanhTien = thanhTien;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

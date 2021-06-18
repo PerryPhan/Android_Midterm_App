@@ -8,8 +8,8 @@ public class PhongBan {
     private String tenpb;
 
     public PhongBan(String mapb, String tenpb) {
-        this.mapb = mapb;
-        this.tenpb = tenpb;
+        this.mapb = mapb.toUpperCase();
+        this.tenpb = tenpb.toUpperCase();
     }
 
     @Override

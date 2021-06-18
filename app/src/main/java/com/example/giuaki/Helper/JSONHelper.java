@@ -111,9 +111,24 @@ public class JSONHelper {
                         viewData.getJSONObject(i).get("SOPHIEU").toString(),
                         viewData.getJSONObject(i).get("TRANGTHAI").toString(),
                         viewData.getJSONObject(i).get("MANCC").toString(),
-                        viewData.getJSONObject(i).get("NGAYGIAO").toString()
+                        viewData.getJSONObject(i).get("NGAYGIAO").toString(),
+                        viewData.getJSONObject(i).get("THANHTIEN").toString()
                 );
                 entitiesList.add(phieuCungCap);
+            }
+            Log.d("data",viewData.length()+"");
+        }
+
+        if (objectName.trim().equals("ChiTiet")) {
+            for(int i = 0; i < viewData.length(); i++) {
+                ChiTietCungCap chiTietCungCap = new ChiTietCungCap(
+                        viewData.getJSONObject(i).get("ID").toString(),
+                        viewData.getJSONObject(i).get("SOPHIEU").toString(),
+                        viewData.getJSONObject(i).get("MAVPP").toString(),
+                        viewData.getJSONObject(i).get("SOLUONG").toString(),
+                        viewData.getJSONObject(i).get("THANHTIEN").toString()
+                );
+                entitiesList.add(chiTietCungCap);
             }
             Log.d("data",viewData.length()+"");
         }

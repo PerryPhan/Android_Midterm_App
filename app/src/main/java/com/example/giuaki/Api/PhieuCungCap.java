@@ -12,11 +12,12 @@ public class PhieuCungCap {
     private String tongtien = null;
 //    private List<ChiTietCungCap> chitiet = null;
 
-    public PhieuCungCap(String soPhieu, String trangThai, String maNcc, String ngaygiao) {
-        this.soPhieu = soPhieu;
-        this.trangThai = trangThai;
-        this.maNcc = maNcc;
+    public PhieuCungCap(String soPhieu, String trangThai, String maNcc, String ngaygiao, String tongtien) {
+        this.soPhieu = soPhieu.toUpperCase();
+        this.trangThai = trangThai.toUpperCase();
+        this.maNcc = maNcc.toUpperCase();
         this.ngaygiao = ngaygiao;
+        this.tongtien = tongtien;
     }
 
     public String getTongtien() {

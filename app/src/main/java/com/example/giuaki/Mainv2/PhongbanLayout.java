@@ -50,7 +50,6 @@ public class PhongbanLayout extends AppCompatActivity {
     Button navNV;
     Button navVPP;
     Button navCP;
-    ImageView bell;
 
     // Dialog Layout
     Dialog phongbandialog;
@@ -81,43 +80,6 @@ public class PhongbanLayout extends AppCompatActivity {
     float scale;
     int layout = R.layout.activity_phongban_layout;
     int dialogLayout = R.layout.popup_phongban;
-    private void bellSetup(ImageView imageView, boolean active ){
-        // View
-        ImageView bell = imageView;
-        bell.setImageResource(Bell.bellNotiicon);
-        if( active == false) {
-            // GET API with List<CungCapLayout> match with that day
-            List<PhieuCungCap> list = new ArrayList<>();
-            if( list != null && list.size() != 0 ) {
-                Toast.makeText(this, "bellSetup need List<CungCapLayout>", Toast.LENGTH_LONG).show();
-                // Compare with Date
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date();
-                String now = formatter.format(date);
-                //
-                for( PhieuCungCap cc : list ){
-                    if( cc.getNgaygiao().trim().equals(now) && cc.getTrangThai().equals("DELIVERIED") ){
-                        active = true; break;
-                    }
-                }
-            }
-        }
-        if( active ) {
-            // Anim
-            bell.setImageResource(Bell.bellNotiiconActive);
-            Animation shake = AnimationUtils.loadAnimation( this, Bell.bellAnimation);
-            bell.setAnimation(shake);
-        }
-        bell.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Goto thongbao
-                Intent intent = new Intent(PhongbanLayout.this, ThongbaoLayout.class);
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                startActivity( intent );
-            }
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +105,6 @@ public class PhongbanLayout extends AppCompatActivity {
         navVPP= findViewById(R.id.PB_navbar_VPP);
         navCP= findViewById(R.id.PB_navbar_capphat);
 
-        bell = findViewById(R.id.PB_bell);
-        bellSetup(bell, false);
     } // OK
     public void setEvent() {
         editBtn.setVisibility(View.INVISIBLE); // turn on when click items
@@ -546,9 +506,6 @@ public class PhongbanLayout extends AppCompatActivity {
         // This Custom Columns' Max Width : 80 / 300
         public TableRow createRow(Context context, PhongBan pb) {
             TableRow tr = new TableRow(context);
-            // Id
-
-
             //   Ma PB
             TextView maPB = (TextView) getLayoutInflater().inflate(R.layout.tvtemplate, null);
             // Cần cái này để khi mà maPB đạt tới max width thì nó sẽ tăng height cho bên tenPB luôn
