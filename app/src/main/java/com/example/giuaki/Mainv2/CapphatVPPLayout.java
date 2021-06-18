@@ -32,7 +32,7 @@ import com.example.giuaki.Api.PhongBan;
 import com.example.giuaki.Entities.Rows;
 import com.example.giuaki.Api.VanPhongPham;
 import com.example.giuaki.Helper.JSONHelper;
-import com.example.giuaki.Main.ThongkeLayout;
+import com.example.giuaki.Mainv2.ThongkeLayout;
 import com.example.giuaki.R;
 import com.example.giuaki.WebService;
 import com.squareup.picasso.Picasso;
@@ -141,7 +141,6 @@ public class CapphatVPPLayout extends AppCompatActivity {
         navTK = findViewById(R.id.CP_navbar_thongke);
         navCRUD = findViewById(R.id.CP_navbar_crud);
     }
-
     public void loadDatabase(){
         // Khai báo
         phongbanDB = new PhongBanRequest();

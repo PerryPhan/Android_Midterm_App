@@ -164,7 +164,6 @@ public class ThongkeLayout extends AppCompatActivity {
                 normalAllButton();
                 activeButton(btn);
                 index = Integer.parseInt(btn.getTag()+"");
-                Toast.makeText(ThongkeLayout.this, index+"",Toast.LENGTH_LONG).show();
                 handleEvent(index);
             }
         });
@@ -319,7 +318,7 @@ public class ThongkeLayout extends AppCompatActivity {
                 btn_cau1.setVisibility(View.VISIBLE);
                 btn_cau1.startAnimation(animationLeft1);
             }
-        }, 350);
+        }, 1350);
         new Handler().postDelayed(new Runnable()
         {
             @Override
@@ -328,7 +327,7 @@ public class ThongkeLayout extends AppCompatActivity {
                 btn_cau2.setVisibility(View.VISIBLE);
                 btn_cau2.startAnimation(animationLeft2);
             }
-        }, 450);
+        }, 1450);
         new Handler().postDelayed(new Runnable()
         {
             @Override
@@ -337,7 +336,7 @@ public class ThongkeLayout extends AppCompatActivity {
                 btn_cau3.setVisibility(View.VISIBLE);
                 btn_cau3.startAnimation(animationLeft3);
             }
-        }, 550);
+        }, 1550);
         new Handler().postDelayed(new Runnable()
         {
             @Override
@@ -346,7 +345,7 @@ public class ThongkeLayout extends AppCompatActivity {
                 btn_cau4.setVisibility(View.VISIBLE);
                 btn_cau4.startAnimation(animationLeft4);
             }
-        }, 650);
+        }, 1650);
 
 
     }

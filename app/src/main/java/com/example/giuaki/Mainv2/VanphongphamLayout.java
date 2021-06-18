@@ -316,6 +316,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                     }
                     editBtn.setVisibility(View.INVISIBLE); // turn on when click items
                     delBtn.setVisibility(View.INVISIBLE);  // this too
+                    previewBtn.setVisibility(View.INVISIBLE); // this three
                 }
 
                 @Override
@@ -338,14 +339,19 @@ public class VanphongphamLayout extends AppCompatActivity {
                 }
             });
         } // OK
+        public int findIndexofNCC( String maNCC ){
+            for( int i = 0; i < ncclist.size(); i++){
+                NhaCungCap ncc = ncclist.get(i);
+                if( ncc.getMaNCC().equalsIgnoreCase(maNCC) ){
+                    return i;
+                }
+            }
+            return -1;
+        }
 
     // ------------------------------ TABLE ---------------------------------------
         public void setEventTable(TableLayout list) {
-            if( list != null && list.getChildCount() > 1) {
-                for (int i = 0; i < list.getChildCount(); i++) {
-                    setEventTableRows((TableRow) list.getChildAt(i), list);
-                }
-            }
+            setEventTableList(list);
             previewBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -399,6 +405,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                         showConfirm.setText("Bạn có muốn sửa hàng này không?");
                         // Event
                         setEventSpinnerMini();
+                        NCCSpinner_mini.setSelection( findIndexofNCC( focusRow.getTag().toString().trim() ) );
                         setEventImagePicker();
                         setEventDialog(v);
                         setDataImageView(inputHinh, focusHinh);
@@ -428,6 +435,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                         // Event
                         setEventDialog(v);
                         setDataImageView(inputHinh, focusHinh);
+                        NCCSpinner_mini.setSelection( findIndexofNCC( focusRow.getTag().toString().trim() ) );
                         inputMaVPP.setText(focusMaVPP.getText());
                         inputTenVPP.setText(focusTenVPP.getText());
                         inputDVT.setText(focusDVT.getText());
@@ -452,6 +460,17 @@ public class VanphongphamLayout extends AppCompatActivity {
                     row.setBackgroundColor(getResources().getColor(R.color.white));
             }
         } // OK
+        public void setEventTableList(TableLayout list){
+            if( list != null && list.getChildCount() > 1) {
+                for (int i = 0; i < list.getChildCount(); i++) {
+                    TableRow tr = (TableRow) list.getChildAt(i);
+//                    int id = tr.getId();
+//                    tr.setId(i+1);
+//                    Log.d("data","Change id from "+ id +" to "+tr.getId());
+                    setEventTableRows( tr, list);
+                }
+            }
+        }
         public void setEventTableRows(TableRow tr, TableLayout list) {
             tr.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -478,7 +497,6 @@ public class VanphongphamLayout extends AppCompatActivity {
     // ! Nhớ thêm dòng <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> trong file Manifest.xml
         public void setDataImageView(ImageView imageView, String imageUri){
             if( imageUri == null || imageUri == "null" || imageUri.equalsIgnoreCase("")) return;
-            Log.d("data",webPath+imageUri);
             Picasso.get().load(webPath+imageUri).into(imageView);
         } // OK
         public void pickImageFromStorage(){
@@ -614,7 +632,6 @@ public class VanphongphamLayout extends AppCompatActivity {
                                     null,
                                     inputSL.getText().toString().trim()+"",
                                     NCCSpinner_mini_data+"");
-    //                        if (vanphongphamDB.insert(vpp) == -1) break;
                             // Gọi Request
                             String response = vanphongphamDB.doPost(vpp, inputFile,"insert");
                             if( !JSONHelper.verifyJSON(response)
@@ -628,18 +645,18 @@ public class VanphongphamLayout extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             // Tạo ra 1 row
+                            vpplist.add(vpp);
                             TableRow tr = createRow(VanphongphamLayout.this, vpp);
                             int n = vpp_table_list.getChildCount();
                             tr.setId(n);
-                            if ( !NCCSpinner_mini_data.trim().equals( NCCSpinner_data.trim()) ){
-                                if( NCCSpinner_data.trim().equals("All") ){
+                            if ( !NCCSpinner_mini_data.trim().equalsIgnoreCase( NCCSpinner_data.trim()) ){
+                                if( NCCSpinner_data.trim().equalsIgnoreCase("All") ){
                                     vpp_table_list.addView(tr);
-                                    setEventTableRows((TableRow) vpp_table_list.getChildAt(n), vpp_table_list);
                                 }
                             }else{
                                 vpp_table_list.addView(tr);
-                                setEventTableRows((TableRow) vpp_table_list.getChildAt(n), vpp_table_list);
                             }
+                            setEventTable(vpp_table_list);
                             editBtn.setVisibility(View.INVISIBLE);
                             delBtn.setVisibility(View.INVISIBLE);
                             previewBtn.setVisibility(View.INVISIBLE);
@@ -654,19 +671,21 @@ public class VanphongphamLayout extends AppCompatActivity {
                         case R.id.VPP_editBtn: {
                             if (!isSafeDialog( true )) break;
                             TableRow tr = (TableRow) vpp_table_list.getChildAt(indexofRow);
+                            String hinh = image_list.get(indexofRow-1) == null
+                                    || image_list.get(indexofRow-1).trim().equalsIgnoreCase("")
+                                    ? null
+                                    : image_list.get(indexofRow-1);
                             VanPhongPham vpp = new VanPhongPham(
                                     inputMaVPP.getText().toString().trim() + "",
                                     inputTenVPP.getText().toString().trim() + "",
                                     inputDVT.getText().toString().trim() + "",
                                     inputGia.getText().toString().trim()+"",
-                                    null,
+                                    hinh + "",
                                     inputSL.getText().toString().trim()+"",
                                     NCCSpinner_mini_data+"");
                             String response = vanphongphamDB.doPost(vpp, inputFile,"update");
-                            Log.d("response",response+"");
                             if( !JSONHelper.verifyJSON(response)
                                     .equalsIgnoreCase("pass") ) break;
-
                             JSONObject fileNameResponse = null;
                             try {
                                 fileNameResponse = new JSONObject(response);
@@ -674,7 +693,37 @@ public class VanphongphamLayout extends AppCompatActivity {
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
-
+                            // edit
+                            int index = 0;
+                            for( int i = 0; i < vpplist.size(); i++ ){
+                                VanPhongPham vppi = vpplist.get(i);
+                                if( vppi.getMaVpp().equalsIgnoreCase(vpp.getMaVpp()) ){
+                                    index = i; break;
+                                }
+                            }
+                            vpplist.set(index, vpp);
+                            // INDEX !=
+                            if ( !NCCSpinner_mini_data.trim().equalsIgnoreCase( NCCSpinner_data.trim()) ){
+                                vpp_table_list.removeViewAt(indexofRow);
+                                // ALL
+                                if( NCCSpinner_data.trim().equalsIgnoreCase("All") ){
+                                    if(indexofRow != vpp_table_list.getChildCount() ) {
+                                        vpp_table_list.addView(tr, indexofRow);
+                                    }
+                                }
+                                for( int i = indexofRow; i < vpp_table_list.getChildCount(); i++){
+                                    vpp_table_list.getChildAt(i).setId(i);
+                                }
+                            }else{ // Match
+                                vpp_table_list.removeViewAt(indexofRow);
+                                if(indexofRow != vpp_table_list.getChildCount()) {
+                                    vpp_table_list.addView(tr, indexofRow);
+                                    for( int i = indexofRow; i < vpp_table_list.getChildCount(); i++){
+                                        vpp_table_list.getChildAt(i).setId(i);
+                                    }
+                                }
+                            }
+                            setEventTableList(vpp_table_list);
                             focusTenVPP.setText( inputTenVPP.getText().toString().trim() + "");
                             focusDVT.setText( inputDVT.getText().toString().trim() + "");
                             focusGia.setText( inputGia.getText().toString().trim() + "");
@@ -684,16 +733,25 @@ public class VanphongphamLayout extends AppCompatActivity {
                         }
                         break;
                         case R.id.VPP_delBtn: {
+                            String hinh = image_list.get(indexofRow-1) == null
+                                    || image_list.get(indexofRow-1).trim().equalsIgnoreCase("")
+                                    ? null
+                                    : image_list.get(indexofRow-1);
                             VanPhongPham vpp = new VanPhongPham(
                                     inputMaVPP.getText().toString().trim() + "",
                                     inputTenVPP.getText().toString().trim() + "",
                                     inputDVT.getText().toString().trim() + "",
                                     inputGia.getText().toString().trim()+"",
-                                    null,
+                                    hinh +"",
                                     inputSL.getText().toString().trim()+"",
                                     NCCSpinner_mini_data+"");
                             if( !JSONHelper.verifyJSON(vanphongphamDB.doPost(vpp, null,"remove"))
-                                    .equalsIgnoreCase("pass") ) break;
+                                    .equalsIgnoreCase("pass") ) {
+                                Toast.makeText(VanphongphamLayout.this
+                                        , "Văn Phòng Phẩm này đã tồn tại trong Cấp Phát "
+                                        ,Toast.LENGTH_LONG).show();
+                                break;
+                            }
                             if (indexofRow == vpp_table_list.getChildCount() - 1) {
                                 vpp_table_list.removeViewAt(indexofRow);
                             } else {
@@ -756,7 +814,7 @@ public class VanphongphamLayout extends AppCompatActivity {
             // Mã PB không được trùng với Mã PB khác và ko để trống
             mavpp = inputMaVPP.getText().toString().trim();
             boolean noError = true;
-            if (mavpp.equals("")) {
+            if (mavpp.trim().equalsIgnoreCase("")) {
                 showMVPPError.setText("Mã VPP không được trống ");
                 showMVPPError.setVisibility(View.VISIBLE);
                 noError = false;
@@ -767,7 +825,7 @@ public class VanphongphamLayout extends AppCompatActivity {
 
             // Tên PB không được để trống và không trùng
             tenvpp = inputTenVPP.getText().toString().trim();
-            if (tenvpp.equals("")) {
+            if (tenvpp.trim().equalsIgnoreCase("")) {
                 showTVPPError.setText("Tên VPP không được trống ");
                 showTVPPError.setVisibility(View.VISIBLE);
                 noError = false;
@@ -780,7 +838,7 @@ public class VanphongphamLayout extends AppCompatActivity {
             boolean hasDigits = false;
             dvt = inputDVT.getText().toString().trim();
             hasDigits = dvt.matches(".*\\d.*");
-            if (dvt.equals("")) {
+            if (dvt.trim().equalsIgnoreCase("")) {
                 showDVTError.setText("DVT không được trống ");
                 showDVTError.setVisibility(View.VISIBLE);
                 noError = false;
@@ -797,7 +855,7 @@ public class VanphongphamLayout extends AppCompatActivity {
             gia = inputGia.getText().toString().trim();
             if (gia.length()!= 0 && gia.charAt(0) == '0')
                 if (gia.length() > 1) gia = gia.substring(1, gia.length() - 1);
-            if (gia.equals("")) {
+            if (gia.trim().equalsIgnoreCase("")) {
                 showGiaError.setText("Giá không được trống ");
                 showGiaError.setVisibility(View.VISIBLE);
                 noError = false;
@@ -808,7 +866,7 @@ public class VanphongphamLayout extends AppCompatActivity {
             // Số lượng không được để trống và không chữ cái
             sl = inputSL.getText().toString().trim();
                 if (sl.length()!= 0 && sl.charAt(0) == '0') if (sl.length() > 1) sl = sl.substring(1, sl.length() - 1);
-                if (sl.equals("")) {
+                if (sl.trim().equalsIgnoreCase("")) {
                     showSLError.setText("Số lượng không được trống ");
                     showSLError.setVisibility(View.VISIBLE);
                     noError = false;
@@ -824,14 +882,14 @@ public class VanphongphamLayout extends AppCompatActivity {
                     TextView tenvpp_data = (TextView) tr.getChildAt(1);
 
                     if (!allowSameID)
-                        if (mavpp.equalsIgnoreCase(mavpp_data.getText().toString())) {
+                        if (mavpp.trim().equalsIgnoreCase(mavpp_data.getText().toString())) {
                             showMVPPError.setText("Mã VPP không được trùng ");
                             showMVPPError.setVisibility(View.VISIBLE);
                             return noError = false;
                         }
 
-                    if (tenvpp.equalsIgnoreCase(tenvpp_data.getText().toString())
-                        && !tenvpp_data.getText().toString().equalsIgnoreCase( focusTenVPP.getText().toString().trim() )) {
+                    if (tenvpp.trim().equalsIgnoreCase(tenvpp_data.getText().toString())
+                        && !tenvpp_data.getText().toString().trim().equalsIgnoreCase( focusTenVPP.getText().toString().trim() )) {
                         showTVPPError.setText("Tên VPP không được trùng");
                         showTVPPError.setVisibility(View.VISIBLE);
                         return noError = false;

@@ -21,7 +21,6 @@
             android:text="@string/thoat"
             android:textColor="#ffffff"
             android:backgroundTint="@color/thoatbtn_bgcolor"
-
             />
 
         <EditText
