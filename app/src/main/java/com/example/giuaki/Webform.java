@@ -16,12 +16,12 @@ public class Webform extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webform);
         // SetControl
-        html = findViewById(R.id.HTMLView);
+//        html = findViewById(R.id.HTMLView);
         //
-        Bundle b = getIntent().getExtras();
-        String loai = b.getString("loai");
-        String ma = b.getString("ma");
-        displayHtml(loai, ma);
+//        Bundle b = getIntent().getExtras();
+//        String loai = b.getString("loai");
+//        String ma = b.getString("ma");
+//        displayHtml(loai, ma);
     }
     public void displayHtml( String loai, String ma) {
         RequestHelper requestHelper = new RequestHelper();

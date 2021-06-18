@@ -37,12 +37,16 @@
         </activity>
         <activity android:name=".Mainv2.NhanvienLayout" ></activity>
         <activity android:name=".Mainv2.PhongbanLayout" ></activity>
-        <activity android:name=".Mainv2.CapphatVPPLayout"></activity>
+        <activity android:name=".Mainv2.CapphatVPPLayout">
+
+        </activity>
         <activity android:name=".Mainv2.CungcapLayout"></activity>
         <activity android:name=".Mainv2.ThongbaoLayout"></activity>
         <activity android:name=".Mainv2.CapPhatCRUDLayout"></activity>
         <activity android:name=".Mainv2.CTCungcapLayout"></activity>
-        <activity android:name=".Mainv2.BaocaoVPPAllLayout" ></activity>
+        <activity android:name=".Mainv2.BaocaoVPPAllLayout" >
+
+        </activity>
         <activity android:name=".Mainv2.BaocaoVPPLayout" ></activity>
         <activity android:name=".Welcome">
 

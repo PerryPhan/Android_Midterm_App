@@ -684,6 +684,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                                     inputSL.getText().toString().trim()+"",
                                     NCCSpinner_mini_data+"");
                             String response = vanphongphamDB.doPost(vpp, inputFile,"update");
+                            Log.d("data","1True");
                             if( !JSONHelper.verifyJSON(response)
                                     .equalsIgnoreCase("pass") ) break;
                             JSONObject fileNameResponse = null;
@@ -693,6 +694,7 @@ public class VanphongphamLayout extends AppCompatActivity {
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
+                            Log.d("data","2True");
                             // edit
                             int index = 0;
                             for( int i = 0; i < vpplist.size(); i++ ){
@@ -707,26 +709,24 @@ public class VanphongphamLayout extends AppCompatActivity {
                                 vpp_table_list.removeViewAt(indexofRow);
                                 // ALL
                                 if( NCCSpinner_data.trim().equalsIgnoreCase("All") ){
-                                    if(indexofRow != vpp_table_list.getChildCount() ) {
                                         vpp_table_list.addView(tr, indexofRow);
-                                    }
                                 }
                                 for( int i = indexofRow; i < vpp_table_list.getChildCount(); i++){
                                     vpp_table_list.getChildAt(i).setId(i);
                                 }
                             }else{ // Match
                                 vpp_table_list.removeViewAt(indexofRow);
-                                if(indexofRow != vpp_table_list.getChildCount()) {
-                                    vpp_table_list.addView(tr, indexofRow);
-                                    for( int i = indexofRow; i < vpp_table_list.getChildCount(); i++){
-                                        vpp_table_list.getChildAt(i).setId(i);
-                                    }
+                                vpp_table_list.addView(tr, indexofRow);
+                                for( int i = indexofRow; i < vpp_table_list.getChildCount(); i++){
+                                    vpp_table_list.getChildAt(i).setId(i);
                                 }
+
                             }
                             setEventTableList(vpp_table_list);
                             focusTenVPP.setText( inputTenVPP.getText().toString().trim() + "");
                             focusDVT.setText( inputDVT.getText().toString().trim() + "");
                             focusGia.setText( inputGia.getText().toString().trim() + "");
+                            focusSL.setText( inputSL.getText().toString().trim()+"" );
                             image_list.set( indexofRow-1, vpp.getHinh() );
                             focusHinh = vpp.getHinh();
                             success = true;
