@@ -128,42 +128,6 @@ tools:context=".Main.PhongbanLayout"
                         android:layout_width="300dp"
                         android:visibility="invisible" />
                 </TableRow>
-<!--                <TableRow>-->
-<!--                    <TextView-->
-<!--                        style="@style/tableRow"-->
-<!--                        android:background="@drawable/table_lightdark_border"-->
-<!--                        android:maxWidth="80dp"-->
-<!--                        android:text="PB02dasdsad" />-->
-
-<!--                    <TextView-->
-<!--                        style="@style/tableRow"-->
-<!--                        android:maxWidth="300dp"-->
-<!--                        android:background="@drawable/table_lightdark_border"-->
-<!--                        android:text="Phòng Kinh doanh dsadsadsad asdasdsaddasdsaddasda" />-->
-<!--                </TableRow>-->
-                <!--            <TableRow>-->
-                <!--                <TextView-->
-                <!--                    style="@style/PBRow_firstCellWidth"-->
-                <!--                    android:text="PB03"-->
-                <!--                    />-->
-                <!--                <TextView-->
-                <!--                    style="@style/tableRow"-->
-                <!--                    android:text="Phòng Kỹ thuật"-->
-                <!--                    />-->
-                <!--            </TableRow>-->
-                <!--            <TableRow>-->
-                <!--                <TextView-->
-                <!--                    style="@style/PBRow_firstCellWidth"-->
-                <!--                    android:text="PB04"-->
-                <!--                    android:background="@drawable/table_lightdark_border"-->
-                <!--                    />-->
-                <!--                <TextView-->
-                <!--                    style="@style/tableRow"-->
-                <!--                    android:text="Phòng Kế toán"-->
-                <!--                    android:background="@drawable/table_lightdark_border"-->
-                <!--                    />-->
-                <!--            </TableRow>-->
-
             </TableLayout>
         </ScrollView>
     </LinearLayout>
@@ -244,7 +208,14 @@ tools:context=".Main.PhongbanLayout"
         android:backgroundTint="@color/disable_color"
         android:textColor="@color/black"
         android:text="@string/vpp"/>
-
+    <ImageView
+        android:id="@+id/PB_bell"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:src="@drawable/notiicon"
+        />
 </LinearLayout>
 <include
     android:layout_width="match_parent"

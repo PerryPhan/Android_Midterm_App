@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.giuaki.Api.NhanVien;
 import com.example.giuaki.Api.PhongBan;
+import com.example.giuaki.Bell;
 import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.NhanVienRequest;
@@ -42,6 +44,7 @@ public class PhongbanLayout extends AppCompatActivity {
     Button navNV;
     Button navVPP;
     Button navCP;
+    ImageView bell;
 
     // Dialog Layout
     Dialog phongbandialog;
@@ -72,7 +75,7 @@ public class PhongbanLayout extends AppCompatActivity {
     float scale;
     int layout = R.layout.activity_phongban_layout;
     int dialogLayout = R.layout.popup_phongban;
-
+    Bell b;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,97 +88,99 @@ public class PhongbanLayout extends AppCompatActivity {
     }
 
     // --------------- MAIN HELPER -----------------------------------------------------------------
-    public void setControl() {
-        phongban_table_list = findViewById(R.id.PB_table_list);
-        insertBtn = findViewById(R.id.PB_insertBtn);
-        editBtn = findViewById(R.id.PB_editBtn);
-        delBtn = findViewById(R.id.PB_delBtn);
-        exitBtn = findViewById(R.id.PB_exitBtn);
+        public void setControl() {
+            phongban_table_list = findViewById(R.id.PB_table_list);
+            insertBtn = findViewById(R.id.PB_insertBtn);
+            editBtn = findViewById(R.id.PB_editBtn);
+            delBtn = findViewById(R.id.PB_delBtn);
+            exitBtn = findViewById(R.id.PB_exitBtn);
 
-        navPB = findViewById(R.id.PB_navbar_phongban);
-        navNV = findViewById(R.id.PB_navbar_nhanvien);
-        navVPP= findViewById(R.id.PB_navbar_VPP);
-        navCP= findViewById(R.id.PB_navbar_capphat);
-
-    } // OK
-    public void setEvent() {
-        editBtn.setVisibility(View.INVISIBLE); // turn on when click items
-        delBtn.setVisibility(View.INVISIBLE);  // this too
-        setEventTable(phongban_table_list);
-    } // OK
-    // Load from the Database to the Table Layout
-    public void loadDatabase() {
-        phongbanDB = new PhongBanRequest();
-        nhanvienDB = new NhanVienRequest();
-        // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn
-        List<PhongBan> list = convertToPhongBanList(
-                returnListfromJSON(
-                        phongbanDB.doGet("show"),
-                        "PhongBan"
-                )
-        );
-        if( list == null){
-            Toast.makeText(this,"Error: Không load được JSON!!",Toast.LENGTH_LONG).show();
-            return;
-        }else if(list.size() == 0){
-            Toast.makeText(this,"Hiện tại không có phòng ban!!",Toast.LENGTH_LONG).show();
-            return;
-        }
-        NVlist = convertToNhanvienList(
-                returnListfromJSON(
-                        nhanvienDB.doGet("show"),
-                        "NhanVien"
-                )
-        );
-        TableRow tr = null;
-        for (int i = 0; i < list.size(); i++) {
-            tr = createRow(this, list.get(i));
-            tr.setId((int) i + 1);
-            phongban_table_list.addView(tr);
-        }
-    } // OK
-    public void setNavigation(){
-        // navPB onclick none
-        // navNV
-        navNV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(PhongbanLayout.this, NhanvienLayout.class);
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                startActivity( intent );
-
+            navPB = findViewById(R.id.PB_navbar_phongban);
+            navNV = findViewById(R.id.PB_navbar_nhanvien);
+            navVPP= findViewById(R.id.PB_navbar_VPP);
+            navCP= findViewById(R.id.PB_navbar_capphat);
+            // Notification
+            bell = findViewById(R.id.PB_bell);
+            b = new Bell(this, bell);
+        } // OK
+        public void setEvent() {
+            editBtn.setVisibility(View.INVISIBLE); // turn on when click items
+            delBtn.setVisibility(View.INVISIBLE);  // this too
+            setEventTable(phongban_table_list);
+        } // OK
+        // Load from the Database to the Table Layout
+        public void loadDatabase() {
+            phongbanDB = new PhongBanRequest();
+            nhanvienDB = new NhanVienRequest();
+            // Tag sẽ bắt đầu ở 1 vì phải cộng thêm thằng example đã có sẵn
+            List<PhongBan> list = convertToPhongBanList(
+                    returnListfromJSON(
+                            phongbanDB.doGet("show"),
+                            "PhongBan"
+                    )
+            );
+            if( list == null){
+                Toast.makeText(this,"Error: Không load được JSON!!",Toast.LENGTH_LONG).show();
+                return;
+            }else if(list.size() == 0){
+                Toast.makeText(this,"Hiện tại không có phòng ban!!",Toast.LENGTH_LONG).show();
+                return;
             }
-        });
-        // navVPP
-        navVPP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                Intent intent = new Intent(PhongbanLayout.this, VanphongphamLayout.class);
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                startActivity( intent );
-
+            NVlist = convertToNhanvienList(
+                    returnListfromJSON(
+                            nhanvienDB.doGet("show"),
+                            "NhanVien"
+                    )
+            );
+            TableRow tr = null;
+            for (int i = 0; i < list.size(); i++) {
+                tr = createRow(this, list.get(i));
+                tr.setId((int) i + 1);
+                phongban_table_list.addView(tr);
             }
-        });
-        // navCP
-        navCP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PhongbanLayout.this, CapphatVPPLayout.class);
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
-                startActivity( intent );
-            }
+        } // OK
+        public void setNavigation(){
+            // navPB onclick none
+            // navNV
+            navNV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                    Intent intent = new Intent(PhongbanLayout.this, NhanvienLayout.class);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                    startActivity( intent );
 
-        });
+                }
+            });
+            // navVPP
+            navVPP.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                    Intent intent = new Intent(PhongbanLayout.this, VanphongphamLayout.class);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                    startActivity( intent );
 
-        exitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    } // OK
+                }
+            });
+            // navCP
+            navCP.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PhongbanLayout.this, CapphatVPPLayout.class);
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                    startActivity( intent );
+                }
+
+            });
+
+            exitBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        } // OK
 
     // ------------------- CONVERTER -------------------------------------------------------------------
         public List<Object> returnListfromJSON( String resultfromQuery , String objectClass){

@@ -124,7 +124,6 @@ public class CungcapLayout extends AppCompatActivity {
         loadDatabase();
         setEvent();
         setNavigation();
-        b.toggleActive();
     }
     // --------------------------------- MAIN ----------------------------------
         private void setControl() {
@@ -809,7 +808,7 @@ public class CungcapLayout extends AppCompatActivity {
 
     // ---------------------------- NOTIFICATION  -----------------------
         public void thongbaoDeliveried(Context context, List<VanPhongPham> list, int i ){
-            new Notification( context , i).sendNotification(list);
+            new Notification( context , i).sendNotification(list,false);
         }
 
     // ---------------------------- DIALOG -----------------------------------

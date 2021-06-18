@@ -50,8 +50,9 @@ public class Notification {
         }
     }
 
-    public void sendNotification(List<VanPhongPham> list) {
-            String textTitle = list.get(0).getMaNcc()+" đã giao các VPP :";
+    public void sendNotification(List<VanPhongPham> list, boolean all) {
+            String textTitle = "Các VPP được giao hôm nay :";
+            if(all == false) textTitle = list.get(0).getMaNcc()+" đã giao các VPP :";
             String textContent = "Giữ hoặc nhấp vào để xem!! ";
             String vppList = "";
             if( list != null ) {

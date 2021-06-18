@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.giuaki.Api.NhaCungCap;
 import com.example.giuaki.Api.VanPhongPham;
+import com.example.giuaki.Bell;
 import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.VanPhongPhamRequest;
@@ -126,6 +127,8 @@ public class VanphongphamLayout extends AppCompatActivity {
     int IMAGE_FOLDER = 1000;
     int PERMISSION_GRANTED = 1001;
     int layout = R.layout.activity_vanphongpham_layout;
+    Bell b;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +157,8 @@ public class VanphongphamLayout extends AppCompatActivity {
 
             search = findViewById(R.id.VPP_searchEdit);
             NCCSpinner = findViewById(R.id.VPP_NCCSpinner);
+            bell = findViewById(R.id.VPP_bell);
+            b = new Bell(this, bell);
         } // OK
         public void loadDatabase(){
             vanphongphamDB = new VanPhongPhamRequest();

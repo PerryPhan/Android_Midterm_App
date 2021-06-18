@@ -259,7 +259,14 @@
             android:backgroundTint="@color/active_color"
             android:textColor="@color/black"
             android:text="@string/vpp"/>
-
+        <ImageView
+            android:id="@+id/VPP_bell"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/notiicon"
+            />
     </LinearLayout>
     <include
         android:layout_width="match_parent"

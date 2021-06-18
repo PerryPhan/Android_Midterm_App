@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.giuaki.Api.*;
+import com.example.giuaki.Bell;
 import com.example.giuaki.Checker;
 import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.R;
@@ -51,6 +53,7 @@ public class NhanvienLayout extends AppCompatActivity {
     Button navNV;
     Button navVPP;
     Button navCP;
+    ImageView bell;
 
     // Dialog Layout
     Dialog nhanviendialog;
@@ -94,6 +97,8 @@ public class NhanvienLayout extends AppCompatActivity {
     float scale;
     int layout = R.layout.activity_nhanvien_layout;
     int dialogLayout = R.layout.popup_nhanvien;
+    Bell b;
+
     @Override
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +124,8 @@ public class NhanvienLayout extends AppCompatActivity {
             navVPP= findViewById(R.id.NV_navbar_VPP);
             navCP= findViewById(R.id.NV_navbar_capphat);
 
+            bell = findViewById(R.id.NV_bell);
+            b = new Bell(this, bell);
         } // OK
         public void loadDatabase() {
             // -------------- Nhan Vien -------------------

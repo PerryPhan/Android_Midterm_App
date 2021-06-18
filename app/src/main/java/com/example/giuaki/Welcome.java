@@ -42,7 +42,6 @@ public class Welcome extends AppCompatActivity {
         }, 3000);
     }
     private void setControl() {
-
         json = findViewById(R.id.json);
         json.setVisibility(View.INVISIBLE);
     }
