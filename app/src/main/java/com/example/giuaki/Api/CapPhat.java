@@ -9,10 +9,10 @@ public class CapPhat {
     private String soLuong;
 
     public CapPhat( String soPhieu, String ngayCap, String maVpp, String maNv, String soLuong) {
-        this.soPhieu = soPhieu;
+        this.soPhieu = soPhieu.toUpperCase();
         this.ngayCap = ngayCap;
-        this.maVpp = maVpp;
-        this.maNv = maNv;
+        this.maVpp = maVpp.toUpperCase();
+        this.maNv = maNv.toUpperCase();
         this.soLuong = soLuong;
     }
 

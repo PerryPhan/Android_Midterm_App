@@ -31,7 +31,9 @@
         <activity android:name=".Mainv2.VanphongphamLayout" ></activity>
         <activity android:name=".Mainv2.NhanvienLayout" ></activity>
         <activity android:name=".Mainv2.PhongbanLayout" ></activity>
-        <activity android:name=".Mainv2.CapphatVPPLayout"></activity>
+        <activity android:name=".Mainv2.CapphatVPPLayout">
+
+        </activity>
         <activity android:name=".Mainv2.CungcapLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,8 +41,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Mainv2.ThongbaoLayout"></activity>
-        <activity android:name=".Mainv2.CapPhatCRUDLayout"></activity>
+        <activity android:name=".Mainv2.ThongbaoLayout">
+
+        </activity>
+        <activity android:name=".Mainv2.CapPhatCRUDLayout">
+
+        </activity>
         <activity android:name=".Mainv2.CTCungcapLayout"></activity>
         <activity android:name=".Mainv2.BaocaoVPPAllLayout" ></activity>
         <activity android:name=".Mainv2.BaocaoVPPLayout" ></activity>

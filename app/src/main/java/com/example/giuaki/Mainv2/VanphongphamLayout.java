@@ -15,8 +15,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,22 +31,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.giuaki.Api.NhaCungCap;
-import com.example.giuaki.Api.PhieuCungCap;
 import com.example.giuaki.Api.VanPhongPham;
-import com.example.giuaki.Bell;
 import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.R;
 import com.example.giuaki.Request.VanPhongPhamRequest;
-import com.example.giuaki.Mainv2.*;
 import com.example.giuaki.WebService;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class VanphongphamLayout extends AppCompatActivity {

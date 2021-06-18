@@ -155,7 +155,7 @@ public class BaocaoVPPLayout extends AppCompatActivity {
                 Intent intent = new Intent(BaocaoVPPLayout.this, XinchoLayout.class);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 Bundle b = new Bundle();
-                b.putString("loai","Phongban");
+                b.putString("loai","PhongBan");
                 b.putString("ma",pb.getMapb()+"");
                 intent.putExtras(b);
                 startActivityForResult( intent, 1 );

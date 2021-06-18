@@ -25,7 +25,7 @@ public class VanPhongPham {
 
     @Override
     public String toString() {
-        return "VanPhongPham{" + "maVpp=" + maVpp + ", tenVpp=" + tenVpp + ", dvt=" + dvt + ", giaNhap=" + giaNhap + ", hinh=" + hinh + ", soLuong=" + soLuong + ", maNcc=" + maNcc + '}';
+        return String.format("%s - %s - %s ( %s )",maVpp,tenVpp,soLuong,dvt);
     }
     
     public String getMaVpp() {

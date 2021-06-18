@@ -25,19 +25,27 @@ public class Webform extends AppCompatActivity {
     }
     public void displayHtml( String loai, String ma) {
         RequestHelper requestHelper = new RequestHelper();
-        if( loai.trim().equals("PhongBan") ) return;
-        String[] request = {"get", String.format("http://%s/PrinterController-printDocs?manv=%s", WebService.host(), ma)};
         String response = "";
-        try {
-            response = requestHelper.execute(request).get();
+        if( loai.trim().equals("PhongBan") ) {
+            String[] request = {"get", String.format("http://%s/PrinterController-printDocsPhongBan?mapb=%s", WebService.host(), ma)};
+            try {
+                response = requestHelper.execute(request).get();
+            } catch (ExecutionException e) {
+                response = e.getMessage();
+            } catch (InterruptedException e) {
+                response = e.getMessage();
+            }
+        }else {
+            String[] request = {"get", String.format("http://%s/PrinterController-printDocsNhanVien?manv=%s", WebService.host(), ma)};
+            try {
+                response = requestHelper.execute(request).get();
+            } catch (ExecutionException e) {
+                response = e.getMessage();
+            } catch (InterruptedException e) {
+                response = e.getMessage();
+            }
         }
-        catch(ExecutionException e){
-            response = e.getMessage();
-        }
-        catch(InterruptedException e){
-            response = e.getMessage();
-        }
-
+        if( response == "") return;
         html.loadData(response, "text/html", "UTF-8");
     }
     @Override

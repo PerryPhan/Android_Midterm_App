@@ -34,6 +34,7 @@ import com.example.giuaki.Api.NhanVien;
 import com.example.giuaki.Api.PhieuCungCap;
 import com.example.giuaki.Api.PhongBan;
 import com.example.giuaki.Api.VanPhongPham;
+import com.example.giuaki.Bell;
 import com.example.giuaki.Entities.Rows;
 import com.example.giuaki.Helper.JSONHelper;
 import com.example.giuaki.R;
@@ -123,7 +124,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
     //Scale
     float scale;
     String webPath = "http://"+ WebService.host()+"/ImageController-get?hinh=";
-
+    Bell b;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,8 +147,9 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
         NVSpinner = findViewById(R.id.CPcrud_NVSpinner);
         // Table
         table    = findViewById(R.id.CPcrud_table_list);
-        // Bell
+        // Notification
         bell = findViewById(R.id.CPcrud_bell);
+        b = new Bell(this, bell);
     }
     public void loadDatabase(){
         // Khai báo
@@ -176,54 +178,12 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
         setSpinner();
 //        setEventTableList();
     }
-    private void bellSetup( ImageView imageView, boolean active ){
-        // View
-        ImageView bell = imageView;
-        bell.setImageResource(R.drawable.notiicon);
-        if( active == false) {
-            // GET API with List<CungCapLayout> match with that day
-            List<PhieuCungCap> list = new ArrayList<>();
-            if( list != null && list.size() != 0 ) {
-                Toast.makeText(this, "bellSetup need List<CungCapLayout>", Toast.LENGTH_LONG).show();
-                // Compare with Date
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date();
-                String now = formatter.format(date);
-                //
-                for( PhieuCungCap cc : list ){
-                    if( cc.getNgaygiao().trim().equals(now) && cc.getTrangThai().equals("DELIVERIED") ){
-                        active = true; break;
-                    }
-                }
-            }
-        }
-        if( active ) {
-            // Anim
-            bell.setImageResource(R.drawable.notiicon_active);
-            Animation shake = AnimationUtils.loadAnimation( this, R.anim.shakeanimation);
-            bell.setAnimation(shake);
-        }
-        bell.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Goto thongbao
-                Intent intent = new Intent(CapPhatCRUDLayout.this, ThongbaoLayout.class);
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                startActivity( intent );
-            }
-        });
-    }
+
     private void setNavigation() {
-//        Animation shake = AnimationUtils.loadAnimation( this, R.anim.shakeanimation);
-//        bell.setAnimation(shake);
-//        bell.setImageResource(R.drawable.notiicon_active);
-        bell.setOnClickListener(new View.OnClickListener() {
+        exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Goto thongbao
-                Intent intent = new Intent(CapPhatCRUDLayout.this, ThongbaoLayout.class);
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                startActivity( intent );
+                finish();
             }
         });
     }
@@ -241,7 +201,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
             if( mavpp == null || mavpp.trim().equalsIgnoreCase("") ) return null;
             if( vanphongpham_list == null || vanphongpham_list.size() == 0 ) return  null;
             for( VanPhongPham vpp : vanphongpham_list){
-                if( vpp.getMaVpp().equals(mavpp)){
+                if( vpp.getMaVpp().equalsIgnoreCase(mavpp)){
                     return vpp;
                 }
             }
@@ -316,7 +276,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
             }// PB = i, NV = i
             for( int i = 0; i < capphat_list.size(); i++){
                 CapPhat cp = capphat_list.get(i);
-                if(cp.getMaNv().equals( maNV ) ){
+                if(cp.getMaNv().equalsIgnoreCase( maNV ) ){
                     TableRow tr = createRow(CapPhatCRUDLayout.this,cp);
                     tr.setId( i+1 );
                     displayCapphatList.add(cp);
@@ -335,9 +295,12 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
             tr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     v.setBackgroundColor(getResources().getColor(R.color.selectedColor));
                     indexofRow = (int) v.getId();
+                    Log.d("row",indexofRow+"");
                     focusRow = (TableRow) list.getChildAt(indexofRow);
+                    Log.d("row",focusRow.getId()+"");
                     TextView tv = (TextView) focusRow.getChildAt(2);
                     focusVPP = getVPPfromList( tv.getText().toString() );
                     setNormalBGTableRows(list);
@@ -348,6 +311,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
         public void setNormalBGTableRows(TableLayout list) {
             // 0: là thằng example đã INVISIBLE
             // Nên bắt đầu từ 1 -> 9
+            Log.d("clearBG","Doit");
             for (int i = 1; i < list.getChildCount(); i++) {
                 TableRow row = (TableRow) list.getChildAt((int) i);
                 if (indexofRow != (int) row.getId())
@@ -357,12 +321,6 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
 
     // ========================================== BUTTON ====================================
         private void setEventButton() {
-            exit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
             previewBtn.setVisibility(View.INVISIBLE);
             previewBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -387,7 +345,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
                     // Load Data
                     setDataImageView(
                             dialog.findViewById(R.id.VPP_IP_Hinh)
-                            , null);
+                            ,focusVPP.getHinh() );
                 }
             });
             insertBtn.setOnClickListener(new View.OnClickListener() {
@@ -505,19 +463,19 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
         }
             private void insert(CapPhat cp) {
                 // API
-                Toast.makeText(CapPhatCRUDLayout.this,"Nhớ làm API cấp phát",Toast.LENGTH_LONG).show();
+                capPhatDatabase.doPost( cp,"insert" );
+
                 // List
                 capphat_list.add(cp);
                 TableRow tr = createRow(this, cp);
-                tr.setId( table.getChildCount()-1 );
-                setEventTableRow(tr, table);
+                tr.setId( table.getChildCount() );
                 if( NVSpinnerData.equalsIgnoreCase(cp.getMaNv()) || NVSpinnerData.equals("Tất cả nhân viên") ){
                     displayCapphatList.add(cp);
                     table.addView(tr);
                 }
                 // Trừ VPP số lượng
                 for( VanPhongPham vpp : vanphongpham_list){
-                    if( vpp.getMaVpp().equals(cp.getMaVpp()) ){
+                    if( vpp.getMaVpp().equalsIgnoreCase(cp.getMaVpp()) ){
                         vpp.setSoLuong(
                                 Integer.parseInt(vpp.getSoLuong())
                                 - Integer.parseInt(cp.getSoLuong()) +""
@@ -525,6 +483,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
                         break;
                     }
                 }
+                setEventTableList(table);
             }
             public boolean isSafeDialog( ) {
                 String sp = inputSP.getText().toString().trim(),
@@ -553,7 +512,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
                     noError = false;
                 }else{
                     sl = Integer.parseInt(sl)+"";
-                    if (sl.equals("0")) {
+                    if (sl.equalsIgnoreCase("0")) {
                         showSLError.setText("Số lượng không được bằng 0 ");
                         showSLError.setVisibility(View.VISIBLE);
                         noError = false;
@@ -654,7 +613,6 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     PBSpinnerMiniData = PBSpinnerMiniList.get(position).split(",")[0].trim();
                     // PB = all, PB = i
-                    Toast.makeText(CapPhatCRUDLayout.this,PBSpinnerMiniData,Toast.LENGTH_LONG).show();
                     NVSpinnerMiniList = getListNVwith( PBSpinnerMiniData, false );
                     Log.d("data",NVSpinnerMiniList.size()+"");
                     setNVSpinnerMini();

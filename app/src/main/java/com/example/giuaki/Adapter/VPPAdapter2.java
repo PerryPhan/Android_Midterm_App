@@ -68,6 +68,7 @@ public class VPPAdapter2 extends BaseAdapter {
         String dvt = vpp.getDvt();
         String hinh = vpp.getHinh();
         String sl = vpp.getSoLuong();
+        String ncc = vpp.getMaNcc();
 
         view = inflater.inflate(R.layout.vpptemplate2, null);
         // getControl.
@@ -77,13 +78,13 @@ public class VPPAdapter2 extends BaseAdapter {
         TextView  tenVPP   = view.findViewById(R.id.tenVPP);
         TextView  dvtVPP   = view.findViewById(R.id.dvtVPP);
         TextView  slVPP   = view.findViewById(R.id.slVPP);
-
+        TextView nccVPP   = view.findViewById(R.id.nccVPP);
         // Fetch data
         idVPP.setText(checkStr(id));
         tenVPP.setText(checkStr(ten));
         dvtVPP.setText(checkStr(dvt));
         slVPP.setText(checkStr(sl));
-
+        nccVPP.setText( String.format("%s đã giao thành công", ncc) );
         // Trả về view kết quả.
         return view;
     }

@@ -64,6 +64,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
     Button previewVPPBtn;
     Button navBC;
     Button navTK;
+    Button navCRUD;
 
     // Data
     CapPhatRequest capphatDB ;
@@ -138,6 +139,7 @@ public class CapphatVPPLayout extends AppCompatActivity {
         navBC = findViewById(R.id.CP_navbar_baocao);
         navBC.setVisibility(View.INVISIBLE);
         navTK = findViewById(R.id.CP_navbar_thongke);
+        navCRUD = findViewById(R.id.CP_navbar_crud);
     }
 
     public void loadDatabase(){
@@ -174,10 +176,6 @@ public class CapphatVPPLayout extends AppCompatActivity {
         }
         // Load List vào các option khác
         PBSpinner.setAdapter( loadPBSpinner() );
-//        Log.d("data",phongban_list.size()+"");
-//        Log.d("data",nhanvien_list.size()+"");
-//        Log.d("data",capphat_list.size()+"");
-//        Log.d("data",vanphongpham_list.size()+"");
     }
 
 //  //----------------------------------{{}}------------------------------------------//   //
@@ -284,6 +282,14 @@ public class CapphatVPPLayout extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CapphatVPPLayout.this, ThongkeLayout.class);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                startActivity( intent );
+            }
+        });
+        navCRUD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CapphatVPPLayout.this, CapPhatCRUDLayout.class);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 startActivity( intent );
             }

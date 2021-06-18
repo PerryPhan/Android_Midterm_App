@@ -206,7 +206,7 @@ public class BaocaoVPPAllLayout extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(BaocaoVPPAllLayout.this, XinchoLayout.class);
                 Bundle b = new Bundle();
-                b.putString("loai","Nhanvien");
+                b.putString("loai","NhanVien");
                 b.putString("ma",selectedNhanVien.getMaNv()+"");
                 intent.putExtras(b);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
