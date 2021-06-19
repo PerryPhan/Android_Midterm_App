@@ -488,6 +488,7 @@ public class CTCungcapLayout extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 vpp = VPPList.get(position);
                 maVPP = vpp.getMaVpp();
+                Log.d("data",maVPP+""+vpp.getTenVpp());
                 gia = checkStr(vpp.getGiaNhap()).trim().equalsIgnoreCase("") ?
                         1
                         : Integer.parseInt(vpp.getGiaNhap()) ;

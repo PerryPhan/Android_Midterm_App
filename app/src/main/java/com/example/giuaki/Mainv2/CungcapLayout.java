@@ -809,6 +809,7 @@ public class CungcapLayout extends AppCompatActivity {
     // ---------------------------- NOTIFICATION  -----------------------
         public void thongbaoDeliveried(Context context, List<VanPhongPham> list, int i ){
             new Notification( context , i).sendNotification(list,false);
+            b.toggleActive();
         }
 
     // ---------------------------- DIALOG -----------------------------------
@@ -887,8 +888,8 @@ public class CungcapLayout extends AppCompatActivity {
                             )
                     );
                     thongbaoDeliveried(this,list,1);
-                    b.toggleActive();
                 }
+
             }
             //    List
             String trangthai = TTSpinner_data;

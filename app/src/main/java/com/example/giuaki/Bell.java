@@ -51,8 +51,13 @@ public class Bell {
     // Toggle Bell Active
     public void toggleActive(){
         Bell.active = !Bell.active;
+        Log.d("shake", Bell.active+"");
         if( active == true ) {
-            shake();
+            Log.d("shake","shake");
+            Animation shake = AnimationUtils.loadAnimation(context, shakeAnimation);
+            Log.d("shake",shake+"");
+            imageView.setImageResource( ActiveDrawable );
+            imageView.setAnimation(shake);
         }else{
             noshake();
         }

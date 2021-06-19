@@ -54,6 +54,7 @@ public class Notification {
             String textTitle = "Các VPP được giao hôm nay :";
             if(all == false) textTitle = list.get(0).getMaNcc()+" đã giao các VPP :";
             String textContent = "Giữ hoặc nhấp vào để xem!! ";
+            if(all == false) textContent = "Giữ hoặc nhấp vào để xem!! ";
             String vppList = "";
             if( list != null ) {
                 for( VanPhongPham vpp : list ){
