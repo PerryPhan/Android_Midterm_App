@@ -159,6 +159,7 @@ public class CTCungcapLayout extends AppCompatActivity {
             return;
         }
         String sp = b.getString("sp") == null ? "SP01" : b.getString("sp");
+        Log.d("sp",sp);
         String ng = b.getString("ng") == null ? "02/06/2018" : b.getString("ng");
         String ncc = b.getString("ncc") == null ? "A" : b.getString("ncc");
         tenNcc = b.getString("tenNCC") == null ? "ABC" : b.getString("tenNCC");
@@ -219,11 +220,10 @@ public class CTCungcapLayout extends AppCompatActivity {
         }
     }
     public VanPhongPham getVPPfromList( String mavpp){
-//        Log.d("data",mavpp.trim());
         if( mavpp == null || mavpp.trim().equalsIgnoreCase("") ) return null;
         if( VPPList == null || VPPList.size() == 0 ) return  null;
         for( VanPhongPham vpp : VPPList){
-            if( vpp.getMaVpp().equals(mavpp)){
+            if( vpp.getMaVpp().equalsIgnoreCase(mavpp)){
                 return vpp;
             }
         }

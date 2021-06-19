@@ -137,7 +137,7 @@ public class CungcapLayout extends AppCompatActivity {
             insertBtn = findViewById(R.id.CC_insertBtn);
             editBtn  = findViewById(R.id.CC_editBtn);
             delBtn = findViewById(R.id.CC_delBtn);
-            exit = findViewById(R.id.CC_editBtn);
+            exit = findViewById(R.id.CC_exitBtn);
             // Navigation
             navPB = findViewById(R.id.CC_navbar_phongban);
             navNV = findViewById(R.id.CC_navbar_nhanvien);
@@ -635,7 +635,6 @@ public class CungcapLayout extends AppCompatActivity {
                     intent.putExtras(b);
                     overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right);
                     startActivityForResult( intent, 1 );
-//                    finish();
                 }
             });
             int layout = R.layout.popup_cungcap ;
