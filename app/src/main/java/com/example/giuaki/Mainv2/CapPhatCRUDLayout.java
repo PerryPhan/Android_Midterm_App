@@ -101,6 +101,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
 
     // SpinnerList
     List<String> PBSpinnerList;
+    List<String> maPBSpinnerList;
     List<String> NVSpinnerList;
 
     // DisplayTable
@@ -114,6 +115,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
 
     //String
     String PBSpinnerData;
+    String maPBSpinnerData;
     String NVSpinnerData;
 
     //Focus
@@ -265,6 +267,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
                 for( NhanVien nv : nhanvien_list)
                     if( nv.getMaPb().trim().equalsIgnoreCase(maPB) )
                         renderTableWithNV( nv.getMaNv() , true );
+                setEventTableList(table);
             }
             return;
         }
@@ -288,6 +291,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
         private void setEventTableList( TableLayout list) {
             if( list == null || list.getChildCount() == 1 ) return;
             for ( int i = 0 ; i < list.getChildCount(); i++){
+                list.getChildAt(i).setId(i);
                 setEventTableRow((TableRow) list.getChildAt(i), list );
             }
         }
@@ -295,7 +299,6 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
             tr.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     v.setBackgroundColor(getResources().getColor(R.color.selectedColor));
                     indexofRow = (int) v.getId();
                     Log.d("row",indexofRow+"");
@@ -434,7 +437,7 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
                                     inputSP.getText().toString() + "",
                                     inputNC_data + "",
                                     VPPSpinnerMiniData.getMaVpp() + "",
-                                    NVSpinnerMiniData + "",
+                                    NVSpinnerMiniData.split(",")[0].trim() + "",
                                     Integer.parseInt(inputSL.getText().toString())+""
                             );
                             insert(cp);
@@ -468,9 +471,11 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
                 // List
                 capphat_list.add(cp);
                 TableRow tr = createRow(this, cp);
-                tr.setId( table.getChildCount() );
-                if( NVSpinnerData.equalsIgnoreCase(cp.getMaNv()) || NVSpinnerData.equals("Tất cả nhân viên") ){
+                if( maPBSpinnerData.trim().equalsIgnoreCase( NVSpinnerMiniData.split(",")[3].trim())
+                        || maPBSpinnerData.trim().equalsIgnoreCase("Tất cả phòng ban"))
+                if( NVSpinnerData.split(",")[0].trim().equalsIgnoreCase(cp.getMaNv()) || NVSpinnerData.equals("Tất cả nhân viên") ){
                     displayCapphatList.add(cp);
+                    tr.setId( table.getChildCount() );
                     table.addView(tr);
                 }
                 // Trừ VPP số lượng
@@ -565,9 +570,13 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
         public ArrayAdapter<String> loadPBSpinner(){
             // 1. Tạo list Phong ban // 2. Đổ Phong_ban.getTenPB() ra 1 List // 3. setAdapter cho cái list getTenPB() đó
             PBSpinnerList = new ArrayList<>();
+            maPBSpinnerList = new ArrayList<>();
             PBSpinnerList.add("Tất cả phòng ban");
+            maPBSpinnerList.add("Tất cả phòng ban");
+
             // Phục vụ cho việc xổ ra Option cho Spinner
             for ( PhongBan pb : phongban_list){
+                maPBSpinnerList.add(pb.getMapb());
                 PBSpinnerList.add(pb.getTenpb());
             }
             ArrayAdapter<String> adapter =
@@ -597,7 +606,9 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     PBSpinnerData = PBSpinnerList.get(position);
+                    maPBSpinnerData = maPBSpinnerList.get(position);
                     // PB = all, PB = i
+
                     NVSpinnerList = getListNVwith( PBSpinnerData, true );
                     setNVSpinner();
                 }
@@ -693,11 +704,11 @@ public class CapPhatCRUDLayout extends AppCompatActivity {
     }
         public void setEventNVSpinnerMini(){
             if( NVSpinnerMiniList == null ) return;
-            NVSpinnerMiniData = NVSpinnerMiniList.get(0).split(",")[0];
+            NVSpinnerMiniData = NVSpinnerMiniList.get(0);
             NVSpinnerMini.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    NVSpinnerMiniData = NVSpinnerMiniList.get(position).split(",")[0];
+                    NVSpinnerMiniData = NVSpinnerMiniList.get(position);
 //                    Toast.makeText(CapPhatCRUDLayout.this, NVSpinnerMiniData, Toast.LENGTH_LONG).show();
                 }
                 @Override

@@ -23,7 +23,7 @@ public class NhanVien {
         if(maNv.equals("empty")){
             return hoTen;
         }
-        return maNv+", "+hoTen+", "+formatDate(ngaySinh, false);
+        return maNv+", "+hoTen+", "+formatDate(ngaySinh, false)+", "+maPb;
     }
 
     public String formatDate(String str, boolean toSQL ){

@@ -684,7 +684,6 @@ public class VanphongphamLayout extends AppCompatActivity {
                                     inputSL.getText().toString().trim()+"",
                                     NCCSpinner_mini_data+"");
                             String response = vanphongphamDB.doPost(vpp, inputFile,"update");
-                            Log.d("data","1True");
                             if( !JSONHelper.verifyJSON(response)
                                     .equalsIgnoreCase("pass") ) break;
                             JSONObject fileNameResponse = null;
@@ -694,7 +693,6 @@ public class VanphongphamLayout extends AppCompatActivity {
                             }catch (Exception e){
                                 e.printStackTrace();
                             }
-                            Log.d("data","2True");
                             // edit
                             int index = 0;
                             for( int i = 0; i < vpplist.size(); i++ ){
